@@ -25,7 +25,7 @@ public class PreferenceViewModel {
   }
 
   public void init() {
-    List<SettingValue> settings = model.getAllSettings();
+    List<SettingValue> settings = model.getSettingsByContextName("user.");
     SettingVmMapper mapper = new SettingVmMapper();
     List<SettingPropertyFx> settingsVmBeans =
         settings.stream().map(s -> mapper.toFxBean(s)).collect(Collectors.toList());
