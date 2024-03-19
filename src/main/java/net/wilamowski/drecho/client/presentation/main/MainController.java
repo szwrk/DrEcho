@@ -102,19 +102,21 @@ public class MainController
   }
 
   @FXML
-  public void onActionOpenPreference(ActionEvent actionEvent) {
-    logger.debug("Clicked on Preference...");
+  public void onActionOpenUserPreference(ActionEvent actionEvent) {
+    logger.debug("Clicked on user preference...");
     viewHandler.switchSceneForParent(root, "Preference");
   }
 
   @FXML
-  public void onActionOpenSettings(ActionEvent actionEvent) {
-    logger.debug("Clicked on SettingAdmin...");
+  public void onActionOpenAdminSettings(ActionEvent actionEvent) {
+    logger.debug("Clicked on admin settings...");
     Platform.runLater(
         () -> {
           viewHandler.switchSceneForParent(root, "Settings");
         });
   }
+
+
 
   @FXML
   public void onActionOpenVisits(ActionEvent actionEvent) {

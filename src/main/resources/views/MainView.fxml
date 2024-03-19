@@ -134,14 +134,14 @@
                                     </graphic>
                                 </Label>
                                 <Separator opacity="0.51"/>
-                                <Button maxHeight="300.0" minWidth="200.0" onAction="#onActionOpenPreference"
-                                        prefWidth="200.0" styleClass="flat" text="%ui.settings.properties">
+                                <Button maxHeight="300.0" minWidth="200.0" onAction="#onActionOpenUserPreference"
+                                        prefWidth="200.0" styleClass="flat" text="%ui.settings.user-preferences">
                                     <VBox.margin>
                                         <Insets/>
                                     </VBox.margin>
                                 </Button>
-                                <Button maxHeight="300.0" minWidth="200.0" onAction="#onActionOpenSettings"
-                                        prefWidth="200.0" styleClass="flat" text="%ui.settings.admin">
+                                <Button maxHeight="300.0" minWidth="200.0" onAction="#onActionOpenAdminSettings"
+                                        prefWidth="200.0" styleClass="flat" text="%ui.settings.admin-settings">
                                     <VBox.margin>
                                         <Insets/>
                                     </VBox.margin>
