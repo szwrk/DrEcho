@@ -13,14 +13,14 @@ public class User {
   private String licenceNumber;
   private Boolean isBlocked;
 
-  private User( String login, String password) {
-      this.login = login;
+  private User(String login, String password) {
+    this.login = login;
     this.password = password;
   }
 
-  private User( String login, String password, String firstName, String surname) {
+  private User(String login, String password, String firstName, String surname) {
 
-      this.login = login;
+    this.login = login;
     this.password = password;
     this.firstName = firstName;
     this.surname = surname;

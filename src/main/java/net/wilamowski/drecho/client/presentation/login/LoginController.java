@@ -28,7 +28,8 @@ import net.wilamowski.drecho.shared.auth.AuthenticationResults;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class LoginController implements Initializable, ViewHandlerInitializer, ViewModelsInitializer, PostInitializable {
+public class LoginController
+    implements Initializable, ViewHandlerInitializer, ViewModelsInitializer, PostInitializable {
   private static final Logger logger = LogManager.getLogger(LoginController.class);
   private final Tooltip loginTooltip =
       new Tooltip("Znaki zostaly automatycznie powiekszone. Login wpisujemy wielkimi literami!");
@@ -75,8 +76,8 @@ public class LoginController implements Initializable, ViewHandlerInitializer, V
 
   private void handleInvalidCredentials() {
     logger.warn("Invalid user credentials!");
-    boolean emptyLogin = loginField.getText( ).isEmpty( );
-    boolean emptyPassword      = passwordField.getText( ).isEmpty( );
+    boolean emptyLogin = loginField.getText().isEmpty();
+    boolean emptyPassword = passwordField.getText().isEmpty();
 
     if (emptyLogin && emptyPassword) {
       highlightInvalidInput(loginField);
@@ -87,8 +88,9 @@ public class LoginController implements Initializable, ViewHandlerInitializer, V
       logger.debug("Authentication failed. Please check your credentials.");
     }
   }
+
   private void highlightInvalidInput(TextField textField) {
-    textField.pseudoClassStateChanged( Styles.STATE_DANGER , true );
+    textField.pseudoClassStateChanged(Styles.STATE_DANGER, true);
   }
 
   private void handleValidCredentials() {
@@ -112,27 +114,67 @@ public class LoginController implements Initializable, ViewHandlerInitializer, V
     logger.debug("Initializing LoginController...");
   }
 
-  private void emptyFieldListener() {
-    loginField.textProperty().addListener(
-            (obs,oldv, newv) ->{
-              if ( newv.isEmpty( ) ) {
-                loginField.pseudoClassStateChanged( Styles.STATE_DANGER , true );
-              } else {
-                loginField.pseudoClassStateChanged( Styles.STATE_DANGER , false );
-              }
-            }
-    );
-    passwordField.textProperty().addListener(
-            (obs,oldv, newv) ->{
-              if ( newv.isEmpty() ) {
-                passwordField.pseudoClassStateChanged( Styles.STATE_DANGER , true );
-              } else {
-                passwordField.pseudoClassStateChanged( Styles.STATE_DANGER , false );
-              }
-            }
-    );
+  @FXML
+  void onClickOpenSettings(MouseEvent event) {
+    logger.debug("Clicked on Settings...");
+    showAppSettings();
   }
-    private void bindingFieldWithProperty() {
+
+  private void showAppSettings() {
+    logger.debug("Open settings");
+    //        List<String> backendValues =
+    // EnumUtils.getEnumList(BackendType.class).stream().map(BackendType::name).collect(Collectors.toList());
+    List<DeploymentType> deploymentTypes = Arrays.asList(DeploymentType.values());
+    ChoiceBox<DeploymentType> backendTypeChoiceBox = new ChoiceBox<>();
+    backendTypeChoiceBox.getItems().addAll(deploymentTypes);
+    backendTypeChoiceBox.setConverter(
+        new StringConverter<DeploymentType>() {
+          @Override
+          public String toString(DeploymentType deploymentType) {
+            return deploymentType.getLabel() + " (" + deploymentType.getDescription() + ")";
+          }
+
+          @Override
+          public DeploymentType fromString(String s) {
+            return DeploymentType.valueOf(s);
+          }
+        });
+  }
+
+  @Override
+  public void initializeViewHandler(GeneralViewHandler viewHandler) {
+    this.viewHandler = viewHandler;
+  }
+
+  @Override
+  public void initializeViewModels(ViewModels factory) {
+    loginViewModel = factory.loginViewModel();
+  }
+
+  @Override
+  public void postInitialize() {
+    bindingFieldWithProperty();
+    initTooltip();
+    convertLoginToUpperCaseIfContainsLowerChars();
+    emptyFieldListener();
+  }
+
+  private void emptyFieldListener() {
+    loginField
+        .textProperty()
+        .addListener(
+            (obs, oldv, newv) -> {
+                loginField.pseudoClassStateChanged(Styles.STATE_DANGER, newv.isEmpty( ) );
+            });
+    passwordField
+        .textProperty()
+        .addListener(
+            (obs, oldv, newv) -> {
+                passwordField.pseudoClassStateChanged(Styles.STATE_DANGER, newv.isEmpty( ) );
+            });
+  }
+
+  private void bindingFieldWithProperty() {
     loginField.textProperty().bindBidirectional(loginViewModel.loginTextProperty());
     passwordField.textProperty().bindBidirectional(loginViewModel.passwordProperty());
     loginInfo.textProperty().bind(loginViewModel.loginMsgProperty());
@@ -187,50 +229,5 @@ public class LoginController implements Initializable, ViewHandlerInitializer, V
     return loginPoint.getX()
         + loginField.getScene().getX()
         + loginField.getScene().getWindow().getX();
-  }
-
-  @FXML
-  void onClickOpenSettings(MouseEvent event) {
-    logger.debug("Clicked on Settings...");
-    showAppSettings();
-  }
-
-  private void showAppSettings() {
-    logger.debug("Open settings");
-    //        List<String> backendValues =
-    // EnumUtils.getEnumList(BackendType.class).stream().map(BackendType::name).collect(Collectors.toList());
-    List<DeploymentType> deploymentTypes = Arrays.asList(DeploymentType.values());
-    ChoiceBox<DeploymentType> backendTypeChoiceBox = new ChoiceBox<>();
-    backendTypeChoiceBox.getItems().addAll(deploymentTypes);
-    backendTypeChoiceBox.setConverter(
-        new StringConverter<DeploymentType>() {
-          @Override
-          public String toString(DeploymentType deploymentType) {
-            return deploymentType.getLabel() + " (" + deploymentType.getDescription() + ")";
-          }
-
-          @Override
-          public DeploymentType fromString(String s) {
-            return DeploymentType.valueOf(s);
-          }
-        });
-     }
-
-  @Override
-  public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.viewHandler = viewHandler;
-  }
-
-    @Override
-    public void initializeViewModels(ViewModels factory) {
-      loginViewModel = factory.loginViewModel();
-    }
-
-  @Override
-  public void postInitialize() {
-    bindingFieldWithProperty();
-    initTooltip();
-    convertLoginToUpperCaseIfContainsLowerChars();
-    emptyFieldListener( );
   }
 }

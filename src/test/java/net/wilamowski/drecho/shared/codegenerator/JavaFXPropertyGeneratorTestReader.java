@@ -1,11 +1,10 @@
 package net.wilamowski.drecho.shared.codegenerator;
 
+import java.util.Arrays;
+import java.util.List;
 import net.wilamowski.drecho.client.application.infra.util.codegenerator.JavaFXPropertyGenerator;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 class JavaFXPropertyGeneratorTestReader {
 

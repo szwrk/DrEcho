@@ -54,5 +54,4 @@ class CardioCalculatorTest {
     // Then
     Assertions.assertEquals(1.85, leftVentricularMassIndex, 0.01);
   }
-
 }

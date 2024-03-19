@@ -1,91 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-
-<TitledPane collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="dense" text="%ui.settings.dictionaries" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.dictionaries.general.DictionariesController">
-   <content>
-      <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <children>
-            <HBox VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label text="Słowniki">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TableView fx:id="dictionaryTable" prefHeight="236.0" prefWidth="347.0" VBox.vgrow="ALWAYS">
-                           <columns>
-                              <TableColumn fx:id="dictionaryCodeColumn" maxWidth="100.0" prefWidth="50.0" text="Code" />
-                              <TableColumn fx:id="dictionaryNameColumn" prefWidth="100.0" text="Name" />
-                              <TableColumn fx:id="dictionaryDescriptionColumn" editable="false" prefWidth="150.0" text="Description" />
-                           </columns>
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                           <styleClass>
-                              <String fx:value="dense" />
-                              <String fx:value="striped" />
-                           </styleClass>
-                        </TableView>
-                     </children>
-                  </VBox>
-                  <VBox HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label text="Zawartość">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TableView fx:id="positionsTable" editable="true" prefHeight="232.0" prefWidth="414.0" VBox.vgrow="ALWAYS">
-                           <VBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </VBox.margin>
-                           <columns>
-                              <TableColumn fx:id="positionCodeColumn" maxWidth="100.0" prefWidth="50.0" text="Code" />
-                              <TableColumn fx:id="positionNameColumn" prefWidth="100.0" text="Name" />
-                              <TableColumn fx:id="positionOrderColumn" prefWidth="50.0" text="Order" />
-                              <TableColumn fx:id="positionIsActiveColumn" prefWidth="50.0" text="isActive" />
-                           </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                           <styleClass>
-                              <String fx:value="dense" />
-                              <String fx:value="striped" />
-                           </styleClass>
-                        </TableView>
-                     </children>
-                  </VBox>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </VBox.margin>
-            </HBox>
-            <Separator prefWidth="200.0" />
-            <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="785.0">
-               <children>
-                  <Button fx:id="confirmButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#onActionConfirmDictionaryChanges" text="Zatwierdź">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </VBox>
-   </content>
+<TitledPane xmlns:fx="http://javafx.com/fxml/1" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+            styleClass="dense" text="%ui.settings.dictionaries" xmlns="http://javafx.com/javafx/21"
+            fx:controller="net.wilamowski.drecho.client.presentation.dictionaries.general.DictionariesController">
+    <content>
+        <VBox fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+            <children>
+                <HBox VBox.vgrow="ALWAYS">
+                    <children>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Słowniki">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </VBox.margin>
+                                </Label>
+                                <TableView fx:id="dictionaryTable" prefHeight="236.0" prefWidth="347.0"
+                                           VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="dictionaryCodeColumn" maxWidth="100.0" prefWidth="50.0"
+                                                     text="Code"/>
+                                        <TableColumn fx:id="dictionaryNameColumn" prefWidth="100.0" text="Name"/>
+                                        <TableColumn fx:id="dictionaryDescriptionColumn" editable="false"
+                                                     prefWidth="150.0" text="Description"/>
+                                    </columns>
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </VBox.margin>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                    </columnResizePolicy>
+                                    <styleClass>
+                                        <String fx:value="dense"/>
+                                        <String fx:value="striped"/>
+                                    </styleClass>
+                                </TableView>
+                            </children>
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label text="Zawartość">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </VBox.margin>
+                                </Label>
+                                <TableView fx:id="positionsTable" editable="true" prefHeight="232.0" prefWidth="414.0"
+                                           VBox.vgrow="ALWAYS">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </VBox.margin>
+                                    <columns>
+                                        <TableColumn fx:id="positionCodeColumn" maxWidth="100.0" prefWidth="50.0"
+                                                     text="Code"/>
+                                        <TableColumn fx:id="positionNameColumn" prefWidth="100.0" text="Name"/>
+                                        <TableColumn fx:id="positionOrderColumn" prefWidth="50.0" text="Order"/>
+                                        <TableColumn fx:id="positionIsActiveColumn" prefWidth="50.0" text="isActive"/>
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                    </columnResizePolicy>
+                                    <styleClass>
+                                        <String fx:value="dense"/>
+                                        <String fx:value="striped"/>
+                                    </styleClass>
+                                </TableView>
+                            </children>
+                        </VBox>
+                    </children>
+                    <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </VBox.margin>
+                </HBox>
+                <Separator prefWidth="200.0"/>
+                <HBox alignment="CENTER_RIGHT" prefHeight="50.0" prefWidth="785.0">
+                    <children>
+                        <Button fx:id="confirmButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                                mnemonicParsing="false" onAction="#onActionConfirmDictionaryChanges" text="Zatwierdź">
+                            <HBox.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </content>
 </TitledPane>

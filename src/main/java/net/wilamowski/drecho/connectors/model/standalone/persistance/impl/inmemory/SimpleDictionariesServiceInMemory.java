@@ -14,10 +14,11 @@ public class SimpleDictionariesServiceInMemory implements SimpleDictionariesServ
 
   private static final Logger logger =
       LogManager.getLogger(SimpleDictionariesServiceInMemory.class);
-  private final Set<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary> repository;
-    private final Map<String, String> dictionaries = new HashMap<>();
+  private final Set<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary>
+      repository;
+  private final Map<String, String> dictionaries = new HashMap<>();
 
-    public SimpleDictionariesServiceInMemory() {
+  public SimpleDictionariesServiceInMemory() {
     this.repository = new HashSet<>();
     loadEchoTteDictionaries();
     laodProvidersUsers();
@@ -25,55 +26,50 @@ public class SimpleDictionariesServiceInMemory implements SimpleDictionariesServ
     loadRealizationMinutes(5);
     loadRealizationHour();
     logger.debug(this);
-    }
+  }
 
   private void loadRealizationHour() {
     createAndAddDictionary(
-            "VST_REALIZ_HOURS",
-            "Realization hours",
-            " ",
-             Position.of("12","12", 12),
-             Position.of("13","13", 13),
-             Position.of("14","14", 14),
-             Position.of("15","15", 15),
-             Position.of("16","16", 16),
-             Position.of("17","17", 17),
-             Position.of("18","18", 18),
-             Position.of("19","19", 19),
-             Position.of("20","20", 20),
-             Position.of("21","21",  21));
-    }
+        "VST_REALIZ_HOURS",
+        "Realization hours",
+        " ",
+        Position.of("12", "12", 12),
+        Position.of("13", "13", 13),
+        Position.of("14", "14", 14),
+        Position.of("15", "15", 15),
+        Position.of("16", "16", 16),
+        Position.of("17", "17", 17),
+        Position.of("18", "18", 18),
+        Position.of("19", "19", 19),
+        Position.of("20", "20", 20),
+        Position.of("21", "21", 21));
+  }
 
   private void loadRealizationMinutes(int interval) {
     List<Position> values = new ArrayList<>();
-    for (int i=0; i<60; i=i+interval){
-      if(i<10){
+    for (int i = 0; i < 60; i = i + interval) {
+      if (i < 10) {
         var leadZero = "0";
-        leadZero+=String.valueOf(i);
+        leadZero += String.valueOf(i);
         values.add(Position.of(leadZero, leadZero, i));
       } else {
         var s = String.valueOf(i);
         values.add(Position.of(s, s, i));
       }
     }
-    createAndAddDictionary(
-            "VST_REALIZ_MIN",
-            "Realization minutes",
-            " ",
-            values
-    );
+    createAndAddDictionary("VST_REALIZ_MIN", "Realization minutes", " ", values);
   }
 
   private void createAndAddDictionary(
-          String code, String name, String description,List<Position> list) {
+      String code, String name, String description, List<Position> list) {
     DictionaryBuilder builder = new DictionaryBuilder();
     net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary =
-            builder
-                    .setCode(code)
-                    .setName(name)
-                    .setDescription(description)
-                    .addPositions(list)
-                    .createDictionary();
+        builder
+            .setCode(code)
+            .setName(name)
+            .setDescription(description)
+            .addPositions(list)
+            .createDictionary();
     repository.add(dictionary);
   }
 
@@ -90,13 +86,13 @@ public class SimpleDictionariesServiceInMemory implements SimpleDictionariesServ
 
   private void laodRegistranrsUsers() {
     createAndAddDictionary(
-            "PRSREGI",
-            "Registranrs.",
-            " ",
-            Position.of("JK", "Kowalski Jan", 0),
-            Position.of("SN", "Nowak Stefan", 1),
-            Position.of("KC", "Czubaszek Krystyna", 2),
-            Position.of("ADM", "Jan Kowalski", 3));
+        "PRSREGI",
+        "Registranrs.",
+        " ",
+        Position.of("JK", "Kowalski Jan", 0),
+        Position.of("SN", "Nowak Stefan", 1),
+        Position.of("KC", "Czubaszek Krystyna", 2),
+        Position.of("ADM", "Jan Kowalski", 3));
   }
 
   private void loadEchoTteDictionaries() {
@@ -238,42 +234,53 @@ public class SimpleDictionariesServiceInMemory implements SimpleDictionariesServ
     repository.add(dictionary);
   }
 
-    @Override
-  public void addDictionary(net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary) {
+  @Override
+  public void addDictionary(
+      net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary) {
     logger.debug(dictionary);
     repository.add(dictionary);
   }
 
-  public Optional<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary> getDictionary(String dictCode) {
+  public Optional<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary>
+      getDictionary(String dictCode) {
     return getFirst(dictCode);
   }
 
-  public Optional<Set<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary>> getDictionaries() {
+  public Optional<
+          Set<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary>>
+      getDictionaries() {
     return Optional.of(repository);
   }
 
   @Override
-  public void enable(net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary, Position positionRowValue) {
+  public void enable(
+      net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary,
+      Position positionRowValue) {
     logger.warn("[REPOSITORY] not impl yet");
   }
 
   @Override
-  public void disable(net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary, Position positionRowValue) {
+  public void disable(
+      net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary,
+      Position positionRowValue) {
     logger.warn("[REPOSITORY] not impl yet");
   }
 
   @Override
-  public void updateDictionary(net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary) {
+  public void updateDictionary(
+      net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary dictionary) {
     logger.info("[REPOSITORY] Executing updateDictionary service method.");
     logger.debug("[REPOSITORY] Update dictionary. Input value: {}", dictionary);
-    Optional<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary> optionalDictionary =
-        repository.stream().filter(d -> dictionary.getCode().equals(d.getCode())).findFirst();
+    Optional<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary>
+        optionalDictionary =
+            repository.stream().filter(d -> dictionary.getCode().equals(d.getCode())).findFirst();
 
     optionalDictionary.ifPresent(
         existingDictionary -> {
           logger.debug("[REPOSITORY] Found dictionary: {}", existingDictionary);
-          DictionaryBuilder                                                              dictionaryBuilder = new DictionaryBuilder();
-          net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary newDictionary     = dictionaryBuilder.create(dictionary);
+          DictionaryBuilder dictionaryBuilder = new DictionaryBuilder();
+          net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary
+              newDictionary = dictionaryBuilder.create(dictionary);
 
           logger.debug("[REPOSITORY] Remove {}", existingDictionary);
           repository.remove(existingDictionary);
@@ -282,7 +289,7 @@ public class SimpleDictionariesServiceInMemory implements SimpleDictionariesServ
           repository.add(newDictionary);
         });
   }
-  
+
   private Optional<Dictionary> getFirst(String dictCode) {
     return repository.stream()
         .filter(dictionary -> dictionary.getCode().equals(dictCode))

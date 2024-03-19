@@ -8,7 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public interface SimpleDictionariesService {
-   Logger logger = LogManager.getLogger(SimpleDictionariesService.class);
+  Logger logger = LogManager.getLogger(SimpleDictionariesService.class);
+
   void addDictionary(Dictionary dictionary);
 
   Optional<Dictionary> getDictionary(String dictName);
@@ -20,6 +21,4 @@ public interface SimpleDictionariesService {
   void disable(Dictionary dictionary, Position positionRowValue);
 
   void updateDictionary(Dictionary dictionary);
-
-
 }

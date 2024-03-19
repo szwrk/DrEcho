@@ -21,8 +21,8 @@ public class PatientStandaloneService implements PatientService {
   private final PatientRepository patientRepository;
   private final VersionedPatientRepository versionedPatientRepository;
 
-  public PatientStandaloneService(PatientRepository patientRepository,
-                                  VersionedPatientRepository versionedPatientRepository) {
+  public PatientStandaloneService(
+      PatientRepository patientRepository, VersionedPatientRepository versionedPatientRepository) {
     this.patientRepository = patientRepository;
     this.versionedPatientRepository = versionedPatientRepository;
   }
@@ -72,8 +72,8 @@ public class PatientStandaloneService implements PatientService {
     } else {
       if (StringUtils.isAlpha(param)) {
         logger.debug("[SERVICE] Searching parametr is alpha. Returning all patient by last name");
-        List<Patient> byLastName = patientRepository.findByLastName( param , page );
-        logger.debug("[SERVICE] Founded patients number: {}", byLastName.size() );
+        List<Patient> byLastName = patientRepository.findByLastName(param, page);
+        logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
         return byLastName;
       }
     }
@@ -82,17 +82,18 @@ public class PatientStandaloneService implements PatientService {
 
   @Override
   public int counterByLastName(String lastName) {
-    return patientRepository.countByLastName( lastName );
+    return patientRepository.countByLastName(lastName);
   }
 
   @Override
   public Optional<Patient> createPatientRecord(Patient patient) throws ValidationExceptions {
     logger.debug("[SERVICE-PATIENT] Creating patient start...");
     Validator newPatientValidator = Validator.instance();
-    newPatientValidator.registerValidations( Constraint.nameNotNullConstraint(patient));
-    newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint( patient ));
+    newPatientValidator.registerValidations(Constraint.nameNotNullConstraint(patient));
+    newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint(patient));
     newPatientValidator.registerValidations(Constraint.peselNotNullConstraint(patient.getPesel()));
-    newPatientValidator.registerValidations(Constraint.peselCodeLengthConstraint(patient.getPesel()));
+    newPatientValidator.registerValidations(
+        Constraint.peselCodeLengthConstraint(patient.getPesel()));
     newPatientValidator.registerValidations(Constraint.patientPeselUniqueConstraint(this, patient));
     List<String> errorList = newPatientValidator.validateAll();
 
@@ -112,7 +113,8 @@ public class PatientStandaloneService implements PatientService {
     newPatientValidator.registerValidations(Constraint.nameNotNullConstraint(patient));
     newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint(patient));
     newPatientValidator.registerValidations(Constraint.peselNotNullConstraint(patient.getPesel()));
-    newPatientValidator.registerValidations(Constraint.peselCodeLengthConstraint(patient.getPesel()));
+    newPatientValidator.registerValidations(
+        Constraint.peselCodeLengthConstraint(patient.getPesel()));
     newPatientValidator.registerValidations(Constraint.patientPeselUniqueConstraint(this, patient));
     List<String> errorList = newPatientValidator.validateAll();
     if (errorList.isEmpty()) {

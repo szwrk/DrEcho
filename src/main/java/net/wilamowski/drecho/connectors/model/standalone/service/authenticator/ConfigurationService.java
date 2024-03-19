@@ -8,12 +8,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ConfigurationService implements Configuration {
-  private static final Logger logger = LogManager.getLogger( ConfigurationService.class);
+  private static final Logger logger = LogManager.getLogger(ConfigurationService.class);
   private final ConfigurationRepository repository;
 
   public ConfigurationService(ConfigurationRepository repository) {
     this.repository = repository;
-    logger.debug("[SERVICE] Initializing ConfigurationService {} {} ...", getClass().getName(), repository.getClass().getSimpleName());
+    logger.debug(
+        "[SERVICE] Initializing ConfigurationService {} {} ...",
+        getClass().getName(),
+        repository.getClass().getSimpleName());
   }
 
   @Override

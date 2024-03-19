@@ -17,19 +17,20 @@ public class UserAlert {
   private static final Logger log = LogManager.getLogger(UserAlert.class);
 
   public void showInfo(String header, String content) {
-    String title = Lang.getString( "ui.alert.info.title");
+    String title = Lang.getString("ui.alert.info.title");
     Alert alert = createBaseAlert(Alert.AlertType.INFORMATION, title, header, content);
     showAndWaitWithLogging(alert, header, content);
   }
 
-
   private void showAndWaitWithLogging(Alert alert, String header, String content) {
-    alert.showAndWait()
-            .filter(buttonType -> buttonType == ButtonType.OK)
-            .ifPresent(result -> log.debug("User accepted alert: {}, {}", header, content));
+    alert
+        .showAndWait()
+        .filter(buttonType -> buttonType == ButtonType.OK)
+        .ifPresent(result -> log.debug("User accepted alert: {}, {}", header, content));
   }
 
-  private Alert createBaseAlert(Alert.AlertType alertType, String title, String header, String content) {
+  private Alert createBaseAlert(
+      Alert.AlertType alertType, String title, String header, String content) {
     Alert alert = new Alert(alertType);
     Button button = new Button();
     button.setText("OK");
@@ -46,23 +47,32 @@ public class UserAlert {
     Alert alert = createBaseAlert(Alert.AlertType.WARNING, title, header, content);
     Platform.runLater(() -> showAndWaitWithLogging(alert, header, content));
   }
-  public void showWarnConfirmOrLeave(String header, String content, String confirmButton, Runnable confirmAction, String cancelButtonName
-          , Runnable cancelAction) {
+
+  public void showWarnConfirmOrLeave(
+      String header,
+      String content,
+      String confirmButton,
+      Runnable confirmAction,
+      String cancelButtonName,
+      Runnable cancelAction) {
     String title = Lang.getString("ui.alert.warn.title");
     Alert alert = createBaseAlert(Alert.AlertType.WARNING, title, header, content);
     Platform.runLater(() -> showAndWaitWithLogging(alert, header, content));
 
     ButtonType confirmButtonType = new ButtonType(confirmButton, ButtonBar.ButtonData.OK_DONE);
-    ButtonType leaveButtonType = new ButtonType(cancelButtonName, ButtonBar.ButtonData.CANCEL_CLOSE);
+    ButtonType leaveButtonType =
+        new ButtonType(cancelButtonName, ButtonBar.ButtonData.CANCEL_CLOSE);
     alert.getButtonTypes().setAll(confirmButtonType, leaveButtonType);
 
-    alert.showAndWait().ifPresent(buttonType -> {
-      if (buttonType == confirmButtonType) {
-        confirmAction.run();
-      } else if (buttonType == leaveButtonType) {
-        cancelAction.run();
-      }
-    });
+    alert
+        .showAndWait()
+        .ifPresent(
+            buttonType -> {
+              if (buttonType == confirmButtonType) {
+                confirmAction.run();
+              } else if (buttonType == leaveButtonType) {
+                cancelAction.run();
+              }
+            });
   }
-
 }

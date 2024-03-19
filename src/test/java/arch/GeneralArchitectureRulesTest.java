@@ -11,17 +11,18 @@ import org.junit.jupiter.api.Test;
 @AnalyzeClasses(packages = "net.wilamowski.drecho")
 public class GeneralArchitectureRulesTest {
   JavaClasses classes = new ClassFileImporter().importPackages("net.wilamowski.drecho");
-  /** General rule. Model can not use view. */
 
+  /** General rule. Model can not use view. */
   @Test
   public void backendShouldNotAccessClient() {
-    ArchRule rule = noClasses()
-        .that()
-        .resideInAPackage("..connectors..")
-        .should()
-        .accessClassesThat()
-        .resideInAPackage("..client..");
+    ArchRule rule =
+        noClasses()
+            .that()
+            .resideInAPackage("..connectors..")
+            .should()
+            .accessClassesThat()
+            .resideInAPackage("..client..");
 
-    rule.check( classes );
+    rule.check(classes);
   }
 }

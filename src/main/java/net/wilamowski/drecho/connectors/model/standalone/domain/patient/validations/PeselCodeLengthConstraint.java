@@ -1,6 +1,6 @@
 package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations;
 
- class PeselCodeLengthConstraint implements Constraint {
+class PeselCodeLengthConstraint implements Constraint {
 
   private final String pesel;
 
@@ -10,10 +10,7 @@ package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validat
 
   @Override
   public boolean validate() {
-    if (pesel.length() == 11) {
-      return true;
-    }
-      return false;
+      return pesel.length( ) == 11;
   }
 
   @Override

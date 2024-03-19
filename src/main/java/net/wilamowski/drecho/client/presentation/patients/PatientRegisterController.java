@@ -26,8 +26,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class PatientRegisterController
     implements ViewModelsInitializer, ViewHandlerInitializer, PostInitializable, Initializable {
@@ -84,63 +84,11 @@ public class PatientRegisterController
       ExceptionAlert.create().showError(e, header, msg);
     }
 
-//    if (savedPatient.isPresent()) {
-//      handleAddNewPatient(savedPatient);
-//    } else {
-//      handleNullPatient();
-//    }
-  }
-
-  private void handleNullPatient() {
-    logger.error("[CONTROLLER-PATIENT] Failed to save new patient.");
-  }
-
-  private void handleAddNewPatient(Optional<PatientFx> patientFxOptional) {
-    PatientFx patientFx = patientFxOptional.get();
-    UserAlert userAlert = new UserAlert();
-    userAlert.showInfo(
-        "New patient", "Patient added successfully: \n" + addedPatientInfo(patientFx));
-    clearAllFields();
-    logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patientFx);
-  }
-
-  private static String addedPatientInfo(PatientFx patientFx) {
-    StringBuilder infoBuilder = new StringBuilder();
-    Long id = patientFx.getId().getValue();
-    String name = patientFx.getName().getValue();
-    String lastName = patientFx.getLastName().getValue();
-    String pesel = patientFx.getPesel().getValue();
-    LocalDate dateOfBith = patientFx.getDateBirth().getValue();
-    String formattedDate =
-        dateOfBith == null ? " - " : dateOfBith.format(DateTimeFormatter.ISO_DATE);
-    String birthCityName = patientFx.getNameOfCityBirth().getValue();
-    String telephone = patientFx.getPatientTelephoneNumber().getValue();
-    infoBuilder
-        .append(id == null ? " - " : "\n" + id)
-        .append(name == null ? " - " : "\n" + name)
-        .append(lastName == null ? " - " : "\n" + lastName)
-        .append(pesel == null ? " - " : "\n" + pesel)
-        .append("\n" + formattedDate)
-        .append(birthCityName == null ? " - " : "\n" + birthCityName)
-        .append(telephone == null ? " - " : "\n" + telephone);
-    return infoBuilder.toString();
-  }
-
-  private void clearAllFields() {
-    caregiverNoteTextField.setText("");
-    caregiverTelephoneTextField.setText("");
-    caregiverTelephoneTextField1.setText("");
-    addressCodeOfCityTextField.setText("");
-    patientDateBirthTextField.setValue(null);
-    patientGeneralPatientNote.setText("");
-    patientIdTextField.setText("");
-    patientLastNameTextField.setText("");
-    addressNameOfCityTextField.setText("");
-    patientNameTextField.setText("");
-    patientStreetTextField.setText("");
-    patientTelephoneNumberTextField.setText("");
-    patientPeselTextField.setText("");
-    patientCityOfBirthTextField.setText("");
+    //    if (savedPatient.isPresent()) {
+    //      handleAddNewPatient(savedPatient);
+    //    } else {
+    //      handleNullPatient();
+    //    }
   }
 
   public void setTitle(String text) {
@@ -259,6 +207,58 @@ public class PatientRegisterController
     } else {
       handleNullPatient();
     }
+  }
+
+  private void handleNullPatient() {
+    logger.error("[CONTROLLER-PATIENT] Failed to save new patient.");
+  }
+
+  private void handleAddNewPatient(Optional<PatientFx> patientFxOptional) {
+    PatientFx patientFx = patientFxOptional.get();
+    UserAlert userAlert = new UserAlert();
+    userAlert.showInfo(
+        "New patient", "Patient added successfully: \n" + addedPatientInfo(patientFx));
+    clearAllFields();
+    logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patientFx);
+  }
+
+  private static String addedPatientInfo(PatientFx patientFx) {
+    StringBuilder infoBuilder = new StringBuilder();
+    Long id = patientFx.getId().getValue();
+    String name = patientFx.getName().getValue();
+    String lastName = patientFx.getLastName().getValue();
+    String pesel = patientFx.getPesel().getValue();
+    LocalDate dateOfBith = patientFx.getDateBirth().getValue();
+    String formattedDate =
+        dateOfBith == null ? " - " : dateOfBith.format(DateTimeFormatter.ISO_DATE);
+    String birthCityName = patientFx.getNameOfCityBirth().getValue();
+    String telephone = patientFx.getPatientTelephoneNumber().getValue();
+    infoBuilder
+        .append(id == null ? " - " : "\n" + id)
+        .append(name == null ? " - " : "\n" + name)
+        .append(lastName == null ? " - " : "\n" + lastName)
+        .append(pesel == null ? " - " : "\n" + pesel)
+        .append("\n" + formattedDate)
+        .append(birthCityName == null ? " - " : "\n" + birthCityName)
+        .append(telephone == null ? " - " : "\n" + telephone);
+    return infoBuilder.toString();
+  }
+
+  private void clearAllFields() {
+    caregiverNoteTextField.setText("");
+    caregiverTelephoneTextField.setText("");
+    caregiverTelephoneTextField1.setText("");
+    addressCodeOfCityTextField.setText("");
+    patientDateBirthTextField.setValue(null);
+    patientGeneralPatientNote.setText("");
+    patientIdTextField.setText("");
+    patientLastNameTextField.setText("");
+    addressNameOfCityTextField.setText("");
+    patientNameTextField.setText("");
+    patientStreetTextField.setText("");
+    patientTelephoneNumberTextField.setText("");
+    patientPeselTextField.setText("");
+    patientCityOfBirthTextField.setText("");
   }
 
   public void onActionClosePatient(ActionEvent event) {

@@ -1,13 +1,12 @@
 package poc.GenericDocumentGeneratorPoc;
 
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.math.BigDecimal;
-
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
+import org.junit.Before;
+import org.junit.Test;
 
 public class AttributeValueTestApp {
 
@@ -24,16 +23,16 @@ public class AttributeValueTestApp {
 
     @Test
     public void isTextType(){
-        assertTrue( textAttributeValue.getDataType().equals( "TEXT" ));
+        assertEquals( "TEXT" , textAttributeValue.getDataType( ) );
     }
 
     @Test
     public void givenTextFormValue_whenGettersCalled_thenCorrectValuesReturned(){
-       assertTrue( textAttributeValue.getRootId().equals( 1 ));
-       assertTrue( textAttributeValue.getClassType().equals( "nameOfFormClass1" ));
-       assertTrue( textAttributeValue.getDataType().equals( "TEXT" ));
-       assertTrue( textAttributeValue.getTextValue().equals( "someValue1" ));
-       assertTrue( textAttributeValue.getCode().equals( "CODE1" ));
+       assertEquals( 1 , (int) textAttributeValue.getRootId( ) );
+       assertEquals( "nameOfFormClass1" , textAttributeValue.getClassType( ) );
+       assertEquals( "TEXT" , textAttributeValue.getDataType( ) );
+       assertEquals( "someValue1" , textAttributeValue.getTextValue( ) );
+       assertEquals( "CODE1" , textAttributeValue.getCode( ) );
     }
 
     @Test

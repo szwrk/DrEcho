@@ -37,8 +37,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class VisitDashboardController
@@ -107,29 +107,34 @@ public class VisitDashboardController
   @FXML
   void onActionSearchByPatient(ActionEvent event) {
     logger.debug("Clicked on search by patient");
-      SimpleModal modal = SimpleModal.setupPatientSearcherView( viewHandler, root );
-      SimpleModalController simpleModalController = (SimpleModalController) modal.getModalController();
-      PatientsSearcherController patientsSearcherController =
-          (PatientsSearcherController) simpleModalController.getIncludedController();
-      PatientSearcherViewModel patientSearcherViewModel =
-          patientsSearcherController.getPatientSearcherViewModel();
+    SimpleModal modal = SimpleModal.setupPatientSearcherView(viewHandler, root);
+    SimpleModalController simpleModalController =
+        (SimpleModalController) modal.getModalController();
+    PatientsSearcherController patientsSearcherController =
+        (PatientsSearcherController) simpleModalController.getIncludedController();
+    PatientSearcherViewModel patientSearcherViewModel =
+        patientsSearcherController.getPatientSearcherViewModel();
 
-    searchByPatientTextField.textProperty().addListener( (observableValue , s , t1) -> {
-      patientSearcherViewModel.initializeSearchValue( t1 );
-    } );
-      logger.debug("searchByPatientTextField value: {}", searchByPatientTextField.getText());
-      patientsSearcherController.inititalizeSearchValue(searchByPatientTextField.getText());
-      int findedMatchedPatients = patientSearcherViewModel.searchPatientByAnyInput( searchByPatientTextField.getText( ), 0 );
-      logger.debug( "findedMatchedPatients {}", findedMatchedPatients );
-      if (findedMatchedPatients==1){
-        visitDashboardViewModel.fetchByPatient(patientSearcherViewModel.getSelectedPatient());
-      } else if(findedMatchedPatients==0){
-        modal.showWithBlur();
-      } else {
-        logger.debug("Clearing search results and showing modal with blur");
-        visitDashboardViewModel.clearSearchResults();
-        modal.showWithBlur();
-      }
+    searchByPatientTextField
+        .textProperty()
+        .addListener(
+            (observableValue, s, t1) -> {
+              patientSearcherViewModel.initializeSearchValue(t1);
+            });
+    logger.debug("searchByPatientTextField value: {}", searchByPatientTextField.getText());
+    patientsSearcherController.inititalizeSearchValue(searchByPatientTextField.getText());
+    int findedMatchedPatients =
+        patientSearcherViewModel.searchPatientByAnyInput(searchByPatientTextField.getText(), 0);
+    logger.debug("findedMatchedPatients {}", findedMatchedPatients);
+    if (findedMatchedPatients == 1) {
+      visitDashboardViewModel.fetchByPatient(patientSearcherViewModel.getSelectedPatient());
+    } else if (findedMatchedPatients == 0) {
+      modal.showWithBlur();
+    } else {
+      logger.debug("Clearing search results and showing modal with blur");
+      visitDashboardViewModel.clearSearchResults();
+      modal.showWithBlur();
+    }
   }
 
   //  @NotNull
@@ -188,26 +193,26 @@ public class VisitDashboardController
     bindTableViewModel();
     configColumnValues();
     configColumnDisplay();
-//    preinitializePatientSearcherModal();
+    //    preinitializePatientSearcherModal();
   }
 
-//  private void preinitializePatientSearcherModal() {
-//    searcherModal =
-//        SimpleModal.setupPatientSearcherView(
-//            Objects.requireNonNull(viewHandler), Objects.requireNonNull(root));
-//    SimpleModalController simpleModalController =
-//        (SimpleModalController) searcherModal.getModalController();
-//    PatientsSearcherController patientsSearcherController =
-//        (PatientsSearcherController) simpleModalController.getIncludedController();
-//    patientSearcherViewModel = patientsSearcherController.getPatientSearcherViewModel();
-//    Objects.requireNonNull(patientSearcherViewModel);
-//
-//    searchByPatientTextField.textProperty().removeListener(  );
-//    searchByPatientTextField
-//        .textProperty()
-//        .addListener(
-//                );
-//  }
+  //  private void preinitializePatientSearcherModal() {
+  //    searcherModal =
+  //        SimpleModal.setupPatientSearcherView(
+  //            Objects.requireNonNull(viewHandler), Objects.requireNonNull(root));
+  //    SimpleModalController simpleModalController =
+  //        (SimpleModalController) searcherModal.getModalController();
+  //    PatientsSearcherController patientsSearcherController =
+  //        (PatientsSearcherController) simpleModalController.getIncludedController();
+  //    patientSearcherViewModel = patientsSearcherController.getPatientSearcherViewModel();
+  //    Objects.requireNonNull(patientSearcherViewModel);
+  //
+  //    searchByPatientTextField.textProperty().removeListener(  );
+  //    searchByPatientTextField
+  //        .textProperty()
+  //        .addListener(
+  //                );
+  //  }
 
   private void configColumnDisplay() {
     realizationDateTimeColumn.setCellFactory(
@@ -289,7 +294,7 @@ public class VisitDashboardController
     patientColumn.setCellValueFactory(cellData -> cellData.getValue().getSelectedPatient());
     patientCodePeselColumn.setCellValueFactory(
         cellData -> cellData.getValue().getSelectedPatient());
-    visitTable.setPlaceholder(new Label( "Sorry, no visits match your criteria." ));
+    visitTable.setPlaceholder(new Label("Sorry, no visits match your criteria."));
   }
 
   private void bindTableViewModel() {

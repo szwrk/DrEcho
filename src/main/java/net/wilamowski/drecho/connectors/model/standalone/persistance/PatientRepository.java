@@ -1,9 +1,8 @@
 package net.wilamowski.drecho.connectors.model.standalone.persistance;
 
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
-
 import java.util.List;
 import java.util.Optional;
+import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 
 public interface PatientRepository {
   Optional<Patient> addNew(Patient patient);

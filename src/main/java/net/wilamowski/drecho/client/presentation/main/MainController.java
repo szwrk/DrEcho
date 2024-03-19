@@ -44,7 +44,7 @@ public class MainController
         PostInitializable {
   private static final Logger logger = LogManager.getLogger(MainController.class);
   private final String loggedInUser;
-  private String sessionStartDateTime;
+  private final String sessionStartDateTime;
   // ViewModels
   private MainViewModel mainViewModel = null;
   private SettingsViewModel settingsViewModel = null;
@@ -69,7 +69,7 @@ public class MainController
     Session instance = Session.instance();
     loggedInUser = instance.getUserLogin();
     LocalDateTime sessionStartAt = instance.sessionStartAt();
-    String        propertiesLanguage         = ClientPropertyReader.getString( "user.ui.language" );
+    String propertiesLanguage = ClientPropertyReader.getString("user.ui.language");
     Locale locale = new Locale.Builder().setLanguage(propertiesLanguage).build();
     sessionStartDateTime =
         sessionStartAt.format(DateTimeFormatter.ofPattern("d MMMM, HH:mm", locale));
@@ -83,7 +83,6 @@ public class MainController
     quickVisitButton.requestFocus();
     logger.traceExit();
   }
-
 
   @Override
   public void initializeViewModels(ViewModels viewModels) {
@@ -149,8 +148,6 @@ public class MainController
   void onClickHomeScreen(MouseEvent event) {
     logger.debug("Click onClickHomeScreen...");
     loadWelcomeScreen();
-    
-    
   }
 
   public void loadWelcomeScreen() {
@@ -229,17 +226,16 @@ public class MainController
     logoutButton.setGraphic(ImageViewUtil.getImg("logout"));
     logoutButton.setOnAction(
         e -> {
-          confirmLogout( logoutButton );
+          confirmLogout(logoutButton);
         });
 
     var logoutTile = new Tile("Logged as...,", loggedInUser + ", " + sessionStartDateTime);
     logoutTile.setAction(logoutButton);
-    logoutTile.setActionHandler(  new Runnable( ) {
-      @Override
-      public void run() {
-
-      }
-    } );
+    logoutTile.setActionHandler(
+        new Runnable() {
+          @Override
+          public void run() {}
+        });
 
     var avatar = ImageViewUtil.getImg("badge");
     avatar.setFitWidth(64);
@@ -260,11 +256,10 @@ public class MainController
               owner.close();
             },
             Popover.ArrowLocation.RIGHT_TOP);
-    lvmPopover.show( logoutButton );
+    lvmPopover.show(logoutButton);
   }
 
   private void setupOwner() {
     owner = (Stage) root.getScene().getWindow();
   }
 }
-

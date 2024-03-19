@@ -1,12 +1,11 @@
 package net.wilamowski.drecho.client.presentation.customs.modals;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.scene.control.Alert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.fxmisc.richtext.InlineCssTextArea;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class DebugAlert {
   private static final Logger log = LogManager.getLogger(DebugAlert.class);

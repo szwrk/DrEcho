@@ -6,10 +6,11 @@ import net.wilamowski.drecho.connectors.model.*;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
 
 import org.apache.commons.lang.NotImplementedException;
+
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class ConnectorRest extends ConnectorLayer {
 

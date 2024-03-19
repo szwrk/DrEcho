@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
 import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
+
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>

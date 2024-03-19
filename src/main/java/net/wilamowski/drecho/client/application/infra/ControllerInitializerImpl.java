@@ -16,16 +16,16 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class ControllerInitializerImpl implements ControllerInitializer {
   public static final String DEBUG_CONTROLS_HOVER_TOOLTIPS = "user.debug.controls-hover-tooltips";
   private static final Logger logger = LogManager.getLogger(ControllerInitializerImpl.class);
   private final ViewModels viewModels;
 
-  public ControllerInitializerImpl( ViewModels viewModels) {
-    Objects.requireNonNull( Lang.getBundle() , "Bundle is null");
+  public ControllerInitializerImpl(ViewModels viewModels) {
+    Objects.requireNonNull(Lang.getBundle(), "Bundle is null");
     Objects.requireNonNull(viewModels, "ViewModels is null");
     this.viewModels = viewModels;
   }
@@ -51,7 +51,7 @@ public class ControllerInitializerImpl implements ControllerInitializer {
     }
 
     if (controller instanceof Initializable initializeController) {
-      initializeController.initialize(null, null );
+      initializeController.initialize(null, null);
     } else {
       logger.debug(
           "Controller {} is not instance of {} ", controller.getClass(), Initializable.class);
@@ -79,7 +79,7 @@ public class ControllerInitializerImpl implements ControllerInitializer {
     if (controller instanceof Tooltipable tooltipable) {
       Node root = tooltipable.getRootUiNode();
       logger.traceEntry("Initialize tooltipers...");
-      runAutoTooltiper( Lang.getBundle() , root);
+      runAutoTooltiper(Lang.getBundle(), root);
       logger.traceExit();
     } else {
       logger.debug(
@@ -94,7 +94,7 @@ public class ControllerInitializerImpl implements ControllerInitializer {
   }
 
   private static void runAutoTooltiper(ResourceBundle bundle, Node root) {
-    if ( ClientPropertyReader.getString(DEBUG_CONTROLS_HOVER_TOOLTIPS).equals("true"))
+    if (ClientPropertyReader.getString(DEBUG_CONTROLS_HOVER_TOOLTIPS).equals("true"))
       try {
         AutoTooltiper autoTooltiper = new AutoTooltiper();
         autoTooltiper.runTree(root);

@@ -1,8 +1,8 @@
 package net.wilamowski.drecho.client.application.factory;
 
 import lombok.ToString;
-import net.wilamowski.drecho.shared.bundle.Lang;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
+import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

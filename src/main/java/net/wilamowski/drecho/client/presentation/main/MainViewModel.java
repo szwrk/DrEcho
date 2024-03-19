@@ -6,6 +6,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.ViewModelOn
 @ToString
 public class MainViewModel implements ViewModelOnly {
   private final MainModel dataModel;
+
   public MainViewModel(MainModel dataModel) {
     this.dataModel = dataModel;
   }

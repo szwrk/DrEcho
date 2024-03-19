@@ -13,21 +13,22 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import lombok.ToString;
-import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
-import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
+import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
+import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
+import net.wilamowski.drecho.client.application.infra.ViewModels;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
+import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
+import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
+import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserController;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.visit.VisitController;
-import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
-import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>

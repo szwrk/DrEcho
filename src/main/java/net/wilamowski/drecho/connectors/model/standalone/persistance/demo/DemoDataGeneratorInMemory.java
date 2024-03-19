@@ -13,8 +13,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DemoDataGeneratorInMemory {
-  private static final Logger logger = LogManager.getLogger( DemoDataGeneratorInMemory.class);
-  private Random random;
+  private static final Logger logger = LogManager.getLogger(DemoDataGeneratorInMemory.class);
+  private final Random random;
   private String[] LAST_NAMES;
   private String[] FIRST_NAMES;
   private String[] CITIES;
@@ -25,10 +25,6 @@ public class DemoDataGeneratorInMemory {
     initializeCities();
     initializeNames();
     initializeLastNames();
-  }
-
-  public static DemoDataGeneratorInMemory instance() {
-    return new DemoDataGeneratorInMemory( );
   }
 
   private void initializeCities() {
@@ -45,18 +41,23 @@ public class DemoDataGeneratorInMemory {
     var values = Lang.getString("dummy.comma_separated.lastnames");
     LAST_NAMES = values.split(",");
   }
+
+  public static DemoDataGeneratorInMemory instance() {
+    return new DemoDataGeneratorInMemory();
+  }
+
   public Patient patient() {
     LocalDate dateOfBirth = dateOfBirth();
     return Patient.builder()
-            .name(name())
-            .lastName(lastName())
-            .pesel(newPesel(dateOfBirth))
-            .nameOfCityBirth( cities())
-            .codeOfCityBirth(getCodeOfCity())
-            .dateBirth(dateOfBirth)
-            .generalPatientNote(shortSentence())
-            .patientTelephoneNumber(telephoneNumber())
-            .build();
+        .name(name())
+        .lastName(lastName())
+        .pesel(newPesel(dateOfBirth))
+        .nameOfCityBirth(cities())
+        .codeOfCityBirth(getCodeOfCity())
+        .dateBirth(dateOfBirth)
+        .generalPatientNote(shortSentence())
+        .patientTelephoneNumber(telephoneNumber())
+        .build();
   }
 
   public String name() {
@@ -81,63 +82,64 @@ public class DemoDataGeneratorInMemory {
 
   public String telephoneNumber() {
     return String.valueOf(random.nextInt(8) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1)
-        + (random.nextInt( 8 ) + 1);
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1)
+        + (random.nextInt(8) + 1);
   }
 
-  public String newPesel(LocalDate dateOfBirth) { //todo internatiozation, national citized id factory etc...
+  public String newPesel(
+      LocalDate dateOfBirth) { // todo internatiozation, national citized id factory etc...
     String dateString = dateOfBirth.format(DateTimeFormatter.ofPattern("yyMMdd"));
-    int    randomNumber          = random.nextInt( 88888 ) + 10000 ;
+    int randomNumber = random.nextInt(88888) + 10000;
     return String.format("%s%d", dateString, randomNumber);
   }
 
   public String shortSentence() {
-    return Lang.getString( "dummy.sentence.short" );
+    return Lang.getString("dummy.sentence.short");
   }
 
   public Set<VisitEntity> loadDemoVisits() {
     Set<VisitEntity> visits = new HashSet<>();
     visits.add(
-            new VisitEntity(
-                    "ADM",
-                    "ADM",
-                    LocalDateTime.now().minusDays(5),
-                    LocalDateTime.now().minusHours(5).minusMinutes(5),
-                    1L));
+        new VisitEntity(
+            "ADM",
+            "ADM",
+            LocalDateTime.now().minusDays(5),
+            LocalDateTime.now().minusHours(5).minusMinutes(5),
+            1L));
     visits.add(
-            new VisitEntity(
-                    "ADM",
-                    "ADM",
-                    LocalDateTime.now().minusDays(4),
-                    LocalDateTime.now().minusHours(4).minusMinutes(4),
-                    2L));
+        new VisitEntity(
+            "ADM",
+            "ADM",
+            LocalDateTime.now().minusDays(4),
+            LocalDateTime.now().minusHours(4).minusMinutes(4),
+            2L));
     visits.add(
-            new VisitEntity(
-                    "ADM",
-                    "ADM",
-                    LocalDateTime.now().minusDays(3),
-                    LocalDateTime.now().minusHours(3).minusMinutes(3),
-                    3L));
+        new VisitEntity(
+            "ADM",
+            "ADM",
+            LocalDateTime.now().minusDays(3),
+            LocalDateTime.now().minusHours(3).minusMinutes(3),
+            3L));
     visits.add(
-            new VisitEntity(
-                    "ADM",
-                    "ADM",
-                    LocalDateTime.now().minusDays(2),
-                    LocalDateTime.now().minusHours(2).minusMinutes(2),
-                    4L));
+        new VisitEntity(
+            "ADM",
+            "ADM",
+            LocalDateTime.now().minusDays(2),
+            LocalDateTime.now().minusHours(2).minusMinutes(2),
+            4L));
     visits.add(
-            new VisitEntity(
-                    "ADM",
-                    "ADM",
-                    LocalDateTime.now().minusDays(1),
-                    LocalDateTime.now().minusHours(1).minusMinutes(1),
-                    5L));
+        new VisitEntity(
+            "ADM",
+            "ADM",
+            LocalDateTime.now().minusDays(1),
+            LocalDateTime.now().minusHours(1).minusMinutes(1),
+            5L));
     return visits;
   }
 }

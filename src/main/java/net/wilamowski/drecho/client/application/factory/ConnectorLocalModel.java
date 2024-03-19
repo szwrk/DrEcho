@@ -19,19 +19,17 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class ConnectorLocalModel extends ConnectorLayer {
-  private static final Logger logger = LogManager.getLogger( ConnectorLocalModel.class);
+  private static final Logger logger = LogManager.getLogger(ConnectorLocalModel.class);
   private final StandaloneRepositoryFactory repoFactory;
   private MainModel mainDataModel;
   private ModelEchoTte modelEchoTte;
-  private Configuration
-          configuration;
-  private AuthenticatorServiceImpl
-      authenticatorService;
+  private Configuration configuration;
+  private AuthenticatorServiceImpl authenticatorService;
   private UserService userService;
   private PatientService patientService;
 
@@ -42,7 +40,8 @@ public class ConnectorLocalModel extends ConnectorLayer {
   ConnectorLocalModel(StandaloneRepositoryFactory repoFactory) {
     Objects.requireNonNull(repoFactory);
     logger.debug(
-        "[CORE] Initializing ModelLayer - StandaloneModel, {} ...", repoFactory.getClass().getSimpleName());
+        "[CORE] Initializing ModelLayer - StandaloneModel, {} ...",
+        repoFactory.getClass().getSimpleName());
     this.repoFactory = repoFactory;
   }
 
@@ -60,9 +59,8 @@ public class ConnectorLocalModel extends ConnectorLayer {
 
   @Override
   public Configuration settingsModel() {
-    if ( configuration == null) {
-      configuration =
-          new ConfigurationService(repoFactory.instanceConfigurationRepository());
+    if (configuration == null) {
+      configuration = new ConfigurationService(repoFactory.instanceConfigurationRepository());
     }
     return configuration;
   }

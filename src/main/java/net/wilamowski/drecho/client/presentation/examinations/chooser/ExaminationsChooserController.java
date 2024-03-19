@@ -70,6 +70,7 @@ public class ExaminationsChooserController
   private ExaminationsChooserViewModel examinationsChooserViewModel;
   private ViewModels factory;
   private Iterator<Integer> tempIdIterator;
+
   public ExaminationsChooserController() {
     initIterator();
   }
@@ -100,20 +101,20 @@ public class ExaminationsChooserController
   }
 
   private void configSelectedExaminationsPlaceholder() {
-    Label label = new Label( Lang.getString("ui.examinations.searcher.selected.nodata"));
+    Label label = new Label(Lang.getString("ui.examinations.searcher.selected.nodata"));
     label.getStyleClass().add(Styles.TEXT_SUBTLE);
     selectedExhaminationsTable.setPlaceholder(label);
   }
 
   private void configDictionaryExaminationsPlaceholder() {
-    Label label = new Label( Lang.getString("ui.examinations.searcher.selected.nodata"));
+    Label label = new Label(Lang.getString("ui.examinations.searcher.selected.nodata"));
     label.getStyleClass().add(Styles.TEXT_SUBTLE);
     examinationsDictionaryTable.setPlaceholder(label);
   }
 
   private void initExamDictionary() {
     examinationsDictionaryTable.setPlaceholder(
-        new Label( Lang.getString("ui.examinations.catalogue.nodata.lbl")));
+        new Label(Lang.getString("ui.examinations.catalogue.nodata.lbl")));
     codeDictionaryColumn.setCellValueFactory(cellData -> cellData.getValue().codeProperty());
     nameDictionaryColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
@@ -147,7 +148,7 @@ public class ExaminationsChooserController
 
   private Button createAddNewInstanceOfExaminationButton(ExaminationDefinitionFx definition) {
     Button btn = new Button();
-    Tooltip tooltip = new Tooltip( Lang.getString("ui.examinations.catalogue.additem"));
+    Tooltip tooltip = new Tooltip(Lang.getString("ui.examinations.catalogue.additem"));
     btn.setTooltip(tooltip);
     Image image = new Image(getClass().getResourceAsStream(DICT_BTN_IMG));
     ImageView imageView = new ImageView(image);
@@ -164,16 +165,14 @@ public class ExaminationsChooserController
       Objects.requireNonNull(viewHandler);
       logger.debug("Selected examination: {}", definition);
       try {
-        EchoTteExaminationInstance echoInstance = new EchoTteExaminationInstance(
-                tempIdIterator.next( ) ,
-                definition ,
-                examinationsChooserViewModel.selectedPatientProperty( ) ,
-                viewHandler );
+        EchoTteExaminationInstance echoInstance =
+            new EchoTteExaminationInstance(
+                tempIdIterator.next(),
+                definition,
+                examinationsChooserViewModel.selectedPatientProperty(),
+                viewHandler);
 
-        examinationsChooserViewModel
-            .getChosenExamination()
-            .getValue()
-            .add(echoInstance);
+        examinationsChooserViewModel.getChosenExamination().getValue().add(echoInstance);
 
       } catch (NotImplementedException notImplementedException) {
         handleError(notImplementedException, "e.006.header", "e.006.msg");
@@ -181,24 +180,26 @@ public class ExaminationsChooserController
         handleError(exception, "e.999.header", "e.999.msg");
       }
     } else {
-      UserAlert userAlert = new UserAlert(  );
-      userAlert.showWarn( Lang.getString("u.001.header"), Lang.getString("u.001.msg"));
+      UserAlert userAlert = new UserAlert();
+      userAlert.showWarn(Lang.getString("u.001.header"), Lang.getString("u.001.msg"));
     }
   }
 
   private boolean isPatientSelected() {
     return examinationsChooserViewModel.selectedPatientProperty().getValue() != null;
   }
-  
-  private ObservableList<ExaminationDefinitionFx> fetchExamCatalog() { // todo hardcoded exam catalogue, create view model + servic, dictionary? factory? etc?
+
+  private ObservableList<ExaminationDefinitionFx>
+      fetchExamCatalog() { // todo hardcoded exam catalogue, create view model + servic, dictionary?
+                           // factory? etc?
     ExaminationDefinitionFx tte =
         new EchoExaminationDefinition(
             new SimpleStringProperty("ETTE"),
-            new SimpleStringProperty( Lang.getString("ui.examinations.service.echotte")));
+            new SimpleStringProperty(Lang.getString("ui.examinations.service.echotte")));
     ExaminationDefinitionFx ks =
         new PacemakerExaminationDefinitionFx(
             new SimpleStringProperty("PM"),
-            new SimpleStringProperty( Lang.getString("ui.examinations.service.pacemaker")));
+            new SimpleStringProperty(Lang.getString("ui.examinations.service.pacemaker")));
     return FXCollections.observableArrayList(tte, ks);
   }
 
@@ -222,7 +223,7 @@ public class ExaminationsChooserController
   private void configureSelectedDeleteColumn() {
     examinationColumnConfigurator(
         selectedExaminationDeleteColumn,
-            Lang.getString("ui.examinations.searcher.selected.delete"),
+        Lang.getString("ui.examinations.searcher.selected.delete"),
         SELECTED_EXAMS_DELETE_BTN_IMG,
         item -> {
           logger.debug("Delete {} {}.... ", item.getDefinition().getCode(), item.getTempId());
@@ -233,7 +234,7 @@ public class ExaminationsChooserController
   private void configureSelectedPrintColumn() {
     examinationColumnConfigurator(
         selectedExaminationPrintColumn,
-            Lang.getString("ui.examinations.searcher.selected.print"),
+        Lang.getString("ui.examinations.searcher.selected.print"),
         SELECTED_EXAMS_PRINT_BTN_IMG,
         item ->
             logger.debug(

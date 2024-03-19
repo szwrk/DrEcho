@@ -1,9 +1,8 @@
 package net.wilamowski.drecho.connectors.model.standalone.persistance;
 
-import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteUnmodifable;
-
 import java.util.List;
 import java.util.Optional;
+import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteUnmodifable;
 
 public interface EchoTteRepository {
   void save(EchoTteUnmodifable object);

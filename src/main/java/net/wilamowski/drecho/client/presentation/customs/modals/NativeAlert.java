@@ -15,5 +15,4 @@ public class NativeAlert {
     alert.setContentText("Check log for more information about: {}" + e.getMessage());
     alert.showAndWait();
   }
-
 }

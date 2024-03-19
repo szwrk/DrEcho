@@ -11,10 +11,10 @@ import javafx.collections.ObservableList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
+import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
+import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
 import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
 import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
-import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
-import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,10 +26,10 @@ public class DictionaryViewModel {
   private final ListProperty<DictionaryFx> dictionariesFx =
       new SimpleListProperty<>(FXCollections.observableArrayList());
   private final ObjectProperty<DictionaryFx> selectedDictionary = new SimpleObjectProperty<>();
+  private final BooleanProperty isDictionaryNowEdited = new SimpleBooleanProperty( false  );
   private ChangeListener<String> positionCodeListener;
   private ChangeListener<String> positionNameListener;
   private ChangeListener<Boolean> positionActiveListener;
-  private final BooleanProperty isDictionaryNowEdited = new SimpleBooleanProperty( false  );
 
   public DictionaryViewModel(SimpleDictionariesService simpleDictionariesService) {
     this.service = simpleDictionariesService;

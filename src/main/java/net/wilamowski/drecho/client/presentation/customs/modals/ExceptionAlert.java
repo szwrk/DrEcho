@@ -30,7 +30,8 @@ public class ExceptionAlert {
 
   public void showError(Throwable e, String header, String content) {
     log.error(e.getMessage());
-    if ( ClientPropertyReader.getString( "user.ui.debug.screenshoot-when-error" ).equals( Boolean.TRUE)){
+    if (ClientPropertyReader.getString("user.ui.debug.screenshoot-when-error")
+        .equals(Boolean.TRUE)) {
       Screenshoter.shot();
     }
     String title;

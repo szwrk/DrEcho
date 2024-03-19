@@ -13,7 +13,7 @@ public class CardioCalculatorExpressionImpl implements CardioCalculator {
   public static final String PATTERN_FORMAT_DOUBLE = "#.##";
   public static final int BODY_SURFACE_AREA_FACTOR = 3600;
   public static final double HEART_MUSCLE_DENSITY = 1.04;
-  private static final Logger logger = LogManager.getLogger( CardioCalculatorExpressionImpl.class);
+  private static final Logger logger = LogManager.getLogger(CardioCalculatorExpressionImpl.class);
 
   @Override
   public double calcLeftVentricularEndDiastolicDimensionMassIndexedToBodySurfaceArea(

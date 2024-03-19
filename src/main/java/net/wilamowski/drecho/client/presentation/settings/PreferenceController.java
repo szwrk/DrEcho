@@ -1,5 +1,7 @@
 package net.wilamowski.drecho.client.presentation.settings;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -21,9 +23,6 @@ import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.preferences.PreferenceViewModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * @author Arkadiusz Wilamowski

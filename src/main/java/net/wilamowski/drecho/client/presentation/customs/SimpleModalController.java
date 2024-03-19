@@ -22,8 +22,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class SimpleModalController implements Initializable, ViewHandlerInitializer {
   private static final Logger logger = LogManager.getLogger(SimpleModalController.class);
@@ -36,13 +36,12 @@ public class SimpleModalController implements Initializable, ViewHandlerInitiali
   private Stage stage;
   private ResourceBundle bundle;
 
-  public SimpleModalController() {
-  }
+  public SimpleModalController() {}
 
   public void loadNestedExamByFxmlPath(String subView) {
     logger.debug("Loading nested examination. Param: {}", subView);
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/" + subView));
-    loader.setResources(Lang.getBundle( ));
+    loader.setResources(Lang.getBundle());
     try {
       includedNode = loader.load();
     } catch (IOException e) {
@@ -57,7 +56,7 @@ public class SimpleModalController implements Initializable, ViewHandlerInitiali
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.url = url;
-    this.bundle = Lang.getBundle( );
+    this.bundle = Lang.getBundle();
   }
 
   @Override
@@ -72,7 +71,7 @@ public class SimpleModalController implements Initializable, ViewHandlerInitiali
   public void addConfirmButton(EventHandler e) {
     Button okBtn = new Button("OK");
     okBtn.getStyleClass().addAll(Styles.ACCENT);
-    okBtn.setOnAction( e );
+    okBtn.setOnAction(e);
     buttonBar.getChildren().add(okBtn);
   }
 

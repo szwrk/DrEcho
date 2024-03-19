@@ -20,7 +20,7 @@ public abstract class ExaminationInstance {
       ObjectProperty<PatientFx> patientFxObject,
       GeneralViewHandler viewHandler) {
     this.tempId = new SimpleIntegerProperty(tempId);
-    this.patient = Objects.requireNonNull( patientFxObject);
+    this.patient = Objects.requireNonNull(patientFxObject);
     this.definition = definition;
     this.viewHandler = viewHandler;
   }

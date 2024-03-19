@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @Getter
 @ToString
@@ -34,7 +34,7 @@ public class VisitDashboardViewModel {
 
   public void initTable() {
     Set<VisitDto> visitSet = visitModel.listVisitsBy(0, 100);
-    VisitVmMapper.toListToVM( visitSet );
+    VisitVmMapper.toListToVM(visitSet);
     loadVisits(visitSet);
   }
 
@@ -55,11 +55,11 @@ public class VisitDashboardViewModel {
 
   void updatePatientsTable(Set<VisitVM> visitVMList) {
     visits.clear();
-    visits.addAll( visitVMList );
+    visits.addAll(visitVMList);
   }
 
   public void fetchByPatient(PatientFx patientFx) {
-    Set<VisitDto> visitSet = visitModel.listVisitsBy( PatientVmMapper.toDomain(patientFx));
+    Set<VisitDto> visitSet = visitModel.listVisitsBy(PatientVmMapper.toDomain(patientFx));
     loadVisits(visitSet);
   }
 

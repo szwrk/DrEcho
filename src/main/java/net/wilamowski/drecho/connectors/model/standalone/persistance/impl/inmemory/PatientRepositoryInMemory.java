@@ -23,10 +23,6 @@ public class PatientRepositoryInMemory implements PatientRepository {
     new Thread( () -> initDummyPatients(numberOfPatientsToGenerate ) ).start();
   }
 
-  public static PatientRepositoryInMemory createPatientRepositoryInMemory( ) {
-    return new PatientRepositoryInMemory(  );
-  }
-
   private void initDummyPatients(int numberOfPatient) {
     dummyDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
     for (int i = 1; i <= numberOfPatient; i++) {
@@ -114,10 +110,12 @@ public class PatientRepositoryInMemory implements PatientRepository {
     }
     return filteredPatients.subList(startIndex, endIndex);
   }
+
   @Override
   public int countByLastName(String param) {
     return filterByLastName( param ).size();
   }
+
   @Override
   public List<Patient> findByPeselCode(String param, int page) {
     if (patients == null || param == null || param.isBlank()) {
@@ -174,5 +172,9 @@ public class PatientRepositoryInMemory implements PatientRepository {
     return patients.stream( )
             .filter( patient -> patient.getLastName( ).toLowerCase( ).startsWith( paramLowerCase ) )
             .collect( Collectors.toList( ) );
+  }
+
+  public static PatientRepositoryInMemory createPatientRepositoryInMemory( ) {
+    return new PatientRepositoryInMemory(  );
   }
 }

@@ -42,9 +42,9 @@ import org.apache.logging.log4j.Logger;
  */
 @ToString
 public class GeneralViewHandler {
-  public static int ANIMATION_CHANGE_SCANE_DURATION = 200;
   private static final Logger logger = LogManager.getLogger(GeneralViewHandler.class);
   private static final int WIDTH = 1920;
+  public static int ANIMATION_CHANGE_SCANE_DURATION = 200;
   private static ControllerInitializer controllerInitializer;
   private final ApplicationRoot root;
   private String applicationStyle;

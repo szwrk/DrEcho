@@ -9,37 +9,36 @@ import net.wilamowski.drecho.connectors.model.Configuration;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class PreferenceViewModel {
-    private final Configuration model;
-    private ObservableList<SettingPropertyFx> settingsFx = FXCollections.observableArrayList();
+  private final Configuration model;
+  private ObservableList<SettingPropertyFx> settingsFx = FXCollections.observableArrayList();
 
-    public PreferenceViewModel(Configuration model) {
-        this.model = model;
-        init();
-    }
+  public PreferenceViewModel(Configuration model) {
+    this.model = model;
+    init();
+  }
 
-    public void init() {
-        List<SettingValue> settings = model.getAllSettings();
-        SettingVmMapper    mapper   = new SettingVmMapper();
-        List<SettingPropertyFx> settingsVmBeans =
-                settings.stream().map(s -> mapper.toFxBean(s)).collect( Collectors.toList());
-        settingsFx = FXCollections.observableList(settingsVmBeans);
-    }
+  public void init() {
+    List<SettingValue> settings = model.getAllSettings();
+    SettingVmMapper mapper = new SettingVmMapper();
+    List<SettingPropertyFx> settingsVmBeans =
+        settings.stream().map(s -> mapper.toFxBean(s)).collect(Collectors.toList());
+    settingsFx = FXCollections.observableList(settingsVmBeans);
+  }
 
-    public ObservableList<SettingPropertyFx> getSettingsFx() {
-        return settingsFx;
-    }
+  public ObservableList<SettingPropertyFx> getSettingsFx() {
+    return settingsFx;
+  }
 
-    public void update(SettingPropertyFx singleSetting) {
-        SettingVmMapper settingMapper = new SettingVmMapper();
-        SettingValue    setting       = settingMapper.toDomain(singleSetting);
-        model.save(setting);
-    }
+  public void update(SettingPropertyFx singleSetting) {
+    SettingVmMapper settingMapper = new SettingVmMapper();
+    SettingValue setting = settingMapper.toDomain(singleSetting);
+    model.save(setting);
+  }
 }
-
-

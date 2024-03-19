@@ -25,7 +25,6 @@ import org.apache.logging.log4j.Logger;
  * Surface Area) = LV Mass / BSA RWT (Relative Wall Thickness) = 2 x PWd / LVEDD For BSA,
  * Mosteller’s formula is employed: BSA = (((Height in cm) x (Weight in kg))/ 3600)½
  */
-
 @Deprecated
 public class CardioCalculatorLvmi implements CardioCalculator {
   public static final int BODY_SURFACE_AREA_FACTOR = 3600;
@@ -34,19 +33,19 @@ public class CardioCalculatorLvmi implements CardioCalculator {
   public static final double POW_3 = 3;
   public static final double ADD_0_6G = 0.6;
   public static final String PATTERN_FORMAT_DOUBLE = "#.##";
-  private static final Logger logger = LogManager.getLogger( CardioCalculatorLvmi.class);
+  private static final Logger logger = LogManager.getLogger(CardioCalculatorLvmi.class);
 
   public CardioCalculatorLvmi() {
-    throw new NotImplementedException( "CalculatorLvmi is deprecated" );
+    throw new NotImplementedException("CalculatorLvmi is deprecated");
   }
 
   @Override
   public double calcLeftVentricularEndDiastolicDimensionMassIndexedToBodySurfaceArea(
-          double leftVentricularEndDiastolicDimension ,
-          double interventricularSeptumThickness ,
-          double posteriorWallThickness ,
-          double heightInCm ,
-          double weightInKg) {
+      double leftVentricularEndDiastolicDimension,
+      double interventricularSeptumThickness,
+      double posteriorWallThickness,
+      double heightInCm,
+      double weightInKg) {
     double lvMass =
         calcLeftVentricularMass(
             leftVentricularEndDiastolicDimension,
@@ -55,13 +54,14 @@ public class CardioCalculatorLvmi implements CardioCalculator {
     double bsa = calcBodySurfaceArea(heightInCm, weightInKg);
     double lvMassIndex = lvMass / bsa;
     logger.debug("LVMI: {} / {} = {}", lvMass, bsa, lvMassIndex);
-    return format( lvMassIndex );
+    return format(lvMassIndex);
   }
+
   @Override
   public double calcLeftVentricularMass(
-          double leftVentricularEndDiastolicDimen ,
-          double interventricularSeptumThickness ,
-          double posteriorWallThickness) {
+      double leftVentricularEndDiastolicDimen,
+      double interventricularSeptumThickness,
+      double posteriorWallThickness) {
 
     double lveddMm = convertMmToCm(leftVentricularEndDiastolicDimen);
     double ivsdMm = convertMmToCm(interventricularSeptumThickness);
@@ -70,8 +70,9 @@ public class CardioCalculatorLvmi implements CardioCalculator {
     double dimensionSum = sumDimenensions(lveddMm, ivsdMm, pwdMm);
 
     logCalculating(lveddMm, dimensionSum);
-    return format(MULTIPLIER_0_8
-            * (Heart_muscle_density * (thirdPower(dimensionSum) - thirdPower(lveddMm))))
+    return format(
+            MULTIPLIER_0_8
+                * (Heart_muscle_density * (thirdPower(dimensionSum) - thirdPower(lveddMm))))
         + ADD_0_6G;
   }
 
@@ -79,7 +80,9 @@ public class CardioCalculatorLvmi implements CardioCalculator {
       double leftVentricularEndDiastolicDimen,
       double interventricularSeptumThickness,
       double posteriorWallThickness) {
-      return leftVentricularEndDiastolicDimen + interventricularSeptumThickness + posteriorWallThickness;
+    return leftVentricularEndDiastolicDimen
+        + interventricularSeptumThickness
+        + posteriorWallThickness;
   }
 
   private static double convertMmToCm(double valueMm) {
@@ -87,57 +90,55 @@ public class CardioCalculatorLvmi implements CardioCalculator {
   }
 
   @Override
-  public double calcBodySurfaceArea(double heightInCm , double weightInKg) {
+  public double calcBodySurfaceArea(double heightInCm, double weightInKg) {
     double result = sqrt((heightInCm * weightInKg) / BODY_SURFACE_AREA_FACTOR);
     logger.debug("BSA: {} ", result);
     return result;
   }
 
   @Override
-  public Double calcRelativeWallThicknessRwt(Integer integer , Integer integer1) {
+  public Double calcRelativeWallThicknessRwt(Integer integer, Integer integer1) {
     return null;
   }
 
-  private double format(double value){
+  private double format(double value) {
     double result = 0;
     try {
-    DecimalFormat df = new DecimalFormat( PATTERN_FORMAT_DOUBLE );
-    df.setRoundingMode( RoundingMode.CEILING);
-    result = Double.parseDouble( df.format( value ) );
-    } catch (Exception e){
-      logger.error( e.getMessage(), e );
+      DecimalFormat df = new DecimalFormat(PATTERN_FORMAT_DOUBLE);
+      df.setRoundingMode(RoundingMode.CEILING);
+      result = Double.parseDouble(df.format(value));
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
     return result;
   }
 
   private static void logCalculating(double leftVentricularEndDiastolicDimen, double dimensionSum) {
     logger.debug(
-            "{} * ( {} * {} - {} ) + {} = {}",
-            MULTIPLIER_0_8,
-            Heart_muscle_density,
-            thirdPower(dimensionSum),
-            thirdPower(leftVentricularEndDiastolicDimen),
-            ADD_0_6G ,
-            MULTIPLIER_0_8
-                    * (Heart_muscle_density * thirdPower(dimensionSum)
+        "{} * ( {} * {} - {} ) + {} = {}",
+        MULTIPLIER_0_8,
+        Heart_muscle_density,
+        thirdPower(dimensionSum),
+        thirdPower(leftVentricularEndDiastolicDimen),
+        ADD_0_6G,
+        MULTIPLIER_0_8
+                * (Heart_muscle_density * thirdPower(dimensionSum)
                     - thirdPower(leftVentricularEndDiastolicDimen))
-                    + ADD_0_6G );
+            + ADD_0_6G);
 
     logger.debug(
-            "{} * {} + {} = {}",
-            MULTIPLIER_0_8,
-            (Heart_muscle_density * thirdPower(dimensionSum)
-                    - thirdPower(leftVentricularEndDiastolicDimen)),
-            ADD_0_6G ,
-            MULTIPLIER_0_8
-                    * (Heart_muscle_density * thirdPower(dimensionSum)
+        "{} * {} + {} = {}",
+        MULTIPLIER_0_8,
+        (Heart_muscle_density * thirdPower(dimensionSum)
+            - thirdPower(leftVentricularEndDiastolicDimen)),
+        ADD_0_6G,
+        MULTIPLIER_0_8
+                * (Heart_muscle_density * thirdPower(dimensionSum)
                     - thirdPower(leftVentricularEndDiastolicDimen))
-                    + ADD_0_6G );
+            + ADD_0_6G);
   }
 
   private static double thirdPower(double leftVentricularEndDiastolicDimen) {
     return pow(leftVentricularEndDiastolicDimen, POW_3);
   }
-
-
 }

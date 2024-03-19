@@ -1,9 +1,9 @@
 package net.wilamowski.drecho.shared.auth;
 
+import java.time.LocalDateTime;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDateTime;
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>
@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 public class Session {
   private static final Logger logger = LogManager.getLogger(Session.class);
   private static Session instance = null;
-  private  String login;
-  private  LocalDateTime sessionStartAt;
+  private final String login;
+  private final LocalDateTime sessionStartAt;
 
   private Session(String login , LocalDateTime sessionStartAt) {
     this.login = login;

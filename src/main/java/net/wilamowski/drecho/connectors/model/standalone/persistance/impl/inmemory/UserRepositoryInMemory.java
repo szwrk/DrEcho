@@ -3,7 +3,6 @@ package net.wilamowski.drecho.connectors.model.standalone.persistance.impl.inmem
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.UserRepository;
 import org.apache.commons.lang3.NotImplementedException;

@@ -20,8 +20,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class ApplicationRoot extends Application {
   public static final String FILE_ENCODING = "file.encoding";
@@ -41,8 +41,8 @@ public class ApplicationRoot extends Application {
 
   private void loadDeployMode() {
     log.info("Loading deploy mode...");
-    String string = ClientPropertyReader.getString( "admin.backend-connect-mode" );
-    deployMode = DeploymentType.of( string );
+    String string = ClientPropertyReader.getString("admin.backend-connect-mode");
+    deployMode = DeploymentType.of(string);
   }
 
   @Override
@@ -58,13 +58,12 @@ public class ApplicationRoot extends Application {
 
   private void initializeLanguage() {
     ResourceBundle mainAppBundle =
-        ResourceBundleFactory.instanceMainApp( ClientPropertyReader.getString( "user.ui.language" ));
+        ResourceBundleFactory.instanceMainApp(ClientPropertyReader.getString("user.ui.language"));
     Lang.initializeSingleton(Objects.requireNonNull(mainAppBundle));
   }
 
-
   private ConnectorLayer createModelLayer() {
-    ConnectorLayer    backend           = null;
+    ConnectorLayer backend = null;
     ModelLayerFactory modelLayerFactory = new ModelLayerFactory();
     try {
       backend = modelLayerFactory.createModelLayerByType(deployMode);
@@ -109,8 +108,8 @@ public class ApplicationRoot extends Application {
 
   private void initializeViewHandler(ConnectorLayer backend) {
     log.debug("Initializing GeneralViewHandler...");
-    String     globalStyleName = ClientPropertyReader.getString( "user.style.set" );
-    ViewModels viewModels      = new ViewModels(backend);
+    String globalStyleName = ClientPropertyReader.getString("user.style.set");
+    ViewModels viewModels = new ViewModels(backend);
     generalViewHandler = GeneralViewHandler.instance(globalStyleName, viewModels, this);
     log.debug("Initializing GeneralViewHandler... DONE");
   }
@@ -131,6 +130,4 @@ public class ApplicationRoot extends Application {
     Thread.setDefaultUncaughtExceptionHandler(myDefaultUncaughtExceptionHandler);
     log.debug("Set default uncaught exception handler");
   }
-
-
 }

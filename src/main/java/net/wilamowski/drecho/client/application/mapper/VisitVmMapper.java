@@ -15,12 +15,11 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-
 public class VisitVmMapper {
-  private static final Logger logger = LogManager.getLogger( VisitVmMapper.class);
+  private static final Logger logger = LogManager.getLogger(VisitVmMapper.class);
 
   public static Set<VisitVM> toListToVM(Set<VisitDto> visitSet) {
     return visitSet.stream().map(visit -> toVM(visit)).collect(Collectors.toSet());
@@ -33,9 +32,9 @@ public class VisitVmMapper {
     logger.debug("Transforming Visit to VisitFx: {}", visit);
 
     ObjectProperty<UserVM> registrantProperty =
-        new SimpleObjectProperty<>( UserVmMapper.of(visit.getSelectedRegistrant()));
+        new SimpleObjectProperty<>(UserVmMapper.of(visit.getSelectedRegistrant()));
     ObjectProperty<UserVM> performerProperty =
-        new SimpleObjectProperty<>( UserVmMapper.of(visit.getSelectedPerformer()));
+        new SimpleObjectProperty<>(UserVmMapper.of(visit.getSelectedPerformer()));
     ObjectProperty<LocalDate> realizationDateProperty =
         new SimpleObjectProperty<>(visit.getRealizationDateTime().toLocalDate());
     ObjectProperty<LocalTime> realizationTimeProperty =
@@ -45,7 +44,7 @@ public class VisitVmMapper {
     ObjectProperty<LocalTime> startTimeProperty =
         new SimpleObjectProperty<>(visit.getViewStartDateTime().toLocalTime());
     ObjectProperty<PatientFx> selectedPatientProperty =
-        new SimpleObjectProperty<>( PatientVmMapper.toFx(visit.getPatient()));
+        new SimpleObjectProperty<>(PatientVmMapper.toFx(visit.getPatient()));
 
     logger.debug(
         "Transformed Visit to VisitFx instance with registrant: {}, performer: {}, realization date: {}, realization time: {}, start date: {}, start time: {}, patient: {}",

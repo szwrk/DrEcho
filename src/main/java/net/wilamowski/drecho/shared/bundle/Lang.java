@@ -1,9 +1,9 @@
 package net.wilamowski.drecho.shared.bundle;
 
+import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>
@@ -26,6 +26,24 @@ public class Lang {
         return bundle;
     }
 
+    public static List<String> getKeysByValue(String targetValue) {
+        List<String> matchingKeys = new ArrayList<>();
+
+        if (targetValue != null && !targetValue.isBlank()) {
+            Enumeration<String> keys = Lang.getKeys();
+
+            while (keys.hasMoreElements()) {
+                String key = keys.nextElement();
+                String value = Lang.getString(key);
+
+                if (!value.isBlank() && value.equals(targetValue)) {
+                    matchingKeys.add(key);
+                }
+            }
+        }
+        return matchingKeys;
+    }
+
     public static String getString(String key) {
         if (bundle == null) {
             logger.error("ResourceBundle is null.");
@@ -45,23 +63,5 @@ public class Lang {
 
     public static Enumeration<String> getKeys() {
         return bundle.getKeys();
-    }
-
-    public static List<String> getKeysByValue(String targetValue) {
-        List<String> matchingKeys = new ArrayList<>();
-
-        if (targetValue != null && !targetValue.isBlank()) {
-            Enumeration<String> keys = Lang.getKeys();
-
-            while (keys.hasMoreElements()) {
-                String key = keys.nextElement();
-                String value = Lang.getString(key);
-
-                if (!value.isBlank() && value.equals(targetValue)) {
-                    matchingKeys.add(key);
-                }
-            }
-        }
-        return matchingKeys;
     }
 }

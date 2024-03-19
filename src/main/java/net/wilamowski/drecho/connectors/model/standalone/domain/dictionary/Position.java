@@ -16,7 +16,7 @@ public class Position {
     this.isActive = isActive;
   }
 
-  public static Position of(String code , String name , int order) {
+  public static Position of(String code, String name, int order) {
     return new Position(code, name, order, true);
   }
 

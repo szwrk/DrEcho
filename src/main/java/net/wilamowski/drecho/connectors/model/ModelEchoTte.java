@@ -1,9 +1,8 @@
 package net.wilamowski.drecho.connectors.model;
 
-import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteUnmodifable;
-
 import java.util.List;
 import java.util.Optional;
+import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteUnmodifable;
 
 public interface ModelEchoTte {
   void addExhamination(EchoTteUnmodifable echoTteBean);

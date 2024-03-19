@@ -1,5 +1,7 @@
 package net.wilamowski.drecho.client.presentation.settings;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -11,18 +13,16 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.DefaultStringConverter;
 import lombok.ToString;
-import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
-import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
+import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
+import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
+import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>

@@ -3,9 +3,8 @@ package net.wilamowski.drecho.connectors.model.standalone.persistance.impl.inmem
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import net.wilamowski.drecho.connectors.model.standalone.persistance.EchoTteRepository;
 import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteUnmodifable;
+import net.wilamowski.drecho.connectors.model.standalone.persistance.EchoTteRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

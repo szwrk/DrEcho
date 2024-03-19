@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class PatientSearcherViewModel {
@@ -26,6 +26,7 @@ public class PatientSearcherViewModel {
   private final int AUTOSEARCH_NUMBER_LENGTH_TRIGGER;
   private final int AUTOSEARCH_TEXT_LENGTH_TRIGGER;
   private final PatientService patientService;
+
   @ToString.Exclude
   private final ObservableList<PatientFx> patients = FXCollections.observableArrayList();
 
@@ -37,9 +38,13 @@ public class PatientSearcherViewModel {
   public PatientSearcherViewModel(PatientService patientService) {
     this.patientService = patientService;
     AUTOSEARCH_NUMBER_LENGTH_TRIGGER =
-        Integer.parseInt( ClientPropertyReader.getString( "admin.patient.searcher.autosearch-number-length-trigger" ));
+        Integer.parseInt(
+            ClientPropertyReader.getString(
+                "admin.patient.searcher.autosearch-number-length-trigger"));
     AUTOSEARCH_TEXT_LENGTH_TRIGGER =
-        Integer.parseInt( ClientPropertyReader.getString( "admin.patient.searcher.autosearch-text-length-trigger" ));
+        Integer.parseInt(
+            ClientPropertyReader.getString(
+                "admin.patient.searcher.autosearch-text-length-trigger"));
   }
 
   public void setCurrentPatient(PatientFx patient) {
@@ -51,10 +56,9 @@ public class PatientSearcherViewModel {
     selectedPatient.set(null);
   }
 
-
   public int searchPatientByAnyInput(String param, int page) {
     logger.trace("Entering search method with param: {}", param);
-    if (param==null){
+    if (param == null) {
       return 0;
     }
     String cleanedInput = param.trim().toLowerCase();
@@ -151,8 +155,7 @@ public class PatientSearcherViewModel {
 
   public void initializeSearchValue(String text) {}
 
-
   public int countPatientByAnyInput(String searchInput) {
-    return patientService.counterByLastName( searchInput );
+    return patientService.counterByLastName(searchInput);
   }
 }

@@ -1,8 +1,7 @@
 package net.wilamowski.drecho.connectors.model.standalone.persistance;
 
-import net.wilamowski.drecho.connectors.configuration.SettingValue;
-
 import java.util.List;
+import net.wilamowski.drecho.connectors.configuration.SettingValue;
 
 public interface ConfigurationRepository {
   void saveProperty(SettingValue s);

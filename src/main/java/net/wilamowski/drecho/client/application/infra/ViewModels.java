@@ -16,6 +16,7 @@ import net.wilamowski.drecho.client.presentation.settings.SettingsViewModel;
 import net.wilamowski.drecho.client.presentation.visit.VisitDetailsViewModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>

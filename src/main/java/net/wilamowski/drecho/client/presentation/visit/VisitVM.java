@@ -18,13 +18,13 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 @Getter
 public class VisitVM {
-  private static final Logger logger = LogManager.getLogger( VisitVM.class);
+  private static final Logger logger = LogManager.getLogger(VisitVM.class);
   private final ObjectProperty<LocalDateTime> realizationDateTimeProperty;
   private final ObjectProperty<LocalDateTime> viewStartDateTimeProperty;
   private ObjectProperty<UserVM> selectedRegistrant = new SimpleObjectProperty<>();
@@ -96,9 +96,9 @@ public class VisitVM {
     logger.debug("Transforming Visit to VisitFx: {}", visit);
 
     ObjectProperty<UserVM> registrantProperty =
-        new SimpleObjectProperty<>( UserVmMapper.of(visit.getSelectedRegistrant()));
+        new SimpleObjectProperty<>(UserVmMapper.of(visit.getSelectedRegistrant()));
     ObjectProperty<UserVM> performerProperty =
-        new SimpleObjectProperty<>( UserVmMapper.of(visit.getSelectedPerformer()));
+        new SimpleObjectProperty<>(UserVmMapper.of(visit.getSelectedPerformer()));
     ObjectProperty<LocalDate> realizationDateProperty =
         new SimpleObjectProperty<>(visit.getRealizationDateTime().toLocalDate());
     ObjectProperty<LocalTime> realizationTimeProperty =
@@ -108,7 +108,7 @@ public class VisitVM {
     ObjectProperty<LocalTime> startTimeProperty =
         new SimpleObjectProperty<>(visit.getViewStartDateTime().toLocalTime());
     ObjectProperty<PatientFx> selectedPatientProperty =
-        new SimpleObjectProperty<>( PatientVmMapper.toFx(visit.getPatient()));
+        new SimpleObjectProperty<>(PatientVmMapper.toFx(visit.getPatient()));
 
     logger.debug(
         "Transformed Visit to VisitFx instance with registrant: {}, performer: {}, realization date: {}, realization time: {}, start date: {}, start time: {}, patient: {}",

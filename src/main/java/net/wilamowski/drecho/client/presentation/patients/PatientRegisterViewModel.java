@@ -13,18 +13,19 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class PatientRegisterViewModel {
   private static final Logger logger = LogManager.getLogger(PatientRegisterViewModel.class);
   private final PatientService patientService;
   private PatientFx currentPatientFx = null;
-  private BooleanProperty addPatientModeDisable = new SimpleBooleanProperty( true );
-  private BooleanProperty updatePatientModeDisable = new SimpleBooleanProperty( true );
+  private final BooleanProperty addPatientModeDisable = new SimpleBooleanProperty(true);
+  private final BooleanProperty updatePatientModeDisable = new SimpleBooleanProperty(true);
   private PatientRegisterDataEntryMode dataEntryMode;
   private boolean isUserStartedWriting = false;
+
   public PatientRegisterViewModel(PatientService patientService) {
     this.patientService = patientService;
     this.currentPatientFx = PatientFx.createEmptyPatientFx();
@@ -52,18 +53,17 @@ public class PatientRegisterViewModel {
     return currentPatientFx;
   }
 
-  public void selectPatientForEdit(PatientFx patientFx)
-  {
+  public void selectPatientForEdit(PatientFx patientFx) {
     this.currentPatientFx = patientFx;
   }
+
   void removePatient() {
     this.currentPatientFx = PatientFx.createEmptyPatientFx();
   }
 
   public void initializePeselTextField(String peselCode) {
-    this.currentPatientFx.getPesel().set( peselCode );
+    this.currentPatientFx.getPesel().set(peselCode);
   }
-
 
   BooleanProperty addPatientModeDisableProperty() {
     return addPatientModeDisable;
@@ -75,12 +75,12 @@ public class PatientRegisterViewModel {
 
   void turnOnAddPatientMode() {
     this.dataEntryMode = PatientRegisterDataEntryMode.ADD;
-    this.addPatientModeDisable.set( false );
+    this.addPatientModeDisable.set(false);
   }
 
   void turnOnEditingPatientMode() {
     this.dataEntryMode = PatientRegisterDataEntryMode.EDIT;
-    this.updatePatientModeDisable.set( false );
+    this.updatePatientModeDisable.set(false);
   }
 
   public PatientRegisterDataEntryMode dataEntryMode() {
@@ -88,10 +88,12 @@ public class PatientRegisterViewModel {
   }
 
   public void configureListenersForPreventingUnsavedChanges() {
-    currentPatientFx.getName()
-            .addListener((obs, oldval, newval) -> this.isUserStartedWriting = true);
-    currentPatientFx.getLastName()
-            .addListener((obs, oldval, newval) -> this.isUserStartedWriting = true);
+    currentPatientFx
+        .getName()
+        .addListener((obs, oldval, newval) -> this.isUserStartedWriting = true);
+    currentPatientFx
+        .getLastName()
+        .addListener((obs, oldval, newval) -> this.isUserStartedWriting = true);
   }
 
   public Optional<PatientFx> commitCurrentPatientChanges() throws ValidationExceptions {
@@ -111,11 +113,13 @@ public class PatientRegisterViewModel {
     }
   }
 
-  enum PatientRegisterDataEntryMode {
-    READONLY, ADD, EDIT
-  }
-
   public boolean isUserStartedWriting() {
     return isUserStartedWriting;
+  }
+
+  enum PatientRegisterDataEntryMode {
+    READONLY,
+    ADD,
+    EDIT
   }
 }

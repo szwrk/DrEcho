@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.connectors.model.servicemapper;
 
-import net.wilamowski.drecho.connectors.model.standalone.domain.visit.Visit;
 import net.wilamowski.drecho.connectors.infrastructure.VisitDto;
+import net.wilamowski.drecho.connectors.model.standalone.domain.visit.Visit;
 
 public class VisitAssembler {
         public static VisitDto toDto(Visit visit) {

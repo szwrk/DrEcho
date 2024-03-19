@@ -38,7 +38,7 @@ public class LoginViewModel {
   private void initBackendMode() {
     DeploymentType backendConnectModeInitValue = null;
     backendConnectModeInitValue =
-        DeploymentType.of( ClientPropertyReader.getString(PROPERTY_BACKEND_CONNECT_MODE));
+        DeploymentType.of(ClientPropertyReader.getString(PROPERTY_BACKEND_CONNECT_MODE));
     deployModeProperty().set(backendConnectModeInitValue);
   }
 

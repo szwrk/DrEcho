@@ -11,13 +11,10 @@ class PatientRequiredFields implements Constraint {
 
   @Override
   public boolean validate() {
-    if (!patient.getPesel().isEmpty()
-        && !patient.getName().isEmpty()
-        && !patient.getLastName().isEmpty()
-        && patient.getDateBirth() != null) {
-      return true;
-    }
-      return false;
+      return !patient.getPesel( ).isEmpty( )
+              && !patient.getName( ).isEmpty( )
+              && !patient.getLastName( ).isEmpty( )
+              && patient.getDateBirth( ) != null;
   }
 
   @Override

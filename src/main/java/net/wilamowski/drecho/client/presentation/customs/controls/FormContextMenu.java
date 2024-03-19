@@ -11,15 +11,17 @@ import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class FormContextMenu {
   public static final String DICTIONARIES_VIEW_NAME = "Dictionaries";
   private static final Logger logger = LogManager.getLogger(FormContextMenu.class);
   private final GeneralViewHandler viewHandler;
+
   private FormContextMenu(GeneralViewHandler viewHandler) {
     this.viewHandler = viewHandler;
   }
@@ -31,7 +33,7 @@ public class FormContextMenu {
   private ContextMenu create() {
 
     ContextMenu menu = new ContextMenu();
-    MenuItem item = new MenuItem( Lang.getString("ui.formcontextmenu.header"));
+    MenuItem item = new MenuItem(Lang.getString("ui.formcontextmenu.header"));
     item.setDisable(true);
     MenuItem editItem = new MenuItem(Lang.getString("ui.formcontextmenu.item.settings"));
     menu.getItems().addAll(item, editItem);
@@ -58,8 +60,8 @@ public class FormContextMenu {
   }
 
   public void applyForRootNode(Node root) {
-    if ( root instanceof ComboBox textField ) {
-        ContextMenu menu = create();
+    if (root instanceof ComboBox textField) {
+      ContextMenu menu = create();
       MenuItem item = new MenuItem();
       item.setDisable(true);
       item.setText("Id: " + root.getId());
@@ -67,8 +69,8 @@ public class FormContextMenu {
       textField.setContextMenu(menu);
     }
 
-    if ( root instanceof Region region ) {
-        for (Node child : region.getChildrenUnmodifiable()) {
+    if (root instanceof Region region) {
+      for (Node child : region.getChildrenUnmodifiable()) {
         applyForRootNode(child);
       }
     }

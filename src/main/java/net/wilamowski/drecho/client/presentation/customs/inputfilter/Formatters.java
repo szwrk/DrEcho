@@ -7,11 +7,10 @@ import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 
 public class Formatters {
   public static final String FORMAT_REGEX_INTEGER = "^[0-9]\\d{0,%d}$";
-
+  private final Double defaultDouble = null;
   private Integer defaultInt = null;
   private Float defaultFloat = null;
   private String defaultString = null;
-  private final Double defaultDouble = null;
   private Converters converters = null;
 
   private Formatters() {
@@ -20,11 +19,14 @@ public class Formatters {
   }
 
   private void turnOnDefaultValue() {
-    if (Boolean.parseBoolean( ClientPropertyReader.getString( "admin.debug.form.default" ))) {
-      //      this.defaultInt = Integer.valueOf(PropertyReader.get("admin.admin.debug.form.default.int"));
-      this.defaultInt = Integer.valueOf( ClientPropertyReader.getString( "admin.debug.form.default.int" ));
-      this.defaultFloat = Float.valueOf( ClientPropertyReader.getString( "admin.debug.form.default.float" ));
-      this.defaultString = ClientPropertyReader.getString( "admin.debug.form.default.string" );
+    if (Boolean.parseBoolean(ClientPropertyReader.getString("admin.debug.form.default"))) {
+      //      this.defaultInt =
+      // Integer.valueOf(PropertyReader.get("admin.admin.debug.form.default.int"));
+      this.defaultInt =
+          Integer.valueOf(ClientPropertyReader.getString("admin.debug.form.default.int"));
+      this.defaultFloat =
+          Float.valueOf(ClientPropertyReader.getString("admin.debug.form.default.float"));
+      this.defaultString = ClientPropertyReader.getString("admin.debug.form.default.string");
     }
   }
 
@@ -65,12 +67,12 @@ public class Formatters {
     //    return new TextFormatter<>(converters.integerStringConverterNullable(), defaultValue,
     // integerFilter);
   }
-  
+
   private static UnaryOperator<TextFormatter.Change> createIntegerFilterForBlockingUserInput(
       String regexpFilter) {
     return change -> {
       String newText = change.getControlNewText();
-      if ( isEmptyChange(newText)) {
+      if (isEmptyChange(newText)) {
         if (newText.matches(regexpFilter)) {
           return change;
         } else {
@@ -80,8 +82,7 @@ public class Formatters {
         if (isNegativeInteger(newText)) {
           change.setText("");
           return change;
-        } else
-          return change;
+        } else return change;
       }
       //      if (isBackspacePressed(newText) || newText.matches(regexpFilter)) {
       //        return change;

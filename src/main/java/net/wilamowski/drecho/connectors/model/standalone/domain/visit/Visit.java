@@ -14,17 +14,22 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.Use
 @Builder
 public class Visit {
 
-    private User selectedRegistrant;
-    private User selectedPerformer;
-    private LocalDateTime realizationDateTime;
-    private LocalDateTime viewStartDateTime;
-    private Patient patient;
+  private User selectedRegistrant;
+  private User selectedPerformer;
+  private LocalDateTime realizationDateTime;
+  private LocalDateTime viewStartDateTime;
+  private Patient patient;
 
-    private Visit(User selectedRegistrant, User selectedPerformer, LocalDateTime realizationDateTime, LocalDateTime viewStartDateTime, Patient patient) {
-        this.selectedRegistrant = selectedRegistrant;
-        this.selectedPerformer = selectedPerformer;
-        this.realizationDateTime = realizationDateTime;
-        this.viewStartDateTime = viewStartDateTime;
-        this.patient = patient;
-    }
+  private Visit(
+      User selectedRegistrant,
+      User selectedPerformer,
+      LocalDateTime realizationDateTime,
+      LocalDateTime viewStartDateTime,
+      Patient patient) {
+    this.selectedRegistrant = selectedRegistrant;
+    this.selectedPerformer = selectedPerformer;
+    this.realizationDateTime = realizationDateTime;
+    this.viewStartDateTime = viewStartDateTime;
+    this.patient = patient;
+  }
 }

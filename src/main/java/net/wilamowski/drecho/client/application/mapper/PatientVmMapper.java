@@ -13,15 +13,14 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-
 public class PatientVmMapper {
-  private static final Logger logger = LogManager.getLogger( PatientVmMapper.class);
+  private static final Logger logger = LogManager.getLogger(PatientVmMapper.class);
 
   public static List<PatientFx> toListToFx(List<Patient> fetchedPatients) {
-    return fetchedPatients.stream().map( PatientVmMapper::toFx).collect(Collectors.toList());
+    return fetchedPatients.stream().map(PatientVmMapper::toFx).collect(Collectors.toList());
   }
 
   public static PatientFx toFx(Patient patient) throws NullPointerException {

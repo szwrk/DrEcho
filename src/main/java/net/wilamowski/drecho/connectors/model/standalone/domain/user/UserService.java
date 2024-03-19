@@ -8,11 +8,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class UserService implements UserModel {
-  private static final Logger logger = LogManager.getLogger( UserService.class);
+  private static final Logger logger = LogManager.getLogger(UserService.class);
   private final UserRepository userRepository;
 
   public UserService(UserRepository repository) {
-    logger.debug("[SERVICE] Initializing UserService {} ...", repository.getClass().getSimpleName());
+    logger.debug(
+        "[SERVICE] Initializing UserService {} ...", repository.getClass().getSimpleName());
     this.userRepository = repository;
   }
 

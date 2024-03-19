@@ -2,6 +2,7 @@ package net.wilamowski.drecho;
 
 import javafx.application.Application;
 import net.wilamowski.drecho.client.ApplicationRoot;
+
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>

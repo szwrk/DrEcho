@@ -10,12 +10,13 @@ import org.apache.logging.log4j.Logger;
 
 @ToString
 public class EchoTteService implements ModelEchoTte {
-  private static final Logger logger = LogManager.getLogger( EchoTteService.class);
+  private static final Logger logger = LogManager.getLogger(EchoTteService.class);
 
   private final EchoTteRepository repository;
 
   public EchoTteService(EchoTteRepository repository) {
-    logger.debug("[SERVICE] Initializing EchoTteService {} ...", repository.getClass().getSimpleName());
+    logger.debug(
+        "[SERVICE] Initializing EchoTteService {} ...", repository.getClass().getSimpleName());
     this.repository = repository;
   }
 
@@ -32,7 +33,7 @@ public class EchoTteService implements ModelEchoTte {
   }
 
   @Override
-  public List<EchoTteUnmodifable> findAll() { //todo partitioning
+  public List<EchoTteUnmodifable> findAll() { // todo partitioning
     logger.debug("[SERVICE] Finding all...");
     return repository.getAll();
   }

@@ -1,9 +1,9 @@
 package poc.GenericDocumentGeneratorPoc;
 
-import org.junit.Test;
-
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.Test;
 
 public class DocumentTestApp {
 

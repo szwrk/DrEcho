@@ -9,8 +9,7 @@ import net.wilamowski.drecho.client.presentation.patients.PatientFx;
 public class GeneralExaminatiomViewModel {
   private final ObjectProperty<PatientFx> patient = new SimpleObjectProperty<>();
 
-  public GeneralExaminatiomViewModel() {
-  }
+  public GeneralExaminatiomViewModel() {}
 
   public ObjectProperty<PatientFx> patientProperty() {
     return patient;

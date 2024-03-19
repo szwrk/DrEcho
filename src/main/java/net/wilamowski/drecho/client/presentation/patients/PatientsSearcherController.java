@@ -35,8 +35,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class PatientsSearcherController
@@ -47,7 +47,7 @@ public class PatientsSearcherController
       "Włącz autowyszukiwanie pacjenta po wpisanych kilku pierwszych znakach w polu wyszukiwania";
   public static final String SELECTED_PATIENT_NO_RESULT = "No patient selected";
   public static final String PROPERTY_KEY_AUTOSEARCH_DEFAULT_VALUE =
-          "user.ui.patient-view.autosearch-toggle.defaultstate";
+      "user.ui.patient-view.autosearch-toggle.defaultstate";
   public static final int AUTOSEARCH_STRING_LENGTH_TRIGGER = 4;
   public static final String PATTERN_PESEL_CODE = "\\d{11}";
   private static final Logger logger = LogManager.getLogger(PatientsSearcherController.class);
@@ -106,29 +106,29 @@ public class PatientsSearcherController
 
   @FXML
   void onActionAddNewPatient(ActionEvent event) {
-      openNewPatientModal( );
+    openNewPatientModal();
   }
 
-    private void openNewPatientModal() {
-        setupOwner();
-        Stage modal = new Stage();
+  private void openNewPatientModal() {
+    setupOwner();
+    Stage modal = new Stage();
 
-        PatientRegisterController patientRegisterController =
-            (PatientRegisterController)
-                viewHandler.switchSceneForStage("patient/PatientRegister", modal);
+    PatientRegisterController patientRegisterController =
+        (PatientRegisterController)
+            viewHandler.switchSceneForStage("patient/PatientRegister", modal);
 
-        PatientRegisterViewModel viewModel = patientRegisterController.getViewModel( );
-        viewModel.turnOnAddPatientMode();
-        viewModel.configureListenersForPreventingUnsavedChanges();
+    PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
+    viewModel.turnOnAddPatientMode();
+    viewModel.configureListenersForPreventingUnsavedChanges();
 
-        patientRegisterController.setTitle("Add patient");
-        GeneralViewHandler.setupAsBlurModal(modal, owner);
-        GeneralViewHandler.setupStageTitle(modal, "New patient registration");
-        modal.showAndWait();
-        GeneralViewHandler.disableBlur(owner);
-    }
+    patientRegisterController.setTitle("Add patient");
+    GeneralViewHandler.setupAsBlurModal(modal, owner);
+    GeneralViewHandler.setupStageTitle(modal, "New patient registration");
+    modal.showAndWait();
+    GeneralViewHandler.disableBlur(owner);
+  }
 
-    private void setupOwner() {
+  private void setupOwner() {
     owner = (Stage) patientsSearcherRoot.getScene().getWindow();
   }
 
@@ -154,13 +154,15 @@ public class PatientsSearcherController
     initializePatientPagination();
     bindSearchTextFieldWithViewModel();
     playAnimationFocusUserOnSearchTextField();
-    enableButtonWhenPatientIsSelected( editPatientButton);
-    enableButtonWhenPatientIsSelected( previewPatientButton);
+    enableButtonWhenPatientIsSelected(editPatientButton);
+    enableButtonWhenPatientIsSelected(previewPatientButton);
   }
 
-    private void enableButtonWhenPatientIsSelected(Button button) {
-        button.disableProperty().bind( patientSearcherViewModel.getSelectedPatientAsObjectProperty().isNull() );
-        var animation = AnimationsUtil.userCallToActionAnimation( button );
+  private void enableButtonWhenPatientIsSelected(Button button) {
+    button
+        .disableProperty()
+        .bind(patientSearcherViewModel.getSelectedPatientAsObjectProperty().isNull());
+    var animation = AnimationsUtil.userCallToActionAnimation(button);
 
     button
         .disableProperty()
@@ -177,9 +179,9 @@ public class PatientsSearcherController
                 timeline.play();
               }
             });
-    }
+  }
 
-    private void playAnimationFocusUserOnSearchTextField() {
+  private void playAnimationFocusUserOnSearchTextField() {
     Platform.runLater(
         () -> {
           Timeline timeline =
@@ -208,7 +210,7 @@ public class PatientsSearcherController
     patientPagination.setVisible(false);
     patientPagination.setDisable(true);
     paginationPageRowNumber =
-        ClientPropertyReader.getInt( "admin.ui.patient-view.searcher.result-table-rows-on-page" );
+        ClientPropertyReader.getInt("admin.ui.patient-view.searcher.result-table-rows-on-page");
     patientPagination.setMaxPageIndicatorCount(3);
     patientPagination.getStyleClass().add(Pagination.STYLE_CLASS_BULLET);
     patientPagination
@@ -248,9 +250,9 @@ public class PatientsSearcherController
   }
 
   private void setupPlayAnimationOnNewPatient() {
-    var timeline = AnimationsUtil.animateDataRefresh( nameValueLabel );
-    var timeline2 =  AnimationsUtil.animateDataRefresh( lastNameValueLabel );
-    var timeline3 = AnimationsUtil.animateDataRefresh( peselValueLabel );
+    var timeline = AnimationsUtil.animateDataRefresh(nameValueLabel);
+    var timeline2 = AnimationsUtil.animateDataRefresh(lastNameValueLabel);
+    var timeline3 = AnimationsUtil.animateDataRefresh(peselValueLabel);
     patientSearcherViewModel
         .selectedPatientProperty()
         .addListener(
@@ -328,7 +330,7 @@ public class PatientsSearcherController
                   patientSearcherViewModel.patientsProperty().clear();
                 }
               } else {
-                  logger.debug( "New value is null. No action." );
+                logger.debug("New value is null. No action.");
               }
             });
   }
@@ -351,7 +353,7 @@ public class PatientsSearcherController
 
   private void configBindingsAndDefaultValues() {
     boolean isAutoSearchIsOn =
-        Boolean.parseBoolean( ClientPropertyReader.getString(PROPERTY_KEY_AUTOSEARCH_DEFAULT_VALUE));
+        Boolean.parseBoolean(ClientPropertyReader.getString(PROPERTY_KEY_AUTOSEARCH_DEFAULT_VALUE));
     autosearchToggle.setSelected(isAutoSearchIsOn);
     searchButton.setVisible(!isAutoSearchIsOn);
     searchButton.setDisable(isAutoSearchIsOn);
@@ -386,9 +388,8 @@ public class PatientsSearcherController
   }
 
   private void bindTableWithViewModel() {
-//    resultTable.setItems(patientSearcherViewModel.getPatients());
-            resultTable.itemsProperty().bindBidirectional(patientSearcherViewModel.patientsProperty());
-
+    //    resultTable.setItems(patientSearcherViewModel.getPatients());
+    resultTable.itemsProperty().bindBidirectional(patientSearcherViewModel.patientsProperty());
   }
 
   @FXML

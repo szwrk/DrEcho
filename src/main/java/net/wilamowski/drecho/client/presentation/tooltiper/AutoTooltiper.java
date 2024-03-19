@@ -7,10 +7,11 @@ import net.wilamowski.drecho.shared.bundle.Lang;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class AutoTooltiper {
   private static final Logger logger = LogManager.getLogger(AutoTooltiper.class);
@@ -20,7 +21,7 @@ public class AutoTooltiper {
   }
 
   public void runTree(Node root) {
-    String s = ClientPropertyReader.getString( "admin.debug.autotooltiper.ison" );
+    String s = ClientPropertyReader.getString("admin.debug.autotooltiper.ison");
     if (Boolean.parseBoolean(s)) {
       createElementsRecursively(root);
     } else {

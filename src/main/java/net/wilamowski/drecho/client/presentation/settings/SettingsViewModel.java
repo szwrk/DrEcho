@@ -11,8 +11,8 @@ import net.wilamowski.drecho.connectors.model.Configuration;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class SettingsViewModel {
@@ -26,7 +26,7 @@ public class SettingsViewModel {
 
   public void init() {
     List<SettingValue> settings = model.getAllSettings();
-    SettingVmMapper    mapper   = new SettingVmMapper();
+    SettingVmMapper mapper = new SettingVmMapper();
     List<SettingPropertyFx> settingsVmBeans =
         settings.stream().map(s -> mapper.toFxBean(s)).collect(Collectors.toList());
     settingsFx = FXCollections.observableList(settingsVmBeans);
@@ -38,7 +38,7 @@ public class SettingsViewModel {
 
   public void update(SettingPropertyFx singleSetting) {
     SettingVmMapper settingMapper = new SettingVmMapper();
-    SettingValue    setting       = settingMapper.toDomain(singleSetting);
+    SettingValue setting = settingMapper.toDomain(singleSetting);
     model.save(setting);
   }
 }

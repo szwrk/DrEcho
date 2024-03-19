@@ -14,16 +14,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import lombok.ToString;
-import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
-import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
-import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
+import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
+import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
+import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
+import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
+import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
+import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,6 +49,13 @@ public class GeneralExaminationController
 
   public GeneralExaminationController() {}
 
+  public static int calculateAge(LocalDate birthdate, LocalDate currentDate) {
+    if ((birthdate != null) && (currentDate != null)) {
+      return Period.between(birthdate, currentDate).getYears();
+    } else {
+      throw new IllegalArgumentException("Birthdate and current date cannot be null.");
+    }
+  }
 
   public void loadNestedExamByFxmlPath(String subView) throws IOException {
     logger.debug("Loading nested examination. Param: {}", subView);
@@ -59,8 +66,6 @@ public class GeneralExaminationController
     initializer.initControllers(includedController, handler);
     this.root.setContent(includedNode);
   }
-
-
 
   @Override
   public void initializeKeyEventDebugging() {
@@ -128,13 +133,5 @@ public class GeneralExaminationController
 //          generalExaminatiomViewModel.patientProperty().getValue().getDateBirth().getValue(),
 //          LocalDate.now());
 //    }
-  }
-
-  public static int calculateAge(LocalDate birthdate, LocalDate currentDate) {
-    if ((birthdate != null) && (currentDate != null)) {
-      return Period.between(birthdate, currentDate).getYears();
-    } else {
-      throw new IllegalArgumentException("Birthdate and current date cannot be null.");
-    }
   }
 }

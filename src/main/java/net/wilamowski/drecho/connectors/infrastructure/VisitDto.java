@@ -1,13 +1,12 @@
 package net.wilamowski.drecho.connectors.infrastructure;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
-
-import java.time.LocalDateTime;
 
 @ToString
 @Getter

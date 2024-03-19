@@ -15,19 +15,21 @@ public class VisitRepositoryInMemory implements VisitRepository {
   private static final Logger logger = LogManager.getLogger(VisitRepositoryInMemory.class);
   private Set<VisitEntity> visits = new HashSet<>();
   private DemoDataGeneratorInMemory dummyDataGeneratorInMemory;
-  private VisitRepositoryInMemory() {
-    initializeDemoDataIfPropertyIsEnabled( );
-  }
 
-  public static VisitRepositoryInMemory createVisitRepositoryInMemory() {
-    return new VisitRepositoryInMemory(  );
+  private VisitRepositoryInMemory() {
+    initializeDemoDataIfPropertyIsEnabled();
   }
 
   private void initializeDemoDataIfPropertyIsEnabled() {
-    if ( Boolean.parseBoolean( BackendPropertyReader.getString( "user.demo.data.initialization.enabled" ) )){
+    if (Boolean.parseBoolean(
+        BackendPropertyReader.getString("user.demo.data.initialization.enabled"))) {
       dummyDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
-      visits = dummyDataGeneratorInMemory.loadDemoVisits( );
+      visits = dummyDataGeneratorInMemory.loadDemoVisits();
     }
+  }
+
+  public static VisitRepositoryInMemory createVisitRepositoryInMemory() {
+    return new VisitRepositoryInMemory();
   }
 
   @Override

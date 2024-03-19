@@ -9,6 +9,7 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.visit.Visit;
 import net.wilamowski.drecho.connectors.model.standalone.domain.visit.VisitEntity;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.PatientRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.UserRepository;
+
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>

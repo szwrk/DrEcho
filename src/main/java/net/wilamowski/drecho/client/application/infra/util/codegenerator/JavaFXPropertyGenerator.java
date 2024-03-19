@@ -5,13 +5,12 @@ import java.util.stream.Collectors;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
- *
- * JavaFXPropertyGenerator is a utility class responsible for generating JavaFX properties based on text input.
- * It offers methods to create different types of JavaFX properties and binding expressions, simplifying the development of JavaFX applications.
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net JavaFXPropertyGenerator is a
+ *     utility class responsible for generating JavaFX properties based on text input. It offers
+ *     methods to create different types of JavaFX properties and binding expressions, simplifying
+ *     the development of JavaFX applications.
  */
-
 public class JavaFXPropertyGenerator {
   public String extractNameFromBundle(List<String> list) {
     return list.stream()

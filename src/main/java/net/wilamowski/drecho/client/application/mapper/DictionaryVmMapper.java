@@ -15,37 +15,39 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dicti
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-
 public class DictionaryVmMapper {
-    public DictionaryFx toJavaFx(Dictionary dictionary) {
-        PositionVmMapper positionVmMapper = new PositionVmMapper( );
-        List<PositionFx> positions = dictionary.getPositions( ).stream( )
-                .map( positionVmMapper::toJavaFx )
-                .collect( Collectors.toList( ) );
+  public DictionaryFx toJavaFx(Dictionary dictionary) {
+    PositionVmMapper positionVmMapper = new PositionVmMapper();
+    List<PositionFx> positions =
+        dictionary.getPositions().stream()
+            .map(positionVmMapper::toJavaFx)
+            .collect(Collectors.toList());
 
-        ObservableList<PositionFx> positionFxObservableList = FXCollections.observableArrayList( positions );
-        ListProperty<PositionFx>   positionsProperty        = new SimpleListProperty<>( positionFxObservableList );
+    ObservableList<PositionFx> positionFxObservableList =
+        FXCollections.observableArrayList(positions);
+    ListProperty<PositionFx> positionsProperty = new SimpleListProperty<>(positionFxObservableList);
 
-        return new DictionaryFxBuilder( )
-                .setCode( new SimpleStringProperty( dictionary.getCode( ) ) )
-                .setName( new SimpleStringProperty( dictionary.getName( ) ) )
-                .setDescription( new SimpleStringProperty( dictionary.getDescription( ) ) )
-                .setPositions( positionsProperty )
-                .createDictionaryFx( );
-    }
-    public Dictionary toDomain(DictionaryFx dictionaryFx) {
-        PositionVmMapper positionVmMapper = new PositionVmMapper( );
-        return new DictionaryBuilder( )
-                .setCode( dictionaryFx.getCode( ) )
-                .setName( dictionaryFx.getName( ) )
-                .setDescription( dictionaryFx.getDescription( ) )
-                .addPositions( dictionaryFx.getPositions( )
-                        .stream( )
-                        .map( positionFx -> positionVmMapper.toDomain( positionFx ) )
-                        .collect( Collectors.toList( ) ) )
-                .createDictionary( );
-    }
+    return new DictionaryFxBuilder()
+        .setCode(new SimpleStringProperty(dictionary.getCode()))
+        .setName(new SimpleStringProperty(dictionary.getName()))
+        .setDescription(new SimpleStringProperty(dictionary.getDescription()))
+        .setPositions(positionsProperty)
+        .createDictionaryFx();
+  }
+
+  public Dictionary toDomain(DictionaryFx dictionaryFx) {
+    PositionVmMapper positionVmMapper = new PositionVmMapper();
+    return new DictionaryBuilder()
+        .setCode(dictionaryFx.getCode())
+        .setName(dictionaryFx.getName())
+        .setDescription(dictionaryFx.getDescription())
+        .addPositions(
+            dictionaryFx.getPositions().stream()
+                .map(positionFx -> positionVmMapper.toDomain(positionFx))
+                .collect(Collectors.toList()))
+        .createDictionary();
+  }
 }

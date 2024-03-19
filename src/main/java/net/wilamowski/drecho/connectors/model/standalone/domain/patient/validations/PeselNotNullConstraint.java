@@ -1,6 +1,6 @@
 package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations;
 
- class PeselNotNullConstraint implements Constraint {
+class PeselNotNullConstraint implements Constraint {
 
   private final String pesel;
 
@@ -10,10 +10,7 @@ package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validat
 
   @Override
   public boolean validate() {
-    if (!pesel.isEmpty()) {
-      return true;
-    }
-    return false;
+      return !pesel.isEmpty( );
   }
 
   @Override
@@ -21,4 +18,3 @@ package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validat
     return "Pesel code is required!";
   }
 }
-

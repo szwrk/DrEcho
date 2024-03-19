@@ -1,18 +1,17 @@
 package poc.GenericDocumentGeneratorPoc;
 
+import java.time.LocalDateTime;
+import java.util.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.time.LocalDateTime;
-import java.util.*;
-
 public class Document {
-    private static Logger log = LogManager.getLogger(Document.class);
-    private List<AttributeValue> values;
-    private String title;
-    private String docCode;
-    private String createdBy;
-    private LocalDateTime now;
+    private static final Logger log = LogManager.getLogger(Document.class);
+    private final List<AttributeValue> values;
+    private final String title;
+    private final String docCode;
+    private final String createdBy;
+    private final LocalDateTime now;
 
     public Document(DocumentDefinition definition, String createdBy) {
         this.docCode = definition.getCode();

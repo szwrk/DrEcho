@@ -1,5 +1,3 @@
 package poc.GenericDocumentGeneratorPoc;
 
-public class ClassManager {
-
-}
+public class ClassManager {}

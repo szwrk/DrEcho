@@ -5,15 +5,16 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.calcs.CardioCalc
 import net.wilamowski.drecho.connectors.model.standalone.domain.calcs.CardioCalculatorExpressionImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 /**
  * @author Arkadiusz Wilamowski
  * <p></><a href="https://github.com/szwrk">GitHub</a></p>
  * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
  */
 public class CalculatorViewModel {
-    private static final Logger logger = LogManager.getLogger( CalculatorViewModel.class);
     public static final int HEIGHT_IN_CM = 190; //todo hardcoded value!
     public static final int WEIGHT_IN_KG = 83;//todo hardcoded value!
+    private static final Logger logger = LogManager.getLogger( CalculatorViewModel.class);
     private final CardioCalculator calculator;
 
     public CalculatorViewModel() {
@@ -35,13 +36,15 @@ public class CalculatorViewModel {
         }
     }
 
-    private boolean validateLvmIndexInputs(IntegerProperty dm_left_ventricle_diastole, IntegerProperty dm_iv_septum_diastole, IntegerProperty  dm_posterior_wall_diastole) {
-        return dm_left_ventricle_diastole.asObject().get() != null
-            && dm_iv_septum_diastole.asObject().get() != null
-            && dm_posterior_wall_diastole.asObject().get() != null
-            && dm_left_ventricle_diastole.asObject().get() != 0
-            && dm_iv_septum_diastole.asObject().get() != 0
-            && dm_posterior_wall_diastole.asObject().get() != 0;
+    private boolean validateLvmInputs(IntegerProperty dm_left_ventricle_diastole,IntegerProperty dm_iv_septum_diastole, IntegerProperty dm_posterior_wall_diastole) {
+        boolean isValidate =
+                dm_left_ventricle_diastole.asObject().get() != null
+                        && dm_iv_septum_diastole.asObject().get() != null
+                        && dm_posterior_wall_diastole.asObject().get() != null
+                        && dm_left_ventricle_diastole.asObject().get() != 0
+                        && dm_iv_septum_diastole.asObject().get() != 0
+                        && dm_posterior_wall_diastole.asObject().get() != 0;
+        return isValidate;
     }
 
 public Double calcRwt(IntegerProperty dm_posterior_wall_diastole, IntegerProperty dm_left_ventricle_diastole){
@@ -84,15 +87,14 @@ public Double calcRwt(IntegerProperty dm_posterior_wall_diastole, IntegerPropert
       return (double) 0;
     }
     }
-    private boolean validateLvmInputs(IntegerProperty dm_left_ventricle_diastole,IntegerProperty dm_iv_septum_diastole, IntegerProperty dm_posterior_wall_diastole) {
-        boolean isValidate =
-                dm_left_ventricle_diastole.asObject().get() != null
-                        && dm_iv_septum_diastole.asObject().get() != null
-                        && dm_posterior_wall_diastole.asObject().get() != null
-                        && dm_left_ventricle_diastole.asObject().get() != 0
-                        && dm_iv_septum_diastole.asObject().get() != 0
-                        && dm_posterior_wall_diastole.asObject().get() != 0;
-        return isValidate;
+
+    private boolean validateLvmIndexInputs(IntegerProperty dm_left_ventricle_diastole, IntegerProperty dm_iv_septum_diastole, IntegerProperty  dm_posterior_wall_diastole) {
+        return dm_left_ventricle_diastole.asObject().get() != null
+            && dm_iv_septum_diastole.asObject().get() != null
+            && dm_posterior_wall_diastole.asObject().get() != null
+            && dm_left_ventricle_diastole.asObject().get() != 0
+            && dm_iv_septum_diastole.asObject().get() != 0
+            && dm_posterior_wall_diastole.asObject().get() != 0;
     }
 
 
