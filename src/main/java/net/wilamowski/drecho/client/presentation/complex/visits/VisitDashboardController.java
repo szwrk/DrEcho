@@ -71,8 +71,9 @@ public class VisitDashboardController
 
   @FXML
   void onActionSearchByDate(ActionEvent event) {
+    assert visitDashboardViewModel == null : "visitDashboardViewModel is unexpectedly null during user click on search by date in the visit view";
     if (saveDatePicker.valueProperty().get() != null) {
-      visitDashboardViewModel.fetchByDate(saveDatePicker.getValue());
+      visitDashboardViewModel.searchByDate(saveDatePicker.getValue(), 0);
     } else {
       showSearchByDateTipPopup();
       animateSearchByDateError();
@@ -105,7 +106,7 @@ public class VisitDashboardController
   }
 
   @FXML
-  void onActionSearchByPatient(ActionEvent event) {
+  void onActionSearchVisitsByPatient(ActionEvent event) {
     logger.debug("Clicked on search by patient");
     SimpleModal modal = SimpleModal.setupPatientSearcherView(viewHandler, root);
     SimpleModalController simpleModalController =
@@ -126,8 +127,9 @@ public class VisitDashboardController
     int findedMatchedPatients =
         patientSearcherViewModel.searchPatientByAnyInput(searchByPatientTextField.getText(), 0);
     logger.debug("findedMatchedPatients {}", findedMatchedPatients);
+    
     if (findedMatchedPatients == 1) {
-      visitDashboardViewModel.fetchByPatient(patientSearcherViewModel.getSelectedPatient());
+      visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
     } else if (findedMatchedPatients == 0) {
       modal.showWithBlur();
     } else {
@@ -137,33 +139,6 @@ public class VisitDashboardController
     }
   }
 
-  //  @NotNull
-  //  private SimpleModalController setupStageAsPatientSearcherModal(Stage patientModal) {
-  //    GeneralViewHandler.setupStageTitle( patientModal , MODAL_NAME_PATIENT_SEARCHER);
-  //    Object controller = viewHandler.switchSceneForStage("modal/SimpleModal", patientModal );
-  //    SimpleModalController simpleModalController = (SimpleModalController) controller;
-  //    simpleModalController.loadNestedExamByFxmlPath("patient/PatientsSearcherView.fxml");
-  //
-  //    simpleModalController.addConfirmButton(
-  //            event -> {
-  //              GeneralViewHandler.disableBlur(owner);
-  //              patientModal.close();
-  //            });
-  //    return simpleModalController;
-  //  }
-
-  //  private void loadVisitsByPatient(PatientSearcherViewModel patientSearcherViewModel) {
-  //    if (patientSearcherViewModel.getSelectedPatient() != null) {
-  //      logger.debug(
-  //          "Preload patient visit.  Fetching by selected patient...",
-  //          patientSearcherViewModel.getSelectedPatient());
-  //      visitDashboardViewModel.fetchByPatient(patientSearcherViewModel.getSelectedPatient());
-  //    } else {
-  //      logger.debug(
-  //          "Preload patient visits. VM selected patient: {}",
-  //          patientSearcherViewModel.getSelectedPatient());
-  //    }
-  //  }
 
   @Override
   public void initializeViewHandler(GeneralViewHandler viewHandler) {
@@ -193,26 +168,7 @@ public class VisitDashboardController
     bindTableViewModel();
     configColumnValues();
     configColumnDisplay();
-    //    preinitializePatientSearcherModal();
   }
-
-  //  private void preinitializePatientSearcherModal() {
-  //    searcherModal =
-  //        SimpleModal.setupPatientSearcherView(
-  //            Objects.requireNonNull(viewHandler), Objects.requireNonNull(root));
-  //    SimpleModalController simpleModalController =
-  //        (SimpleModalController) searcherModal.getModalController();
-  //    PatientsSearcherController patientsSearcherController =
-  //        (PatientsSearcherController) simpleModalController.getIncludedController();
-  //    patientSearcherViewModel = patientsSearcherController.getPatientSearcherViewModel();
-  //    Objects.requireNonNull(patientSearcherViewModel);
-  //
-  //    searchByPatientTextField.textProperty().removeListener(  );
-  //    searchByPatientTextField
-  //        .textProperty()
-  //        .addListener(
-  //                );
-  //  }
 
   private void configColumnDisplay() {
     realizationDateTimeColumn.setCellFactory(

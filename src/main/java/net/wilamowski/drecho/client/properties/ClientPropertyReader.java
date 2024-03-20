@@ -6,7 +6,8 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/** Properties */public class ClientPropertyReader {
+/** Properties */
+public class ClientPropertyReader {
   private static final String PROPERTIES_PATH = "/client.properties";
   private static final Logger log = LogManager.getLogger(ClientPropertyReader.class);
 

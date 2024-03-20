@@ -37,7 +37,7 @@
                                                 </TextField>
                                                 <Button fx:id="searchByPatientButton" defaultButton="true"
                                                         minWidth="150.0" mnemonicParsing="false"
-                                                        onAction="#onActionSearchByPatient" prefHeight="50.0"
+                                                        onAction="#onActionSearchVisitsByPatient" prefHeight="50.0"
                                                         prefWidth="200.0" text="%ui.visits.searcher.bypatient">
                                                     <HBox.margin>
                                                         <Insets bottom="1.0" left="1.0" right="1.0" top="1.0"/>

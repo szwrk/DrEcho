@@ -7,9 +7,7 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 
 public interface VisitModel {
 
-    Set<VisitDto> listVisitsBy(int page, int pageSize);
+    Set<VisitDto> listVisitsBy(Patient patient, int page);
 
-    Set<VisitDto> listVisitsBy(Patient patient);
-
-    Set<VisitDto> listVisitsBy(LocalDate date);
+    Set<VisitDto> listVisitsBy(LocalDate date,int page);
 }

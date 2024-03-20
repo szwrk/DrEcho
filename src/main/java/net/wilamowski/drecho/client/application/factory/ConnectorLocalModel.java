@@ -54,7 +54,7 @@ public class ConnectorLocalModel extends ConnectorLayer {
     if (modelEchoTte == null) {
       modelEchoTte = new EchoTteService(repoFactory.instanceEchoTteRepository());
     }
-    return modelEchoTte;
+    return Objects.requireNonNull(modelEchoTte);
   }
 
   @Override
@@ -62,7 +62,7 @@ public class ConnectorLocalModel extends ConnectorLayer {
     if (configuration == null) {
       configuration = new ConfigurationService(repoFactory.instanceConfigurationRepository());
     }
-    return configuration;
+    return Objects.requireNonNull(configuration);
   }
 
   @Override
@@ -70,7 +70,7 @@ public class ConnectorLocalModel extends ConnectorLayer {
     if (userService == null) {
       userService = new UserService(repoFactory.instanceUserRepository());
     }
-    return userService;
+    return Objects.requireNonNull(userService);
   }
 
   @Override
@@ -79,7 +79,7 @@ public class ConnectorLocalModel extends ConnectorLayer {
       authenticatorService =
           new AuthenticatorServiceImpl(new UserService(repoFactory.instanceUserRepository()));
     }
-    return authenticatorService;
+    return Objects.requireNonNull(authenticatorService);
   }
 
   @Override
@@ -87,7 +87,7 @@ public class ConnectorLocalModel extends ConnectorLayer {
     if (mainDataModel == null) {
       mainDataModel = new MainModelStandalone();
     }
-    return mainDataModel;
+    return Objects.requireNonNull(mainDataModel);
   }
 
   @Override
@@ -98,14 +98,14 @@ public class ConnectorLocalModel extends ConnectorLayer {
               repoFactory.instancePatientRepository(),
               repoFactory.instanceVersionedPatientRepository());
     }
-    return patientService;
+    return Objects.requireNonNull(patientService);
   }
 
   public SimpleDictionariesService dictionariesService() {
     if (dictionariesService == null) {
       dictionariesService = new SimpleDictionariesServiceInMemory();
     }
-    return dictionariesService;
+    return Objects.requireNonNull(dictionariesService);
   }
 
   @Override
@@ -113,18 +113,21 @@ public class ConnectorLocalModel extends ConnectorLayer {
     if (examinationsModel == null) {
       examinationsModel = new ExaminationsStandaloneModel();
     }
-    return examinationsModel;
+    return Objects.requireNonNull(examinationsModel);
   }
 
   @Override
   public VisitModel visitModel() {
     if (visitModel == null) {
+      logger.trace( "Visit model is null. Creating new instances start..." );
       visitModel =
           new VisitStandaloneModel(
               repoFactory.instanceVisitRepository(),
               repoFactory.instanceUserRepository(),
               repoFactory.instancePatientRepository());
+    } else {
+      logger.trace( "Visit model is not null" );
     }
-    return visitModel;
+    return Objects.requireNonNull( visitModel);
   }
 }

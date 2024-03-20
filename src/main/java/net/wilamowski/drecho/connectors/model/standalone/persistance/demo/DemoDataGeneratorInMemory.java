@@ -12,6 +12,13 @@ import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ *
+ * @Author Arkadiusz Wilamowski
+ *
+ */
+
+
 public class DemoDataGeneratorInMemory {
   private static final Logger logger = LogManager.getLogger(DemoDataGeneratorInMemory.class);
   private final Random random;
@@ -28,17 +35,29 @@ public class DemoDataGeneratorInMemory {
   }
 
   private void initializeCities() {
-    var values = Lang.getString("dummy.comma_separated.cities_names");
+    var values = Lang.getString( "demo.comma_separated.cities_names" );
+    if ( values.isEmpty( ) ) {
+      String s = "The list of cities in the resource bundle is empty.";
+      throw new IllegalArgumentException( s );
+    }
     CITIES = values.split(",");
   }
 
   private void initializeNames() {
-    var values = Lang.getString("dummy.comma_separated.firstnames");
+    var values = Lang.getString( "demo.comma_separated.firstnames" );
+    if ( values.isEmpty( ) ) {
+      String s = "The list of first names in the resource bundle is empty.";
+      throw new IllegalArgumentException( s );
+    }
     FIRST_NAMES = values.split(",");
   }
 
   private void initializeLastNames() {
-    var values = Lang.getString("dummy.comma_separated.lastnames");
+    var values = Lang.getString( "demo.comma_separated.lastnames" );
+    if ( values.isEmpty( ) ) {
+      String s = "The list of last names in the resource bundle is empty.";
+      throw new IllegalArgumentException( s );
+    }
     LAST_NAMES = values.split(",");
   }
 
@@ -100,7 +119,7 @@ public class DemoDataGeneratorInMemory {
   }
 
   public String shortSentence() {
-    return Lang.getString("dummy.sentence.short");
+    return Lang.getString( "demo.sentence.short" );
   }
 
   public Set<VisitEntity> loadDemoVisits() {
@@ -140,6 +159,7 @@ public class DemoDataGeneratorInMemory {
             LocalDateTime.now().minusDays(1),
             LocalDateTime.now().minusHours(1).minusMinutes(1),
             5L));
+    logger.debug("[DEMO] Visits:" + visits);
     return visits;
   }
 }

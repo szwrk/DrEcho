@@ -12,6 +12,7 @@ import net.wilamowski.drecho.client.presentation.patients.PatientFx;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
 import net.wilamowski.drecho.connectors.infrastructure.VisitDto;
 import net.wilamowski.drecho.connectors.model.VisitModel;
+import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,13 +33,7 @@ public class VisitDashboardViewModel {
     this.visitModel = visitModel;
   }
 
-  public void initTable() {
-    Set<VisitDto> visitSet = visitModel.listVisitsBy(0, 100);
-    VisitVmMapper.toListToVM(visitSet);
-    loadVisits(visitSet);
-  }
-
-  private void loadVisits(Set<VisitDto> visitSet) {
+  private void loadVisitsToTable(Set<VisitDto> visitSet) {
     if (visitSet != null) {
       logger.debug("SERVICE - visit service returns: {} entity items", visitSet.size());
       Set<VisitVM> patientsFxBean = VisitVmMapper.toListToVM(visitSet);
@@ -58,14 +53,17 @@ public class VisitDashboardViewModel {
     visits.addAll(visitVMList);
   }
 
-  public void fetchByPatient(PatientFx patientFx) {
-    Set<VisitDto> visitSet = visitModel.listVisitsBy(PatientVmMapper.toDomain(patientFx));
-    loadVisits(visitSet);
+  public void searchByPatient(PatientFx patientFx, int page) {
+    logger.trace( "Clicked search by selected patient" );
+    Patient       patient   = PatientVmMapper.toDomain( patientFx );
+    Set<VisitDto> visitSet = visitModel.listVisitsBy(patient,  page);
+    loadVisitsToTable(visitSet);
   }
 
-  public void fetchByDate(LocalDate date) {
-    Set<VisitDto> visitSet = visitModel.listVisitsBy(date);
-    loadVisits(visitSet);
+  public void searchByDate(LocalDate date, int page) {
+    logger.trace( "Clicked search by date" );
+    Set<VisitDto> visitSet = visitModel.listVisitsBy(date, page);
+    loadVisitsToTable(visitSet);
   }
 
   public void clearSearchResults() {

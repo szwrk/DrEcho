@@ -4,7 +4,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import net.wilamowski.drecho.connectors.properties.BackendPropertyReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,7 +22,7 @@ public class CardioCalculatorExpressionImpl implements CardioCalculator {
       double heightInCm,
       double weightInKg) {
 
-    String expreesion = ClientPropertyReader.getString("examination.echotte.lvmi.expression");
+    String expreesion = BackendPropertyReader.getString("examination.echotte.lvmi.expression");
 
     Expression expression =
         new ExpressionBuilder(expreesion)

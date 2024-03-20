@@ -25,6 +25,7 @@ replay_pid*
 
 # Maven files
 target/
+dependency-reduced-pom.xml
 # logs files
 logs/
 # logs files

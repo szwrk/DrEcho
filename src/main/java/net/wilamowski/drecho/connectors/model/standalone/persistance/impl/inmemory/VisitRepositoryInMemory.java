@@ -13,55 +13,54 @@ import org.apache.logging.log4j.Logger;
 
 public class VisitRepositoryInMemory implements VisitRepository {
   private static final Logger logger = LogManager.getLogger(VisitRepositoryInMemory.class);
-  private Set<VisitEntity> visits = new HashSet<>();
-  private DemoDataGeneratorInMemory dummyDataGeneratorInMemory;
+  private static VisitRepositoryInMemory instance;
+  private Set<VisitEntity> visitsDatabase = new HashSet<>();
+  private static DemoDataGeneratorInMemory demoDataGeneratorInMemory;
 
   private VisitRepositoryInMemory() {
-    initializeDemoDataIfPropertyIsEnabled();
+    boolean isEnabled = BackendPropertyReader.getBoolean( "user.demo.random-data.initialization.enabled" );
+    initializeDemoDataIfPropertyIsEnabled(isEnabled);
   }
 
-  private void initializeDemoDataIfPropertyIsEnabled() {
-    if (Boolean.parseBoolean(
-        BackendPropertyReader.getString("user.demo.data.initialization.enabled"))) {
-      dummyDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
-      visits = dummyDataGeneratorInMemory.loadDemoVisits();
+  private void initializeDemoDataIfPropertyIsEnabled(boolean isEnabled) {
+    if (isEnabled) {
+      logger.info("Demo data initialization is enabled");
+      demoDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
+      visitsDatabase = demoDataGeneratorInMemory.loadDemoVisits();
     }
   }
 
   public static VisitRepositoryInMemory createVisitRepositoryInMemory() {
-    return new VisitRepositoryInMemory();
+    if (instance==null){
+      logger.debug( "Visit repository is null. Creating new instance..." );
+      instance = new VisitRepositoryInMemory();
+    }
+    return instance ;
   }
 
-  @Override
-  public Set<VisitEntity> findAll(int page, int pageSize) {
-    Object ignoreFilterAndReturnAll;
-    Set<VisitEntity> visitEntities = ignoreFilterAndReturnAll();
-    logger.debug("[REPOSITORY] - Visit repository returns {} items", visitEntities.size());
-    return visitEntities;
-  }
 
   @Override
   public Set<VisitEntity> findVisitsByPatientId(long patientId) {
-    Set<VisitEntity> visitEntities =
-        visits.stream()
+    Set<VisitEntity> matchingVisits =
+        visitsDatabase.stream()
             .filter(patient -> patient.getPatientId().equals(patientId))
             .collect(Collectors.toSet());
-    logger.debug("[REPOSITORY] - Visit repository returns {} items", visitEntities.size());
-    return visitEntities;
+    logger.debug("[REPOSITORY] - Visit repository returned {}/{} items", matchingVisits.size(), visitsDatabase.size());
+    return matchingVisits;
   }
 
   @Override
   public Set<VisitEntity> findVisitByDate(LocalDate date) {
-    Set<VisitEntity> visitEntities =
-        visits.stream()
+    Set<VisitEntity> matchingVisits =
+        visitsDatabase.stream()
             .filter(patient -> patient.getRealizationDateTimeProperty().toLocalDate().equals(date))
             .collect(Collectors.toSet());
-    logger.debug("[REPOSITORY] - Visit repository returns {} items", visitEntities.size());
-    return visitEntities;
+    logger.debug("[REPOSITORY] - Visit repository returned {}/{} items", matchingVisits.size(), visitsDatabase.size());
+    return matchingVisits;
   }
 
   private Set<VisitEntity> ignoreFilterAndReturnAll() {
     logger.warn("[REPOSITORY] Visit repository - ignoring filter is on!");
-    return visits;
+    return visitsDatabase;
   }
 }

@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 @ToString
 public class PatientRepositoryInMemory implements PatientRepository {
   private static final Logger logger = LogManager.getLogger(PatientRepositoryInMemory.class);
-
+  @ToString.Exclude
   private final List<Patient> patients = new ArrayList<>();
   private DemoDataGeneratorInMemory dummyDataGeneratorInMemory;
   private Long patientId = 1L;
@@ -29,11 +29,12 @@ public class PatientRepositoryInMemory implements PatientRepository {
       Patient newPatient = dummyDataGeneratorInMemory.patient();
       this.addNew(newPatient);
     }
+    logger.debug( "Created random patients. Amount: {}", patients.size() );
   }
 
   @Override
   public Optional<Patient> addNew(Patient patient) {
-    logger.debug("[REPOSITORY] Creating patient");
+    logger.trace("[REPOSITORY] Creating patient...");
     Long currentId = patientId++;
     Patient newPatient =
         Patient.builder()
@@ -68,8 +69,6 @@ public class PatientRepositoryInMemory implements PatientRepository {
           "[REPOSITORY] Some property of the specified element prevents it from being added to this set.", e);
       return Optional.empty();
     }
-    logger.debug(
-        "[REPOSITORY] Added new patient to in memory repository. Data: {}", newPatient);
     return Optional.of(newPatient);
   }
 

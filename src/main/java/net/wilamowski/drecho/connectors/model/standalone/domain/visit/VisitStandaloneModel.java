@@ -33,15 +33,9 @@ public class VisitStandaloneModel implements VisitModel {
     this.visitEntityMapper = new VisitEntityMapper(userRepository, patientRepository);
   }
 
-  @Override
-  public Set<VisitDto> listVisitsBy(int page, int pageSize) {
-    logger.debug("[SERVICE] Getting data by page and page size...");
-    Set<VisitEntity> all = visitRepository.findAll(page, pageSize);
-    return mapVisitsToDto(all, page, pageSize);
-  }
 
   @Override
-  public Set<VisitDto> listVisitsBy(Patient patient) {
+  public Set<VisitDto> listVisitsBy(Patient patient,int page) {
     assert patient != null;
     logger.debug("[SERVICE] Getting data by patient {}...", patient.getId());
     Set<VisitEntity> visitEntities = visitRepository.findVisitsByPatientId(patient.getId());
@@ -49,7 +43,7 @@ public class VisitStandaloneModel implements VisitModel {
   }
 
   @Override
-  public Set<VisitDto> listVisitsBy(LocalDate date) {
+  public Set<VisitDto> listVisitsBy(LocalDate date,int page) {
     logger.debug("[SERVICE] Getting data by date {}...", date);
     Set<VisitEntity> visitEntities = visitRepository.findVisitByDate(date);
     return mapVisitsToDto(visitEntities, date);
