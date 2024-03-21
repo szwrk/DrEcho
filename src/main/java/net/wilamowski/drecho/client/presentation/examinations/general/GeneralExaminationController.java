@@ -59,7 +59,7 @@ public class GeneralExaminationController
 
   public void loadNestedExamByFxmlPath(String subView) throws IOException {
     logger.debug("Loading nested examination. Param: {}", subView);
-    FXMLLoader loader = GeneralViewHandler.createFxmlLoader( subView );
+    FXMLLoader loader = GeneralViewHandler.createFxmlLoader(subView);
     includedNode = loader.load();
     includedController = loader.getController();
     ControllerInitializer initializer = GeneralViewHandler.initializer();
@@ -127,11 +127,11 @@ public class GeneralExaminationController
     } else {
       logger.debug("User dont choose patient before choosing examination so patient is null now");
     }
-    //todo calculate age, add label
-//    if (generalExaminatiomViewModel.patientProperty().getValue().getDateBirth() != null) {
-//      calculateAge(
-//          generalExaminatiomViewModel.patientProperty().getValue().getDateBirth().getValue(),
-//          LocalDate.now());
-//    }
+    // todo calculate age, add label
+    //    if (generalExaminatiomViewModel.patientProperty().getValue().getDateBirth() != null) {
+    //      calculateAge(
+    //          generalExaminatiomViewModel.patientProperty().getValue().getDateBirth().getValue(),
+    //          LocalDate.now());
+    //    }
   }
 }

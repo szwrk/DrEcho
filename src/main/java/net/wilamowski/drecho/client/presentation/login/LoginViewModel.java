@@ -2,11 +2,11 @@ package net.wilamowski.drecho.client.presentation.login;
 
 import javafx.beans.property.*;
 import net.wilamowski.drecho.client.application.factory.DeploymentType;
-import net.wilamowski.drecho.shared.bundle.Lang;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import net.wilamowski.drecho.connectors.model.AuthenticatorService;
-import net.wilamowski.drecho.shared.auth.AuthenticationResults;
 import net.wilamowski.drecho.connectors.model.standalone.service.authenticator.Credentials;
+import net.wilamowski.drecho.shared.auth.AuthenticationResults;
+import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

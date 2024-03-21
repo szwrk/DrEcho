@@ -4,7 +4,6 @@ import net.wilamowski.drecho.client.presentation.examinations.chooser.Examinatio
 import net.wilamowski.drecho.client.presentation.main.MainModel;
 import net.wilamowski.drecho.connectors.model.*;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
-
 import org.apache.commons.lang.NotImplementedException;
 
 /**

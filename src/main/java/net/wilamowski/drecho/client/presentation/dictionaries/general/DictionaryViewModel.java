@@ -26,7 +26,7 @@ public class DictionaryViewModel {
   private final ListProperty<DictionaryFx> dictionariesFx =
       new SimpleListProperty<>(FXCollections.observableArrayList());
   private final ObjectProperty<DictionaryFx> selectedDictionary = new SimpleObjectProperty<>();
-  private final BooleanProperty isDictionaryNowEdited = new SimpleBooleanProperty( false  );
+  private final BooleanProperty isDictionaryNowEdited = new SimpleBooleanProperty(false);
   private ChangeListener<String> positionCodeListener;
   private ChangeListener<String> positionNameListener;
   private ChangeListener<Boolean> positionActiveListener;
@@ -54,11 +54,11 @@ public class DictionaryViewModel {
   }
 
   private void initDictionary() {
-    DictionaryVmMapper        dictionaryVmMapper = new DictionaryVmMapper();
-    Optional<Set<Dictionary>> dictionaries       = service.getDictionaries();
+    DictionaryVmMapper dictionaryVmMapper = new DictionaryVmMapper();
+    Optional<Set<Dictionary>> dictionaries = service.getDictionaries();
     List<DictionaryFx> collect =
         dictionaries.orElseThrow().stream()
-            .map( dictionaryVmMapper::toJavaFx)
+            .map(dictionaryVmMapper::toJavaFx)
             .collect(Collectors.toList());
     dictionariesFx.get().setAll(collect);
   }
@@ -105,8 +105,8 @@ public class DictionaryViewModel {
     logger.debug("Saving selected dictionary changes");
     DictionaryFx selectedDictionaryFx = selectedDictionary.get();
     logger.debug("Selected dictionary: {}", selectedDictionaryFx);
-    DictionaryVmMapper mapper     = new DictionaryVmMapper();
-    Dictionary         dictionary = mapper.toDomain(selectedDictionaryFx);
+    DictionaryVmMapper mapper = new DictionaryVmMapper();
+    Dictionary dictionary = mapper.toDomain(selectedDictionaryFx);
     service.updateDictionary(dictionary);
   }
 
@@ -115,12 +115,11 @@ public class DictionaryViewModel {
     selectedDictionary.set(dictionaryFx);
   }
 
-
   public void enableDictionary() {
-    this.isDictionaryNowEdited.set( true );
+    this.isDictionaryNowEdited.set(true);
   }
 
-  public void disableDictionary(){
-    this.isDictionaryNowEdited.set( false );
+  public void disableDictionary() {
+    this.isDictionaryNowEdited.set(false);
   }
 }

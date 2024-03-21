@@ -7,22 +7,23 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Posit
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-
 public class PositionVmMapper {
-    public List<PositionFx> toJavaFx(List<Position> positions) {
-        return positions.stream( ).map( this::toJavaFx ).collect( Collectors.toList( ) );
-    }
-    public PositionFx toJavaFx(Position position) {
-        return new PositionFx( position );
-    }
-    public Position toDomain(PositionFx positionFx) {
-        String code = positionFx.getCode( );
-        String name = positionFx.getName( );
-        int order = positionFx.getOrder( );
-        boolean active = positionFx.getActive( );
-        return new Position(code, name, order, active);
-    }
+  public List<PositionFx> toJavaFx(List<Position> positions) {
+    return positions.stream().map(this::toJavaFx).collect(Collectors.toList());
+  }
+
+  public PositionFx toJavaFx(Position position) {
+    return new PositionFx(position);
+  }
+
+  public Position toDomain(PositionFx positionFx) {
+    String code = positionFx.getCode();
+    String name = positionFx.getName();
+    int order = positionFx.getOrder();
+    boolean active = positionFx.getActive();
+    return new Position(code, name, order, active);
+  }
 }

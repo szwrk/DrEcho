@@ -1,9 +1,9 @@
 package net.wilamowski.drecho.client.application.factory;
 
-import net.wilamowski.drecho.connectors.model.*;
-import net.wilamowski.drecho.connectors.model.standalone.persistance.factory.StandaloneRepositoryFactory;
 import net.wilamowski.drecho.client.presentation.main.MainModel;
+import net.wilamowski.drecho.connectors.model.*;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
+import net.wilamowski.drecho.connectors.model.standalone.persistance.factory.StandaloneRepositoryFactory;
 
 /**
  * @author Arkadiusz Wilamowski

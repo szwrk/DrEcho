@@ -164,13 +164,13 @@ public class LoginController
         .textProperty()
         .addListener(
             (obs, oldv, newv) -> {
-                loginField.pseudoClassStateChanged(Styles.STATE_DANGER, newv.isEmpty( ) );
+              loginField.pseudoClassStateChanged(Styles.STATE_DANGER, newv.isEmpty());
             });
     passwordField
         .textProperty()
         .addListener(
             (obs, oldv, newv) -> {
-                passwordField.pseudoClassStateChanged(Styles.STATE_DANGER, newv.isEmpty( ) );
+              passwordField.pseudoClassStateChanged(Styles.STATE_DANGER, newv.isEmpty());
             });
   }
 

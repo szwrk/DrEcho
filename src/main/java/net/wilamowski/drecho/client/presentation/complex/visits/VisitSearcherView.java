@@ -41,13 +41,13 @@ import org.apache.logging.log4j.Logger;
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
-public class VisitDashboardController
+public class VisitSearcherView
     implements ViewHandlerInitializer,
         Initializable,
         ViewModelsInitializer,
         KeyEventDebugInitializer,
         PostInitializable {
-  private static final Logger logger = LogManager.getLogger(VisitDashboardController.class);
+  private static final Logger logger = LogManager.getLogger(VisitSearcherView.class);
   private final ObservableList<VisitVM> visits = FXCollections.observableArrayList();
   private final DateTimeFormatter dataTimeFormatter =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -71,7 +71,8 @@ public class VisitDashboardController
 
   @FXML
   void onActionSearchByDate(ActionEvent event) {
-    assert visitDashboardViewModel == null : "visitDashboardViewModel is unexpectedly null during user click on search by date in the visit view";
+    assert visitDashboardViewModel == null
+        : "visitDashboardViewModel is unexpectedly null during user click on search by date in the visit view";
     if (saveDatePicker.valueProperty().get() != null) {
       visitDashboardViewModel.searchByDate(saveDatePicker.getValue(), 0);
     } else {
@@ -127,7 +128,7 @@ public class VisitDashboardController
     int findedMatchedPatients =
         patientSearcherViewModel.searchPatientByAnyInput(searchByPatientTextField.getText(), 0);
     logger.debug("findedMatchedPatients {}", findedMatchedPatients);
-    
+
     if (findedMatchedPatients == 1) {
       visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
     } else if (findedMatchedPatients == 0) {
@@ -138,7 +139,6 @@ public class VisitDashboardController
       modal.showWithBlur();
     }
   }
-
 
   @Override
   public void initializeViewHandler(GeneralViewHandler viewHandler) {

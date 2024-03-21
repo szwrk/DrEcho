@@ -33,9 +33,8 @@ public class VisitStandaloneModel implements VisitModel {
     this.visitEntityMapper = new VisitEntityMapper(userRepository, patientRepository);
   }
 
-
   @Override
-  public Set<VisitDto> listVisitsBy(Patient patient,int page) {
+  public Set<VisitDto> listVisitsBy(Patient patient, int page) {
     assert patient != null;
     logger.debug("[SERVICE] Getting data by patient {}...", patient.getId());
     Set<VisitEntity> visitEntities = visitRepository.findVisitsByPatientId(patient.getId());
@@ -43,14 +42,15 @@ public class VisitStandaloneModel implements VisitModel {
   }
 
   @Override
-  public Set<VisitDto> listVisitsBy(LocalDate date,int page) {
+  public Set<VisitDto> listVisitsBy(LocalDate date, int page) {
     logger.debug("[SERVICE] Getting data by date {}...", date);
     Set<VisitEntity> visitEntities = visitRepository.findVisitByDate(date);
     return mapVisitsToDto(visitEntities, date);
   }
 
   private Set<VisitDto> mapVisitsToDto(Set<VisitEntity> visitEntities, Object... parameters) {
-    Set<Visit> visits = visitEntities.stream().map( visitEntityMapper::toDomain).collect(Collectors.toSet());
+    Set<Visit> visits =
+        visitEntities.stream().map(visitEntityMapper::toDomain).collect(Collectors.toSet());
     logger.debug(
         "[SERVICE] - Visit Service returns {} items. Parameter: {}", visits.size(), parameters);
     return visits.stream().map(VisitAssembler::toDto).collect(Collectors.toSet());

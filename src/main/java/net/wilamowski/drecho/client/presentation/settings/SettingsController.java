@@ -25,8 +25,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class SettingsController

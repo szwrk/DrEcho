@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.client.application.exceptions;
 
-import net.wilamowski.drecho.client.presentation.customs.modals.NativeAlert;
 import net.wilamowski.drecho.client.application.infra.util.screenshot.Screenshoter;
+import net.wilamowski.drecho.client.presentation.customs.modals.NativeAlert;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

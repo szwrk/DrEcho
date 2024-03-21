@@ -37,8 +37,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class GeneralViewHandler {
@@ -51,7 +51,7 @@ public class GeneralViewHandler {
 
   private GeneralViewHandler(
       String styleName, ViewModels viewModels, ApplicationRoot applicationRoot) {
-    ANIMATION_CHANGE_SCANE_DURATION = ClientPropertyReader.getInt( "admin.switch-scene.duration" );
+    ANIMATION_CHANGE_SCANE_DURATION = ClientPropertyReader.getInt("admin.switch-scene.duration");
     this.root = applicationRoot;
     this.initGlobalStyle(styleName);
     controllerInitializer = new ControllerInitializerImpl(viewModels);

@@ -6,6 +6,7 @@ import net.wilamowski.drecho.connectors.model.standalone.persistance.PatientRepo
 import net.wilamowski.drecho.connectors.model.standalone.persistance.UserRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.VersionedPatientRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.VisitRepository;
+import net.wilamowski.drecho.connectors.model.standalone.persistance.demo.DemoDataGeneratorInMemory;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.impl.inmemory.ConfigurationFileRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.impl.inmemory.InMemoryEchoTteRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.impl.inmemory.PatientRepositoryInMemory;
@@ -17,43 +18,58 @@ import org.apache.logging.log4j.Logger;
 
 public class InMemoryRepositoryFactory implements StandaloneRepositoryFactory {
   private static final Logger logger = LogManager.getLogger(InMemoryRepositoryFactory.class);
+  private final EchoTteRepository repositoryInMemoryEchoTte;
+  private final ConfigurationRepository configurationRepository;
+  private final UserRepositoryInMemory userRepositoryInMemory;
+  private final PatientRepositoryInMemory patientRepositoryInMemory;
+  private final VisitRepositoryInMemory visitRepositoryInMemory;
+  private final VersionedPatientRepositoryInMemory versionedPatientRepositoryInMemory;
 
-  private InMemoryRepositoryFactory( ) {
+  public InMemoryRepositoryFactory() {
+    DemoDataGeneratorInMemory demoDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
+    repositoryInMemoryEchoTte = InMemoryEchoTteRepository.createRepositoryInMemoryEchoTte();
+    configurationRepository = ConfigurationFileRepository.defaultConfigurationFileRepository();
+    userRepositoryInMemory = UserRepositoryInMemory.createUserRepositoryInMemory();
+    patientRepositoryInMemory =
+        PatientRepositoryInMemory.createPatientRepositoryInMemory(demoDataGeneratorInMemory);
+    visitRepositoryInMemory =
+        VisitRepositoryInMemory.createVisitRepositoryInMemory(demoDataGeneratorInMemory);
+    versionedPatientRepositoryInMemory = new VersionedPatientRepositoryInMemory();
   }
 
-  public static InMemoryRepositoryFactory createInMemoryRepositoryFactory() {
-    return new InMemoryRepositoryFactory(  );
+  public static InMemoryRepositoryFactory instance() {
+    logger.info("[CONTEXT] Initializing singleton instance of InMemoryRepositoryFactory...");
+
+    return new InMemoryRepositoryFactory();
   }
 
   @Override
   public EchoTteRepository instanceEchoTteRepository() {
-    return InMemoryEchoTteRepository.createRepositoryInMemoryEchoTte();
+    return repositoryInMemoryEchoTte;
   }
 
   @Override
   public ConfigurationRepository instanceConfigurationRepository() {
-    logger.warn( "[FACTORY]" );
-    return ConfigurationFileRepository
-        .defaultConfigurationFileRepository(); // todo in-memory instance should be file vs map?
+    return configurationRepository;
   }
 
   @Override
   public UserRepository instanceUserRepository() {
-    return UserRepositoryInMemory.createUserRepositoryInMemory();
+    return userRepositoryInMemory;
   }
 
   @Override
   public VisitRepository instanceVisitRepository() {
-    return VisitRepositoryInMemory.createVisitRepositoryInMemory();
+    return visitRepositoryInMemory;
   }
 
   @Override
   public PatientRepository instancePatientRepository() {
-    return PatientRepositoryInMemory.createPatientRepositoryInMemory();
+    return patientRepositoryInMemory;
   }
 
   @Override
   public VersionedPatientRepository instanceVersionedPatientRepository() {
-    return new VersionedPatientRepositoryInMemory();
+    return versionedPatientRepositoryInMemory;
   }
 }

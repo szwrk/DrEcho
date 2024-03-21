@@ -191,7 +191,7 @@ public class ExaminationsChooserController
 
   private ObservableList<ExaminationDefinitionFx>
       fetchExamCatalog() { // todo hardcoded exam catalogue, create view model + servic, dictionary?
-                           // factory? etc?
+    // factory? etc?
     ExaminationDefinitionFx tte =
         new EchoExaminationDefinition(
             new SimpleStringProperty("ETTE"),

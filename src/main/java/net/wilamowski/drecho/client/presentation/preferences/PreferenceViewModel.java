@@ -1,14 +1,13 @@
 package net.wilamowski.drecho.client.presentation.preferences;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import net.wilamowski.drecho.client.application.mapper.SettingVmMapper;
 import net.wilamowski.drecho.client.presentation.settings.SettingPropertyFx;
 import net.wilamowski.drecho.connectors.configuration.SettingValue;
 import net.wilamowski.drecho.connectors.model.Configuration;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Arkadiusz Wilamowski

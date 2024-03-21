@@ -19,8 +19,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class ViewModels {
@@ -31,36 +31,36 @@ public class ViewModels {
     this.modelLayer = modelLayer;
   }
 
-  // singleViews, subViews (nested views), atomic
   public LoginViewModel loginViewModel() {
-    return new LoginViewModel( modelLayer.authenticatorModel() );
+    return new LoginViewModel(modelLayer.authenticatorModel());
   }
 
   public EchoTteViewModel exhaminationTteViewModel() {
     logger.traceEntry();
-    return new EchoTteViewModel( modelLayer.echoTteModel(), modelLayer.dictionariesService());
+    return new EchoTteViewModel(modelLayer.echoTteModel(), modelLayer.dictionariesService());
   }
 
   public SettingsViewModel settingsViewModel() {
-    return new SettingsViewModel( modelLayer.settingsModel());
+    return new SettingsViewModel(modelLayer.settingsModel());
   }
+
   public PreferenceViewModel preferenceViewModel() {
-    return new PreferenceViewModel( modelLayer.settingsModel());
+    return new PreferenceViewModel(modelLayer.settingsModel());
   }
 
   public MainViewModel mainViewModel() {
     logger.traceEntry();
-    return new MainViewModel( modelLayer.mainDataModel());
+    return new MainViewModel(modelLayer.mainDataModel());
   }
 
   public PatientSearcherViewModel patientViewModel() {
     logger.traceEntry();
-    return new PatientSearcherViewModel( modelLayer.patientModel());
+    return new PatientSearcherViewModel(modelLayer.patientModel());
   }
 
   public ExaminationsChooserViewModel examinationsChooserViewModel() {
     logger.traceEntry();
-    return new ExaminationsChooserViewModel( modelLayer.examinationsModel());
+    return new ExaminationsChooserViewModel(modelLayer.examinationsModel());
   }
 
   public GeneralExaminatiomViewModel generalExaminatiomViewModel() {
@@ -75,15 +75,14 @@ public class ViewModels {
   }
 
   public DictionaryViewModel dictionariesViewModel() {
-    return new DictionaryViewModel( modelLayer.dictionariesService());
+    return new DictionaryViewModel(modelLayer.dictionariesService());
   }
 
   public VisitDashboardViewModel visitDashboardViewModel() {
-    return new VisitDashboardViewModel( modelLayer.visitModel());
+    return new VisitDashboardViewModel(modelLayer.visitModel());
   }
 
-    public PatientRegisterViewModel patientRegistrationViewModel() {
-    return new PatientRegisterViewModel( modelLayer.patientModel() );
-    }
-
+  public PatientRegisterViewModel patientRegistrationViewModel() {
+    return new PatientRegisterViewModel(modelLayer.patientModel());
+  }
 }

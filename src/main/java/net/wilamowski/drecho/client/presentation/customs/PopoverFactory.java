@@ -14,12 +14,12 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class PopoverFactory {
-  private static final Logger logger = LogManager.getLogger( PopoverFactory.class);
-  
+  private static final Logger logger = LogManager.getLogger(PopoverFactory.class);
+
   public static Popover createActionPopover(
       String title,
       String contentText,
@@ -38,7 +38,7 @@ public class PopoverFactory {
 
     VBox box = new VBox(10);
     box.setSpacing(10);
-    VBox.setMargin(box, new Insets( 5,5,5,5 ));
+    VBox.setMargin(box, new Insets(5, 5, 5, 5));
     box.getChildren().add(actionButton);
     actionButton.setOnAction(eventHandler);
     pop.setContentNode(new VBox(new TextFlow(new Text(contentText)), box));
@@ -49,19 +49,20 @@ public class PopoverFactory {
     logger.debug("New simple popover");
     var pop = new Popover();
     pop.setTitle(title);
-    pop.setCornerRadius( 10 );
+    pop.setCornerRadius(10);
     pop.setHeaderAlwaysVisible(true);
     pop.setContentNode(new VBox(new TextFlow(new Text(contentText))));
     return pop;
   }
 
-  public static Popover createSimplePopover(String title, String contentText, Popover.ArrowLocation location) {
+  public static Popover createSimplePopover(
+      String title, String contentText, Popover.ArrowLocation location) {
     logger.debug("New simple popover");
     var pop = new Popover();
     pop.setTitle(title);
     pop.setHeaderAlwaysVisible(true);
     pop.setContentNode(new VBox(new TextFlow(new Text(contentText))));
-    pop.setArrowLocation( location);
+    pop.setArrowLocation(location);
     return pop;
   }
 }

@@ -10,5 +10,5 @@ public interface ConfigurationRepository {
 
   List<SettingValue> readAllProperty();
 
-    List<SettingValue> readByContextName(String contextName);
+  List<SettingValue> readByContextName(String contextName);
 }

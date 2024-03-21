@@ -119,15 +119,15 @@ public class ConnectorLocalModel extends ConnectorLayer {
   @Override
   public VisitModel visitModel() {
     if (visitModel == null) {
-      logger.trace( "Visit model is null. Creating new instances start..." );
+      logger.trace("Visit model is null. Creating new instances start...");
       visitModel =
           new VisitStandaloneModel(
               repoFactory.instanceVisitRepository(),
               repoFactory.instanceUserRepository(),
               repoFactory.instancePatientRepository());
     } else {
-      logger.trace( "Visit model is not null" );
+      logger.trace("Visit model is not null");
     }
-    return Objects.requireNonNull( visitModel);
+    return Objects.requireNonNull(visitModel);
   }
 }

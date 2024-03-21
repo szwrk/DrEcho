@@ -6,7 +6,7 @@
 <TitledPane xmlns:fx="http://javafx.com/fxml/1" fx:id="root" collapsible="false" maxHeight="1.7976931348623157E308"
             maxWidth="1.7976931348623157E308" styleClass="dense" text="%ui.visits.visits"
             xmlns="http://javafx.com/javafx/21"
-            fx:controller="net.wilamowski.drecho.client.presentation.complex.visits.VisitDashboardController">
+            fx:controller="net.wilamowski.drecho.client.presentation.complex.visits.VisitSearcherView">
     <content>
         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
               nodeOrientation="LEFT_TO_RIGHT" prefHeight="819.0" prefWidth="1034.0">

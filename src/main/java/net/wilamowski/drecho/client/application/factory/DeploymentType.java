@@ -8,10 +8,10 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
- * High-level parameters that determine the choice of model implementations and repository
- * configurations. In client-server mode, the repository is a server dependency.
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net High-level parameters that
+ *     determine the choice of model implementations and repository configurations. In client-server
+ *     mode, the repository is a server dependency.
  */
 @ToString
 public enum DeploymentType {

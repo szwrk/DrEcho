@@ -22,8 +22,7 @@ public class ModelLayerFactory {
     //    DeploymentType passedType = stringToEnum( DeploymentType.class, deployType);
     switch (deployType) {
       case STANDALONE_INMEMORY:
-        return ConnectorLayer.createServiceLayerAsStandalone(
-            InMemoryRepositoryFactory.createInMemoryRepositoryFactory());
+        return ConnectorLayer.createServiceLayerAsStandalone(InMemoryRepositoryFactory.instance());
       case STANDALONE_LOCALDB:
         {
           String errorMsg =

@@ -127,8 +127,7 @@ public class DictionariesController
               handleError(e, "e.999.header", "e.999.msg");
             }
           }
-        }
-        );
+        });
 
     positionNameColumn.setOnEditCancel(
         event -> {
@@ -188,7 +187,7 @@ public class DictionariesController
   @Override
   public void initializeKeyEventDebugging() {
     logger.traceEntry();
-    DebugHandler debugHandler = new KeyDebugHandlerGui(  );
+    DebugHandler debugHandler = new KeyDebugHandlerGui();
     debugHandler.initNode(root);
     debugHandler.watch(this);
     logger.traceExit();
@@ -251,8 +250,9 @@ public class DictionariesController
     logger.info("User clicked on the confirm button in the Dictionary view");
     logger.debug("View model {}", dictionaryViewModel.getDictionariesFx());
     dictionaryViewModel.saveChangesDictionary();
-    UserAlert userAlert = new UserAlert(  );
-    userAlert.showInfo( resourceBundle.getString("u.002.header") , resourceBundle.getString("u.002.msg"));
+    UserAlert userAlert = new UserAlert();
+    userAlert.showInfo(
+        resourceBundle.getString("u.002.header"), resourceBundle.getString("u.002.msg"));
     dictionaryViewModel.enableDictionary();
   }
 

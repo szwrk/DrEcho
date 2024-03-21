@@ -10,7 +10,7 @@ class PeselCodeLengthConstraint implements Constraint {
 
   @Override
   public boolean validate() {
-      return pesel.length( ) == 11;
+    return pesel.length() == 11;
   }
 
   @Override

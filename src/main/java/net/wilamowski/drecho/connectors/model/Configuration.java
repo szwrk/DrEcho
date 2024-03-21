@@ -9,5 +9,6 @@ public interface Configuration {
   String read(String key);
 
   List<SettingValue> getAllSettings();
+
   List<SettingValue> getSettingsByContextName(String contextName);
 }

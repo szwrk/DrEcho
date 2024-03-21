@@ -14,30 +14,30 @@ import org.apache.logging.log4j.Logger;
 public class VisitRepositoryInMemory implements VisitRepository {
   private static final Logger logger = LogManager.getLogger(VisitRepositoryInMemory.class);
   private static VisitRepositoryInMemory instance;
-  private Set<VisitEntity> visitsDatabase = new HashSet<>();
   private static DemoDataGeneratorInMemory demoDataGeneratorInMemory;
+  private Set<VisitEntity> visitsDatabase = new HashSet<>();
 
-  private VisitRepositoryInMemory() {
-    boolean isEnabled = BackendPropertyReader.getBoolean( "user.demo.random-data.initialization.enabled" );
+  private VisitRepositoryInMemory(DemoDataGeneratorInMemory demoDataGeneratorInMemory) {
+    VisitRepositoryInMemory.demoDataGeneratorInMemory = demoDataGeneratorInMemory;
+    boolean isEnabled =
+        BackendPropertyReader.getBoolean("user.demo.random-data.initialization.enabled");
     initializeDemoDataIfPropertyIsEnabled(isEnabled);
   }
 
   private void initializeDemoDataIfPropertyIsEnabled(boolean isEnabled) {
     if (isEnabled) {
       logger.info("Demo data initialization is enabled");
-      demoDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
-      visitsDatabase = demoDataGeneratorInMemory.loadDemoVisits();
+      visitsDatabase = demoDataGeneratorInMemory.generateVisitsForPatients();
+      logger.debug(
+          "[REPOSITORY] Added genereted visits to repository. Repository size: {}",
+          visitsDatabase.size());
     }
   }
 
-  public static VisitRepositoryInMemory createVisitRepositoryInMemory() {
-    if (instance==null){
-      logger.debug( "Visit repository is null. Creating new instance..." );
-      instance = new VisitRepositoryInMemory();
-    }
-    return instance ;
+  public static VisitRepositoryInMemory createVisitRepositoryInMemory(
+      DemoDataGeneratorInMemory demoDataGeneratorInMemory) {
+    return new VisitRepositoryInMemory(demoDataGeneratorInMemory);
   }
-
 
   @Override
   public Set<VisitEntity> findVisitsByPatientId(long patientId) {
@@ -45,7 +45,10 @@ public class VisitRepositoryInMemory implements VisitRepository {
         visitsDatabase.stream()
             .filter(patient -> patient.getPatientId().equals(patientId))
             .collect(Collectors.toSet());
-    logger.debug("[REPOSITORY] - Visit repository returned {}/{} items", matchingVisits.size(), visitsDatabase.size());
+    logger.debug(
+        "[REPOSITORY] - Visit repository returned {}/{} items",
+        matchingVisits.size(),
+        visitsDatabase.size());
     return matchingVisits;
   }
 
@@ -55,7 +58,10 @@ public class VisitRepositoryInMemory implements VisitRepository {
         visitsDatabase.stream()
             .filter(patient -> patient.getRealizationDateTimeProperty().toLocalDate().equals(date))
             .collect(Collectors.toSet());
-    logger.debug("[REPOSITORY] - Visit repository returned {}/{} items", matchingVisits.size(), visitsDatabase.size());
+    logger.debug(
+        "[REPOSITORY] - Visit repository returned {}/{} items",
+        matchingVisits.size(),
+        visitsDatabase.size());
     return matchingVisits;
   }
 

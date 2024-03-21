@@ -39,6 +39,4 @@ public class ClientPropertyReader {
       throw new IllegalArgumentException(errorMsg, e);
     }
   }
-
-
 }

@@ -20,9 +20,9 @@ import org.apache.logging.log4j.Logger;
 public class PatientRegisterViewModel {
   private static final Logger logger = LogManager.getLogger(PatientRegisterViewModel.class);
   private final PatientService patientService;
-  private PatientFx currentPatientFx = null;
   private final BooleanProperty addPatientModeDisable = new SimpleBooleanProperty(true);
   private final BooleanProperty updatePatientModeDisable = new SimpleBooleanProperty(true);
+  private PatientFx currentPatientFx = null;
   private PatientRegisterDataEntryMode dataEntryMode;
   private boolean isUserStartedWriting = false;
 

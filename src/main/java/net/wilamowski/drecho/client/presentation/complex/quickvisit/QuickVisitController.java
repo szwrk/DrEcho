@@ -31,153 +31,139 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
 public class QuickVisitController
-        implements 
-        KeyEventDebugInitializer,
+    implements KeyEventDebugInitializer,
         ViewModelsInitializer,
         ViewHandlerInitializer,
         PostInitializable,
         Tooltipable {
-    private static final Logger logger = LogManager.getLogger(QuickVisitController.class);
-    @FXML
-    private RadioButton controlRadio;
-    @FXML
-    private TitledPane root;
-    @FXML
-    private RadioButton echoTteRadio;
-    @FXML
-    private TitledPane visit;
-    @FXML
-    private VisitController visitController;
-    @FXML
-    private TitledPane patient;
-    @FXML
-    private PatientsSearcherController patientController;
-    @FXML
-    private VBox examination;
-    @FXML
-    private ExaminationsChooserController examinationController;
-    @FXML
-    private TabPane tabPane;
-    @FXML
-    private Tab visitDetailTab;
-    @FXML
-    private Tab examinationsTab;
-    @FXML
-    private Button confirmButton;
-    private ResourceBundle bundle;
-    private ViewModels factory;
-    private GeneralViewHandler handler;
+  private static final Logger logger = LogManager.getLogger(QuickVisitController.class);
+  @FXML private RadioButton controlRadio;
+  @FXML private TitledPane root;
+  @FXML private RadioButton echoTteRadio;
+  @FXML private TitledPane visit;
+  @FXML private VisitController visitController;
+  @FXML private TitledPane patient;
+  @FXML private PatientsSearcherController patientController;
+  @FXML private VBox examination;
+  @FXML private ExaminationsChooserController examinationController;
+  @FXML private TabPane tabPane;
+  @FXML private Tab visitDetailTab;
+  @FXML private Tab examinationsTab;
+  @FXML private Button confirmButton;
+  private ResourceBundle bundle;
+  private ViewModels factory;
+  private GeneralViewHandler handler;
 
-    public QuickVisitController() {
+  public QuickVisitController() {}
+
+  @FXML
+  void onActionConfirmVisitDetails(ActionEvent event) {
+    logger.debug("Clicked on confirm visit details...");
+    tabPane.getSelectionModel().select(examinationsTab);
+  }
+
+  @Override
+  public void initializeKeyEventDebugging() {
+    DebugHandler debugHandler = new KeyDebugHandlerGui();
+    debugHandler.initNode(root);
+    debugHandler.watch(this);
+  }
+
+  @Override
+  public void initializeViewModels(ViewModels factory) {
+    this.factory = factory;
+  }
+
+  @Override
+  public void postInitialize() {
+    try {
+      initializeNestedViewControllers();
+      informVisitAboutSelectedPatient();
+      informExaminationAboutSelectedPatient();
+      requestFocusOnViewStart();
+      initQuickVisitRealizationDate();
+      initRegistrationSystemSaveDate();
+      fireConfirmButtonWhenPressKeyCombination();
+      bindSelectedOfPatientAndExaminationTabDisable();
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
+  }
 
-    @FXML
-    void onActionConfirmVisitDetails(ActionEvent event) {
-        logger.debug("Clicked on confirm visit details...");
-        tabPane.getSelectionModel().select(examinationsTab);
-    }
+  private void bindSelectedOfPatientAndExaminationTabDisable() {
+    examinationsTab
+        .disableProperty()
+        .bind(patientController.getPatientSearcherViewModel().selectedPatientProperty().isNull());
+  }
 
-    @Override
-    public void initializeKeyEventDebugging() {
-        DebugHandler debugHandler = new KeyDebugHandlerGui();
-        debugHandler.initNode(root);
-        debugHandler.watch(this);
-    }
+  private void fireConfirmButtonWhenPressKeyCombination() {
+    root.setOnKeyPressed(
+        e -> {
+          if (new KeyCodeCombination(KeyCode.ENTER, KeyCombination.SHIFT_DOWN).match(e)) {
+            logger.debug("User pressed key combination for fire confirm button");
+            confirmButton.fire();
+          }
+        });
+  }
 
-    @Override
-    public void initializeViewModels(ViewModels factory) {
-        this.factory = factory;
-    }
+  private void initRegistrationSystemSaveDate() {
+    visitController.getViewModel().getViewStartDtProperty().set(LocalDate.now());
+  }
 
-    @Override
-    public void postInitialize() {
-        try {
-        initializeNestedViewControllers();
-        informVisitAboutSelectedPatient();
-        informExaminationAboutSelectedPatient();
-        requestFocusOnViewStart();
-        initQuickVisitRealizationDate();
-        initRegistrationSystemSaveDate();
-        fireConfirmButtonWhenPressKeyCombination();
-        bindSelectedOfPatientAndExaminationTabDisable();
-        } catch (Exception e) {
-            logger.error( e.getMessage(), e );
-        }
-    }
+  private void initQuickVisitRealizationDate() {
+    visitController.getViewModel().getRealizationDtProperty().set(LocalDate.now());
+  }
 
-    private void bindSelectedOfPatientAndExaminationTabDisable() {
-        examinationsTab.disableProperty()
-                .bind(patientController.getPatientSearcherViewModel().selectedPatientProperty().isNull()
-        );
-    }
+  private void initializeNestedViewControllers() {
+    Objects.requireNonNull(patientController);
+    Objects.requireNonNull(examinationController);
+    Objects.requireNonNull(visitController);
+    Objects.requireNonNull(handler);
 
-    private void fireConfirmButtonWhenPressKeyCombination() {
-        root.setOnKeyPressed(e -> {
-                    if (new KeyCodeCombination(KeyCode.ENTER, KeyCombination.SHIFT_DOWN).match(e)) {
-                        logger.debug("User pressed key combination for fire confirm button");
-                        confirmButton.fire();
-                    }
-                }
-        );
-    }
+    ControllerInitializer initializer = GeneralViewHandler.initializer();
+    initializer.initControllers(patientController, handler);
+    initializer.initControllers(examinationController, handler);
+    initializer.initControllers(visitController, handler);
 
-    private void initRegistrationSystemSaveDate() {
-        visitController.getViewModel().getViewStartDtProperty().set(LocalDate.now());
-    }
+    Objects.requireNonNull(visitController.getViewModel());
+    Objects.requireNonNull(patientController.getPatientSearcherViewModel());
+    Objects.requireNonNull(examinationController.getExaminationViewModel());
+  }
 
-    private void initQuickVisitRealizationDate() {
-        visitController.getViewModel().getRealizationDtProperty().set(LocalDate.now());
-    }
+  private void requestFocusOnViewStart() {
+    Platform.runLater(
+        () -> {
+          root.requestFocus();
+          patientController.searcherReguestFocus();
+        });
+  }
 
-    private void initializeNestedViewControllers() {
-        Objects.requireNonNull(  patientController);
-        Objects.requireNonNull(  examinationController);
-        Objects.requireNonNull(  visitController);
-        Objects.requireNonNull(  handler);
+  private void informExaminationAboutSelectedPatient() {
+    examinationController
+        .getExaminationViewModel()
+        .selectedPatientProperty()
+        .bind(visitController.getViewModel().getSelectedPatient());
+  }
 
-        ControllerInitializer initializer = GeneralViewHandler.initializer();
-        initializer.initControllers(patientController, handler);
-        initializer.initControllers(examinationController, handler);
-        initializer.initControllers(visitController, handler);
+  private void informVisitAboutSelectedPatient() {
+    visitController
+        .getViewModel()
+        .getSelectedPatient()
+        .bind(patientController.getPatientSearcherViewModel().selectedPatientProperty());
+  }
 
-        Objects.requireNonNull( visitController.getViewModel());
-        Objects.requireNonNull( patientController.getPatientSearcherViewModel());
-        Objects.requireNonNull( examinationController.getExaminationViewModel());
-    }
+  @Override
+  public void initializeViewHandler(GeneralViewHandler viewHandler) {
+    this.handler = viewHandler;
+  }
 
-    private void requestFocusOnViewStart() {
-        Platform.runLater(
-                () -> {
-                    root.requestFocus();
-                    patientController.searcherReguestFocus();
-                });
-    }
-
-    private void informExaminationAboutSelectedPatient() {
-        examinationController
-                .getExaminationViewModel()
-                .selectedPatientProperty()
-                .bind(visitController.getViewModel().getSelectedPatient());
-    }
-
-    private void informVisitAboutSelectedPatient() {
-        visitController.getViewModel()
-                .getSelectedPatient()
-                .bind(patientController.getPatientSearcherViewModel().selectedPatientProperty());
-    }
-
-    @Override
-    public void initializeViewHandler(GeneralViewHandler viewHandler) {
-        this.handler = viewHandler;
-    }
-
-    @Override
-    public Node getRootUiNode() {
-        return root;
-    }
+  @Override
+  public Node getRootUiNode() {
+    return root;
+  }
 }

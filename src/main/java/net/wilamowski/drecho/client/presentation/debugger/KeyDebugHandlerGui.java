@@ -7,10 +7,10 @@ import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
-import net.wilamowski.drecho.shared.bundle.Lang;
-import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import net.wilamowski.drecho.client.presentation.customs.modals.DebugAlert;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
+import net.wilamowski.drecho.client.properties.ClientPropertyReader;
+import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

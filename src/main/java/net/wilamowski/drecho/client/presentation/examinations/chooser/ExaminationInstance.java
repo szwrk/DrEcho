@@ -4,8 +4,8 @@ import java.util.Objects;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import lombok.ToString;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
+import net.wilamowski.drecho.client.presentation.patients.PatientFx;
 
 @ToString
 public abstract class ExaminationInstance {

@@ -212,7 +212,7 @@ public class EchoController
   public void postInitialize() {}
 
   void reinitializeEchoFormProperties(EchoTte echoTte) {
-    viewModel.initEchoTteFormData( echoTte );
+    viewModel.initEchoTteFormData(echoTte);
     // dimension
     heartDimensionSectionBindings();
     configureDimensionsInputsFormatters();
@@ -232,7 +232,7 @@ public class EchoController
     //
     contextMenuCreator = FormContextMenu.setup(viewHandler);
     contextMenuCreator.applyForRootNode(root);
-    //calcs
+    // calcs
     initAnimationTypeForCalculation();
     viewModel.autoCalculateLVM();
     configLvmInfoBox();
@@ -242,7 +242,6 @@ public class EchoController
 
     viewModel.autoCalculateLVMIndex();
     configLvmIndexInfoBox();
-    
   }
 
   private void configureDimensionsInputsFormatters() {
@@ -430,12 +429,14 @@ public class EchoController
   }
 
   private void initAnimationTypeForCalculation() {
-    requiredFieldAnimationType = ClientPropertyReader.getString("examination.echotte.lvm.animation");
+    requiredFieldAnimationType =
+        ClientPropertyReader.getString("examination.echotte.lvm.animation");
   }
 
   private void configLvmInfoBox() {
     final String expression = ClientPropertyReader.getString("examination.echotte.lvm.expression");
-    final String referenceValues = ClientPropertyReader.getString("examination.echotte.lvm.reference");
+    final String referenceValues =
+        ClientPropertyReader.getString("examination.echotte.lvm.reference");
     lvmPopover =
         PopoverFactory.createActionPopover(
             "LVM - Left ventricular mass",
@@ -487,7 +488,8 @@ public class EchoController
 
   private void configLvmIndexInfoBox() {
     final String expression = ClientPropertyReader.getString("examination.echotte.lvmi.expression");
-    final String referenceValues = ClientPropertyReader.getString("examination.echotte.lvm.reference");
+    final String referenceValues =
+        ClientPropertyReader.getString("examination.echotte.lvm.reference");
     lvmiPopover =
         PopoverFactory.createActionPopover(
             "LVMI - LV Mass Indexed to Body Surface Area",
@@ -568,24 +570,24 @@ public class EchoController
     ot_contractility_dictComboBox.setConverter(converter);
   }
 
-  public void clearForm(){
-    logger.debug( "Clear form..." );
-   dm_aorta.setText( "" );
-   dm_iv_septum_diastole.setText( "" );
-   dm_iv_septum_systole.setText( "" );
-   dm_left_atrium_length.setText( "" );
-   dm_left_atrium_width.setText( "" );
-   dm_left_ventricle_diastole.setText( "" );
-   dm_left_ventricle_systole.setText( "" );
-   dm_lvmi.setText( "" );
-   dm_mass_LVM.setText( "" );
-   dm_name_lbl.setText( "" );
-   dm_note_txt.setText( "" );
-   dm_posterior_wall_systole.setText( "" );
-   dm_posterior_wall_diastole.setText( "" );
-   dm_pulmonary_trunk.setText( "" );
-   dm_relative_wall_thickness.setText( "" );
-   dm_right_atrium_length.setText( "" );
-   dm_right_atrium_width.setText( "" );
+  public void clearForm() {
+    logger.debug("Clear form...");
+    dm_aorta.setText("");
+    dm_iv_septum_diastole.setText("");
+    dm_iv_septum_systole.setText("");
+    dm_left_atrium_length.setText("");
+    dm_left_atrium_width.setText("");
+    dm_left_ventricle_diastole.setText("");
+    dm_left_ventricle_systole.setText("");
+    dm_lvmi.setText("");
+    dm_mass_LVM.setText("");
+    dm_name_lbl.setText("");
+    dm_note_txt.setText("");
+    dm_posterior_wall_systole.setText("");
+    dm_posterior_wall_diastole.setText("");
+    dm_pulmonary_trunk.setText("");
+    dm_relative_wall_thickness.setText("");
+    dm_right_atrium_length.setText("");
+    dm_right_atrium_width.setText("");
   }
 }

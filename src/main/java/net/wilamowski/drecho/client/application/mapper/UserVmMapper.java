@@ -1,8 +1,8 @@
 package net.wilamowski.drecho.client.application.mapper;
 
 import javafx.beans.property.SimpleStringProperty;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
+import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
 
 /**
  * @author Arkadiusz Wilamowski

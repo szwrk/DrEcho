@@ -10,7 +10,7 @@ class PeselNotNullConstraint implements Constraint {
 
   @Override
   public boolean validate() {
-      return !pesel.isEmpty( );
+    return !pesel.isEmpty();
   }
 
   @Override

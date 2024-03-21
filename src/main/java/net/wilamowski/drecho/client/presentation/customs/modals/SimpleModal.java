@@ -2,8 +2,8 @@ package net.wilamowski.drecho.client.presentation.customs.modals;
 
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import net.wilamowski.drecho.client.presentation.customs.SimpleModalController;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
+import net.wilamowski.drecho.client.presentation.customs.SimpleModalController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

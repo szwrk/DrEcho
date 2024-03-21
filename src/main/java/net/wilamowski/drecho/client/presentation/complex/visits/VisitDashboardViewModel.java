@@ -33,6 +33,13 @@ public class VisitDashboardViewModel {
     this.visitModel = visitModel;
   }
 
+  public void searchByPatient(PatientFx patientFx, int page) {
+    logger.trace("Clicked search by selected patient");
+    Patient patient = PatientVmMapper.toDomain(patientFx);
+    Set<VisitDto> visitSet = visitModel.listVisitsBy(patient, page);
+    loadVisitsToTable(visitSet);
+  }
+
   private void loadVisitsToTable(Set<VisitDto> visitSet) {
     if (visitSet != null) {
       logger.debug("SERVICE - visit service returns: {} entity items", visitSet.size());
@@ -53,15 +60,8 @@ public class VisitDashboardViewModel {
     visits.addAll(visitVMList);
   }
 
-  public void searchByPatient(PatientFx patientFx, int page) {
-    logger.trace( "Clicked search by selected patient" );
-    Patient       patient   = PatientVmMapper.toDomain( patientFx );
-    Set<VisitDto> visitSet = visitModel.listVisitsBy(patient,  page);
-    loadVisitsToTable(visitSet);
-  }
-
   public void searchByDate(LocalDate date, int page) {
-    logger.trace( "Clicked search by date" );
+    logger.trace("Clicked search by date");
     Set<VisitDto> visitSet = visitModel.listVisitsBy(date, page);
     loadVisitsToTable(visitSet);
   }

@@ -116,8 +116,6 @@ public class MainController
         });
   }
 
-
-
   @FXML
   public void onActionOpenVisits(ActionEvent actionEvent) {
     logger.debug("Clicked on open Visits...");

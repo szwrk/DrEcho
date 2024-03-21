@@ -10,13 +10,14 @@ public interface PatientRepository {
   Optional<Patient> findById(long id);
 
   List<Patient> findByLastName(String param, int page);
+
   int countByLastName(String param);
 
   List<Patient> findByPeselCode(String param, int page);
 
-  Optional<Patient>  update(Patient patient);
+  Optional<Patient> update(Patient patient);
 
   List<Patient> findAll();
 
-//  List<Patient> getByPage(int pageNumber , int pageSize);
+  //  List<Patient> getByPage(int pageNumber , int pageSize);
 }

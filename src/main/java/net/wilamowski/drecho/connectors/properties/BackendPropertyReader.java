@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 public class BackendPropertyReader {
   private static final String PROPERTIES_PATH = "/backend.properties";
   private static final Logger logger = LogManager.getLogger(BackendPropertyReader.class);
+
   public static Integer getInt(String key) {
     String value = getString(key);
     try {
@@ -36,7 +37,8 @@ public class BackendPropertyReader {
       properties.load(file);
 
       if (!properties.containsKey(key)) {
-        throw new IllegalStateException("Missing value for key '" + key + "' in properties: " + PROPERTIES_PATH);
+        throw new IllegalStateException(
+            "Missing value for key '" + key + "' in properties: " + PROPERTIES_PATH);
       }
 
       return properties.getProperty(key);
@@ -49,7 +51,6 @@ public class BackendPropertyReader {
     }
   }
 
-
   private static void closeStream(InputStream stream) {
     if (stream != null) {
       try {
@@ -58,7 +59,7 @@ public class BackendPropertyReader {
         logger.error("Error closing input stream: {}", e.getMessage());
       }
     }
-    }
+  }
 
   public static Boolean getBoolean(String key) {
     String value = getString(key);

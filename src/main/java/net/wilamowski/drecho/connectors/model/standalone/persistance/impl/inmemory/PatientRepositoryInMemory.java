@@ -13,28 +13,26 @@ import org.apache.logging.log4j.Logger;
 @ToString
 public class PatientRepositoryInMemory implements PatientRepository {
   private static final Logger logger = LogManager.getLogger(PatientRepositoryInMemory.class);
-  @ToString.Exclude
-  private final List<Patient> patients = new ArrayList<>();
-  private DemoDataGeneratorInMemory dummyDataGeneratorInMemory;
+  @ToString.Exclude private final List<Patient> patients = new ArrayList<>();
+  private final DemoDataGeneratorInMemory dummyDataGeneratorInMemory;
   private Long patientId = 1L;
 
-  private PatientRepositoryInMemory() {
-    Integer numberOfPatientsToGenerate  = BackendPropertyReader.getInt( "demo.patients-counter" );
-    new Thread( () -> initDummyPatients(numberOfPatientsToGenerate ) ).start();
+  private PatientRepositoryInMemory(DemoDataGeneratorInMemory demoDataGeneratorInMemory) {
+    this.dummyDataGeneratorInMemory = demoDataGeneratorInMemory;
+    Integer numberOfPatientsToGenerate = BackendPropertyReader.getInt("demo.patients-counter");
+    initDemoPatients(numberOfPatientsToGenerate);
   }
 
-  private void initDummyPatients(int numberOfPatient) {
-    dummyDataGeneratorInMemory = DemoDataGeneratorInMemory.instance();
-    for (int i = 1; i <= numberOfPatient; i++) {
-      Patient newPatient = dummyDataGeneratorInMemory.patient();
-      this.addNew(newPatient);
-    }
-    logger.debug( "Created random patients. Amount: {}", patients.size() );
+  private void initDemoPatients(int numberOfPatient) {
+    List<Patient> patients = dummyDataGeneratorInMemory.patients(numberOfPatient);
+    patients.forEach(p -> addNew(p));
+    logger.debug(
+        "[REPOSITORY] Added genereted patients to repository. Repository size: {}",
+        patients.size());
   }
 
   @Override
   public Optional<Patient> addNew(Patient patient) {
-    logger.trace("[REPOSITORY] Creating patient...");
     Long currentId = patientId++;
     Patient newPatient =
         Patient.builder()
@@ -59,14 +57,18 @@ public class PatientRepositoryInMemory implements PatientRepository {
       logger.error("[REPOSITORY] Add operation is not supported by this set.", e);
       return Optional.empty();
     } catch (ClassCastException e) {
-      logger.error("[REPOSITORY] Class of the specified element prevents it from being added to this set.", e);
+      logger.error(
+          "[REPOSITORY] Class of the specified element prevents it from being added to this set.",
+          e);
       return Optional.empty();
     } catch (NullPointerException e) {
-      logger.error("[REPOSITORY] Specified element is null and this set does not permit null elements.", e);
+      logger.error(
+          "[REPOSITORY] Specified element is null and this set does not permit null elements.", e);
       return Optional.empty();
     } catch (IllegalArgumentException e) {
       logger.error(
-          "[REPOSITORY] Some property of the specified element prevents it from being added to this set.", e);
+          "[REPOSITORY] Some property of the specified element prevents it from being added to this set.",
+          e);
       return Optional.empty();
     }
     return Optional.of(newPatient);
@@ -88,9 +90,9 @@ public class PatientRepositoryInMemory implements PatientRepository {
     if (patients == null || param == null || param.isBlank()) {
       return Collections.emptyList();
     }
-    List<Patient> filteredPatients =
-            filterByLastName( param );
-    int pageSize = BackendPropertyReader.getInt( "backend.patient.pagination.result-table-rows-on-page" );
+    List<Patient> filteredPatients = filterByLastName(param);
+    int pageSize =
+        BackendPropertyReader.getInt("backend.patient.pagination.result-table-rows-on-page");
     int totalPatients = patients.size();
     int matchedPatients = filteredPatients.size();
     int startIndex = (pageNumber) * pageSize;
@@ -104,7 +106,7 @@ public class PatientRepositoryInMemory implements PatientRepository {
             + startIndex
             + ", End Index: "
             + endIndex);
-    if (filteredPatients.size()<pageSize){
+    if (filteredPatients.size() < pageSize) {
       return filteredPatients.subList(startIndex, filteredPatients.size());
     }
     return filteredPatients.subList(startIndex, endIndex);
@@ -112,7 +114,7 @@ public class PatientRepositoryInMemory implements PatientRepository {
 
   @Override
   public int countByLastName(String param) {
-    return filterByLastName( param ).size();
+    return filterByLastName(param).size();
   }
 
   @Override
@@ -130,26 +132,27 @@ public class PatientRepositoryInMemory implements PatientRepository {
   }
 
   public Optional<Patient> update(Patient updatedPatient) {
-    Optional<Patient> existingPatientOptional = patients.stream()
-            .filter(p -> p.getId().equals(updatedPatient.getId()))
-            .findFirst();
+    Optional<Patient> existingPatientOptional =
+        patients.stream().filter(p -> p.getId().equals(updatedPatient.getId())).findFirst();
 
-    existingPatientOptional.ifPresent(existingPatient -> {
-      Patient newPatient = Patient.builder()
-              .id(existingPatient.getId())
-              .name(updatedPatient.getName())
-              .pesel(updatedPatient.getPesel())
-              .lastName(updatedPatient.getLastName())
-              .nameOfCityBirth(updatedPatient.getNameOfCityBirth())
-              .codeOfCityBirth(updatedPatient.getCodeOfCityBirth())
-              .dateBirth(updatedPatient.getDateBirth())
-              .generalPatientNote(updatedPatient.getGeneralPatientNote())
-              .patientTelephoneNumber(updatedPatient.getPatientTelephoneNumber())
-              .build();
+    existingPatientOptional.ifPresent(
+        existingPatient -> {
+          Patient newPatient =
+              Patient.builder()
+                  .id(existingPatient.getId())
+                  .name(updatedPatient.getName())
+                  .pesel(updatedPatient.getPesel())
+                  .lastName(updatedPatient.getLastName())
+                  .nameOfCityBirth(updatedPatient.getNameOfCityBirth())
+                  .codeOfCityBirth(updatedPatient.getCodeOfCityBirth())
+                  .dateBirth(updatedPatient.getDateBirth())
+                  .generalPatientNote(updatedPatient.getGeneralPatientNote())
+                  .patientTelephoneNumber(updatedPatient.getPatientTelephoneNumber())
+                  .build();
 
-      patients.remove(existingPatient);
-      patients.add(newPatient);
-    });
+          patients.remove(existingPatient);
+          patients.add(newPatient);
+        });
 
     return existingPatientOptional;
   }
@@ -164,25 +167,26 @@ public class PatientRepositoryInMemory implements PatientRepository {
   }
 
   private List<Patient> filterByLastName(String param) {
-    if (param==null){
+    if (param == null) {
       return Collections.emptyList();
     }
     String paramLowerCase = param.trim().toLowerCase();
 
-
     List<Patient> collect = Collections.emptyList();
-    try{
-     collect = patients.stream( )
-            .filter( patient -> patient.getLastName( ).toLowerCase( ).startsWith( paramLowerCase ) )
-            .collect( Collectors.toList( ) );
-    logger.debug( "[REPOSITORY ]Returned patients: " + collect.size() );
-    } catch (Exception e){
-      logger.error( e.getMessage(), e );
+    try {
+      collect =
+          patients.stream()
+              .filter(patient -> patient.getLastName().toLowerCase().startsWith(paramLowerCase))
+              .collect(Collectors.toList());
+      logger.debug("[REPOSITORY ]Returned patients: " + collect.size());
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
     }
     return collect;
   }
 
-  public static PatientRepositoryInMemory createPatientRepositoryInMemory( ) {
-    return new PatientRepositoryInMemory(  );
+  public static PatientRepositoryInMemory createPatientRepositoryInMemory(
+      DemoDataGeneratorInMemory demoDataGeneratorInMemory) {
+    return new PatientRepositoryInMemory(demoDataGeneratorInMemory);
   }
 }

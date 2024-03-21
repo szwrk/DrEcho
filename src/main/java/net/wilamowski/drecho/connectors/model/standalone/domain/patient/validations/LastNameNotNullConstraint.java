@@ -11,7 +11,7 @@ class LastNameNotNullConstraint implements Constraint {
 
   @Override
   public boolean validate() {
-      return !patient.getLastName( ).isEmpty( );
+    return !patient.getLastName().isEmpty();
   }
 
   @Override

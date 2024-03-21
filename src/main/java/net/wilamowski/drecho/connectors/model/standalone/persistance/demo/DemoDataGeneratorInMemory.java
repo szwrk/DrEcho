@@ -3,9 +3,7 @@ package net.wilamowski.drecho.connectors.model.standalone.persistance.demo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.connectors.model.standalone.domain.visit.VisitEntity;
 import net.wilamowski.drecho.shared.bundle.Lang;
@@ -13,18 +11,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- *
  * @Author Arkadiusz Wilamowski
- *
  */
-
-
 public class DemoDataGeneratorInMemory {
   private static final Logger logger = LogManager.getLogger(DemoDataGeneratorInMemory.class);
   private final Random random;
   private String[] LAST_NAMES;
   private String[] FIRST_NAMES;
   private String[] CITIES;
+  private List<Patient> patients = new ArrayList<>();
+  private Long sequencePatient = 1L;
 
   private DemoDataGeneratorInMemory() {
     logger.warn("[REPOSITORY] Initializing _DEMO_ data generator...");
@@ -35,28 +31,28 @@ public class DemoDataGeneratorInMemory {
   }
 
   private void initializeCities() {
-    var values = Lang.getString( "demo.comma_separated.cities_names" );
-    if ( values.isEmpty( ) ) {
+    var values = Lang.getString("demo.comma_separated.cities_names");
+    if (values.isEmpty()) {
       String s = "The list of cities in the resource bundle is empty.";
-      throw new IllegalArgumentException( s );
+      throw new IllegalArgumentException(s);
     }
     CITIES = values.split(",");
   }
 
   private void initializeNames() {
-    var values = Lang.getString( "demo.comma_separated.firstnames" );
-    if ( values.isEmpty( ) ) {
+    var values = Lang.getString("demo.comma_separated.firstnames");
+    if (values.isEmpty()) {
       String s = "The list of first names in the resource bundle is empty.";
-      throw new IllegalArgumentException( s );
+      throw new IllegalArgumentException(s);
     }
     FIRST_NAMES = values.split(",");
   }
 
   private void initializeLastNames() {
-    var values = Lang.getString( "demo.comma_separated.lastnames" );
-    if ( values.isEmpty( ) ) {
+    var values = Lang.getString("demo.comma_separated.lastnames");
+    if (values.isEmpty()) {
       String s = "The list of last names in the resource bundle is empty.";
-      throw new IllegalArgumentException( s );
+      throw new IllegalArgumentException(s);
     }
     LAST_NAMES = values.split(",");
   }
@@ -65,12 +61,24 @@ public class DemoDataGeneratorInMemory {
     return new DemoDataGeneratorInMemory();
   }
 
-  public Patient patient() {
+  public List<Patient> patients(int numberOfPatient) {
+    patients = new ArrayList<>();
+    int i = 1;
+    while (i <= numberOfPatient) {
+      patients.add(patient());
+      i++;
+    }
+    logger.debug("[DEMO] Genereted demo patients:" + patients.size());
+    return patients;
+  }
+
+  private Patient patient() {
     LocalDate dateOfBirth = dateOfBirth();
     return Patient.builder()
+        .id(patientSequentNext())
         .name(name())
         .lastName(lastName())
-        .pesel(newPesel(dateOfBirth))
+        .pesel(randomCitizenId(dateOfBirth))
         .nameOfCityBirth(cities())
         .codeOfCityBirth(getCodeOfCity())
         .dateBirth(dateOfBirth)
@@ -79,27 +87,31 @@ public class DemoDataGeneratorInMemory {
         .build();
   }
 
-  public String name() {
+  private Long patientSequentNext() {
+    return sequencePatient++;
+  }
+
+  private String name() {
     return FIRST_NAMES[random.nextInt(FIRST_NAMES.length)];
   }
 
-  public String lastName() {
+  private String lastName() {
     return LAST_NAMES[random.nextInt(LAST_NAMES.length)];
   }
 
-  public String cities() {
+  private String cities() {
     return CITIES[random.nextInt(CITIES.length)];
   }
 
-  public LocalDate dateOfBirth() {
+  private LocalDate dateOfBirth() {
     return LocalDate.now().minusYears(random.nextInt(100) + 1).minusDays(random.nextInt(364) + 1);
   }
 
-  public String getCodeOfCity() {
-    return "12-123";
+  private String getCodeOfCity() {
+    return "12-123"; // todo
   }
 
-  public String telephoneNumber() {
+  private String telephoneNumber() {
     return String.valueOf(random.nextInt(8) + 1)
         + (random.nextInt(8) + 1)
         + (random.nextInt(8) + 1)
@@ -111,55 +123,75 @@ public class DemoDataGeneratorInMemory {
         + (random.nextInt(8) + 1);
   }
 
-  public String newPesel(
+  private String randomCitizenId(
       LocalDate dateOfBirth) { // todo internatiozation, national citized id factory etc...
     String dateString = dateOfBirth.format(DateTimeFormatter.ofPattern("yyMMdd"));
     int randomNumber = random.nextInt(88888) + 10000;
     return String.format("%s%d", dateString, randomNumber);
   }
 
-  public String shortSentence() {
-    return Lang.getString( "demo.sentence.short" );
+  private String shortSentence() {
+    return Lang.getString("demo.sentence.short");
   }
 
-  public Set<VisitEntity> loadDemoVisits() {
-    Set<VisitEntity> visits = new HashSet<>();
-    visits.add(
-        new VisitEntity(
-            "ADM",
-            "ADM",
-            LocalDateTime.now().minusDays(5),
-            LocalDateTime.now().minusHours(5).minusMinutes(5),
-            1L));
-    visits.add(
-        new VisitEntity(
-            "ADM",
-            "ADM",
-            LocalDateTime.now().minusDays(4),
-            LocalDateTime.now().minusHours(4).minusMinutes(4),
-            2L));
-    visits.add(
-        new VisitEntity(
-            "ADM",
-            "ADM",
-            LocalDateTime.now().minusDays(3),
-            LocalDateTime.now().minusHours(3).minusMinutes(3),
-            3L));
-    visits.add(
-        new VisitEntity(
-            "ADM",
-            "ADM",
-            LocalDateTime.now().minusDays(2),
-            LocalDateTime.now().minusHours(2).minusMinutes(2),
-            4L));
-    visits.add(
-        new VisitEntity(
-            "ADM",
-            "ADM",
-            LocalDateTime.now().minusDays(1),
-            LocalDateTime.now().minusHours(1).minusMinutes(1),
-            5L));
-    logger.debug("[DEMO] Visits:" + visits);
-    return visits;
+  public Set<VisitEntity> generateVisitsForPatients() {
+    final String operatorUserName = "ADM";
+    Set<VisitEntity> generatedVisits = new HashSet<>();
+    if (patientsWasGenerated()) {
+      genereteSomeVisitsForPatient(generatedVisits, operatorUserName);
+      logger.debug("[DEMO] Created random visits. Amount: " + generatedVisits.size());
+    } else {
+      logger.error(
+          "No patients found. Please ensure patients are generated before attempting to generate visits.");
+      throw new IllegalStateException(
+          "No patients found. Please ensure patients are generated before attempting to generate visits.");
+    }
+    return Collections.unmodifiableSet(generatedVisits);
+  }
+
+  private void genereteSomeVisitsForPatient(Set<VisitEntity> visits, String userName) {
+    patients.forEach(
+        p -> {
+          int numberOfVisits = random.nextInt(5) + 1;
+          while (numberOfVisits > 0) {
+            visits.add(
+                VisitEntity.builder()
+                    .selectedPerformer(userName)
+                    .selectedRegistrant("ADM")
+                    .realizationDateTimeProperty(randomRealizationDateTime())
+                    .viewStartDateTimeProperty(randomViewStartDateTimeProperty())
+                    .patientId(p.getId())
+                    .build());
+            numberOfVisits--;
+          }
+        });
+  }
+
+  private LocalDateTime randomRealizationDateTime() {
+    int days = random.nextInt(366);
+    int hours = random.nextInt(24);
+    int minutes = random.nextInt(60);
+    int seconds = random.nextInt(60);
+    return LocalDateTime.now()
+        .minusDays(days)
+        .minusHours(hours)
+        .minusMinutes(minutes)
+        .minusSeconds(seconds);
+  }
+
+  private LocalDateTime randomViewStartDateTimeProperty() {
+      int days = random.nextInt(366);
+    int hours = random.nextInt(24);
+    int minutes = random.nextInt(60);
+    int seconds = random.nextInt(60);
+    return LocalDateTime.now()
+        .minusDays(days)
+        .minusHours(hours)
+        .minusMinutes(minutes)
+        .minusSeconds(seconds);
+  }
+
+  private boolean patientsWasGenerated() {
+    return !patients.isEmpty();
   }
 }

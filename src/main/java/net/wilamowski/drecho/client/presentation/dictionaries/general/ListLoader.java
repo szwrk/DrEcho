@@ -3,9 +3,9 @@ package net.wilamowski.drecho.client.presentation.dictionaries.general;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
-import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
 import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
+import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
+import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
 
 public class ListLoader {
   private final SimpleDictionariesService service;

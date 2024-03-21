@@ -3,8 +3,8 @@ package net.wilamowski.drecho.client.presentation.tooltiper;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.Region;
-import net.wilamowski.drecho.shared.bundle.Lang;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
+import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

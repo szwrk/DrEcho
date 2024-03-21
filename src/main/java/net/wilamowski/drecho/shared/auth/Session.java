@@ -6,8 +6,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class Session {
   private static final Logger logger = LogManager.getLogger(Session.class);
@@ -15,7 +15,7 @@ public class Session {
   private final String login;
   private final LocalDateTime sessionStartAt;
 
-  private Session(String login , LocalDateTime sessionStartAt) {
+  private Session(String login, LocalDateTime sessionStartAt) {
     this.login = login;
     this.sessionStartAt = sessionStartAt;
   }
@@ -23,11 +23,11 @@ public class Session {
   public static void initialize(String login) {
     logger.traceEntry();
     if (instance == null) {
-      LocalDateTime now = LocalDateTime.now( );
+      LocalDateTime now = LocalDateTime.now();
       instance = new Session(login, now);
-      logger.info("Session created for login: {}; start at: {}", login, now );
+      logger.info("Session created for login: {}; start at: {}", login, now);
     } else {
-      logger.warn( "Session already created" );
+      logger.warn("Session already created");
     }
     logger.traceExit();
   }
@@ -36,11 +36,11 @@ public class Session {
     return instance;
   }
 
-    public String getUserLogin() {
+  public String getUserLogin() {
     return login;
   }
 
-   public LocalDateTime sessionStartAt() {
+  public LocalDateTime sessionStartAt() {
     return sessionStartAt;
   }
 }

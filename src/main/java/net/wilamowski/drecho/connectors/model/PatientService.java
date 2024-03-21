@@ -14,9 +14,7 @@ public interface PatientService {
 
   int counterByLastName(String lastName);
 
-  Optional<Patient> createPatientRecord(Patient patient)
-      throws ValidationExceptions;
+  Optional<Patient> createPatientRecord(Patient patient) throws ValidationExceptions;
 
-  Optional<Patient> updatePatient(Patient patient)
-          throws ValidationExceptions;
+  Optional<Patient> updatePatient(Patient patient) throws ValidationExceptions;
 }

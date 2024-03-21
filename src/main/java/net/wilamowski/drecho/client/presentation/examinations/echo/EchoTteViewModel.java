@@ -61,13 +61,9 @@ public class EchoTteViewModel {
   private ListProperty<PositionFx> ot_contratility_values =
       new SimpleListProperty<>(FXCollections.observableArrayList());
 
-  private EchoTteViewModel() {
+  private EchoTteViewModel() {}
 
-
-  }
-
-  public EchoTteViewModel(
-      ModelEchoTte dataModel,  SimpleDictionariesService service) {
+  public EchoTteViewModel(ModelEchoTte dataModel, SimpleDictionariesService service) {
     this.dataModel = dataModel;
     this.calculator = new CalculatorViewModel();
     this.dictService = service;
@@ -98,11 +94,7 @@ public class EchoTteViewModel {
 
   public void saveChanges() {}
 
-  private void clearForm() {
-
-
-
-  }
+  private void clearForm() {}
 
   //  public ModelEchoTte getDataModel() {
   //    return dataModel;
@@ -118,21 +110,23 @@ public class EchoTteViewModel {
         "dm_left_ventricle_diastole",
         calculateLvmIndex());
     registerCalculateListener(
-        echoTteProperty.get().dm_iv_septum_diastole(), "dm_iv_septum_diastole", calculateLvmIndex());
+        echoTteProperty.get().dm_iv_septum_diastole(),
+        "dm_iv_septum_diastole",
+        calculateLvmIndex());
     registerCalculateListener(
         echoTteProperty.get().dm_posterior_wall_diastole(),
         "dm_posterior_wall_diastole",
         calculateLvmIndex());
   }
 
-  private void registerCalculateListener(//todo debug property
-                                         Property control, String propertyName, Runnable calculation) {
+  private void registerCalculateListener( // todo debug property
+      Property control, String propertyName, Runnable calculation) {
     try {
       control.addListener(
-              (observable, oldValue, newValue) -> {
-                logger.debug("{}: {}", propertyName, newValue);
-                calculation.run();
-              });
+          (observable, oldValue, newValue) -> {
+            logger.debug("{}: {}", propertyName, newValue);
+            calculation.run();
+          });
     } catch (Exception e) {
       handleError(e, "e.999.header", "e.999.msg");
     }
@@ -144,59 +138,66 @@ public class EchoTteViewModel {
     String msg = bundle.getString(contentKey);
     ExceptionAlert.create().showError(e, header, msg);
   }
-  
+
   public Runnable calculateLvmIndex() {
     return () -> {
       logger.warn("Add patient height and weight to context");
       logger.traceEntry();
-      EchoTte    echo  = this.echoTteProperty.get( );
-      Double calcResult = calculator.calcLvmIndex(
-              echo.dm_left_ventricle_diastole( ),
-              echo.dm_iv_septum_diastole( ) ,
-              echo.dm_left_ventricle_diastole( ) );
+      EchoTte echo = this.echoTteProperty.get();
+      Double calcResult =
+          calculator.calcLvmIndex(
+              echo.dm_left_ventricle_diastole(),
+              echo.dm_iv_septum_diastole(),
+              echo.dm_left_ventricle_diastole());
       Platform.runLater(() -> echo.dm_lvmi().set(calcResult));
     };
   }
 
   void autoCalculateRTW() {
     registerCalculateListener(
-        echoTteProperty.get().dm_left_ventricle_diastole(), "dm_left_ventricle_diastole", calculateRwt());
+        echoTteProperty.get().dm_left_ventricle_diastole(),
+        "dm_left_ventricle_diastole",
+        calculateRwt());
     registerCalculateListener(
-        echoTteProperty.get().dm_posterior_wall_diastole(), "dm_posterior_wall_diastole", calculateRwt());
+        echoTteProperty.get().dm_posterior_wall_diastole(),
+        "dm_posterior_wall_diastole",
+        calculateRwt());
   }
 
   public Runnable calculateRwt() {
     return () -> {
       logger.debug("Start calculating RWT...");
-        EchoTte    echo  = this.echoTteProperty.get( );
-        Double calcResult = calculator.calcRwt(
-                echo.dm_posterior_wall_diastole( ) ,
-                echo.dm_left_ventricle_diastole( ));
-        Platform.runLater(() -> echo.dm_relative_wall_thickness().set(calcResult));
-      };
+      EchoTte echo = this.echoTteProperty.get();
+      Double calcResult =
+          calculator.calcRwt(echo.dm_posterior_wall_diastole(), echo.dm_left_ventricle_diastole());
+      Platform.runLater(() -> echo.dm_relative_wall_thickness().set(calcResult));
+    };
   }
 
   void autoCalculateLVM() {
     registerCalculateListener(
-            echoTteProperty.get().dm_left_ventricle_diastole(), "dm_left_ventricle_diastole", calculateLvm());
+        echoTteProperty.get().dm_left_ventricle_diastole(),
+        "dm_left_ventricle_diastole",
+        calculateLvm());
     registerCalculateListener(
-            echoTteProperty.get().dm_iv_septum_diastole(), "dm_iv_septum_diastole", calculateLvm());
+        echoTteProperty.get().dm_iv_septum_diastole(), "dm_iv_septum_diastole", calculateLvm());
     registerCalculateListener(
-            echoTteProperty.get().dm_posterior_wall_diastole(), "dm_posterior_wall_diastole", calculateLvm());
+        echoTteProperty.get().dm_posterior_wall_diastole(),
+        "dm_posterior_wall_diastole",
+        calculateLvm());
   }
 
   public Runnable calculateLvm() {
     return () -> {
       logger.warn("Add patient height and weight to context");
       logger.traceEntry();
-      EchoTte    echo  = this.echoTteProperty.get( );
-      Double calcResult = calculator.calcLvm(
-              echo.dm_left_ventricle_diastole( ) ,
-              echo.dm_iv_septum_diastole( ) ,
-              echo.dm_posterior_wall_diastole( ) );
+      EchoTte echo = this.echoTteProperty.get();
+      Double calcResult =
+          calculator.calcLvm(
+              echo.dm_left_ventricle_diastole(),
+              echo.dm_iv_septum_diastole(),
+              echo.dm_posterior_wall_diastole());
       Platform.runLater(() -> echo.dm_mass_LVM().set(calcResult));
     };
   }
-
-
 }

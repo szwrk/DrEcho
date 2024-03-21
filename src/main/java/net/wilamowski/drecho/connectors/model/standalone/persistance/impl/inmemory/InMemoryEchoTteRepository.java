@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 /*In-memory implementation*/
 public class InMemoryEchoTteRepository implements EchoTteRepository {
-  private static final Logger log = LogManager.getLogger( InMemoryEchoTteRepository.class);
+  private static final Logger log = LogManager.getLogger(InMemoryEchoTteRepository.class);
   private final List<EchoTteUnmodifable> docs = new ArrayList<>();
 
   private InMemoryEchoTteRepository() {}

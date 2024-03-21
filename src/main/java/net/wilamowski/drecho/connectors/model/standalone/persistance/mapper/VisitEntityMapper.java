@@ -12,35 +12,48 @@ import net.wilamowski.drecho.connectors.model.standalone.persistance.UserReposit
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-
 public class VisitEntityMapper {
-    private final UserRepository userRepository;
-    private final PatientRepository patientRepostitory;
-    public VisitEntityMapper(UserRepository userRepository , PatientRepository patientRepostitory) {
-        this.userRepository = userRepository;
-        this.patientRepostitory = patientRepostitory;
-    }
+  private final UserRepository userRepository;
+  private final PatientRepository patientRepostitory;
 
-    public Visit toDomain(VisitEntity entity){
-        String selectedPerformer = entity.getSelectedPerformer();
-        Optional<User> optionalUserPerformer = userRepository.findByLogin(selectedPerformer);
+  public VisitEntityMapper(UserRepository userRepository, PatientRepository patientRepostitory) {
+    this.userRepository = userRepository;
+    this.patientRepostitory = patientRepostitory;
+  }
 
-        String selectedRegistrant = entity.getSelectedRegistrant();
-        Optional<User> optionalUserRegistrant = userRepository.findByLogin(selectedRegistrant);
+  public Visit toDomain(VisitEntity entity) {
+    String selectedPerformer = entity.getSelectedPerformer();
+    Optional<User> optionalUserPerformer = userRepository.findByLogin(selectedPerformer);
 
-        Long              patientId       = entity.getPatientId( );
-        Optional<Patient> optionalPatient = patientRepostitory.findById( patientId );
+    String selectedRegistrant = entity.getSelectedRegistrant();
+    Optional<User> optionalUserRegistrant = userRepository.findByLogin(selectedRegistrant);
 
-        Visit visit = Visit.builder( )
-                .selectedPerformer( optionalUserPerformer.orElseThrow( () -> new UserNotFoundException( "Visit mapper has an issue. Performer user not found" ) ) )
-                .selectedRegistrant( optionalUserRegistrant.orElseThrow( () -> new UserNotFoundException( "Visit mapper has an issue. Registrant user not found" ) ) )
-                .realizationDateTime( entity.getRealizationDateTimeProperty( ) )
-                .viewStartDateTime( entity.getViewStartDateTimeProperty( ) )
-                .patient( optionalPatient.orElseThrow( () -> new PatientNotFoundException( "Visit mapper has an issue. Registrant user not found" ) ) )
-                .build( );
-        return visit;
-    }
+    Long patientId = entity.getPatientId();
+    Optional<Patient> optionalPatient = patientRepostitory.findById(patientId);
+
+    Visit visit =
+        Visit.builder()
+            .selectedPerformer(
+                optionalUserPerformer.orElseThrow(
+                    () ->
+                        new UserNotFoundException(
+                            "Visit mapper has an issue. Performer user not found")))
+            .selectedRegistrant(
+                optionalUserRegistrant.orElseThrow(
+                    () ->
+                        new UserNotFoundException(
+                            "Visit mapper has an issue. Registrant user not found")))
+            .realizationDateTime(entity.getRealizationDateTimeProperty())
+            .viewStartDateTime(entity.getViewStartDateTimeProperty())
+            .patient(
+                optionalPatient.orElseThrow(
+                    () ->
+                        new PatientNotFoundException(
+                            "Visit mapper has an issue. Registrant user not found")))
+            .build();
+    return visit;
+  }
 }

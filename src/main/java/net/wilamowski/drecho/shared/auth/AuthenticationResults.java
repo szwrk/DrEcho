@@ -5,8 +5,8 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * @author Arkadiusz Wilamowski
- * <p></><a href="https://github.com/szwrk">GitHub</a></p>
- * <p> For questions or inquiries, at contact arek@wilamowski.net </p>
+ *     <p></><a href="https://github.com/szwrk">GitHub</a>
+ *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class AuthenticationResults {
   private static final Logger logger = LogManager.getLogger(AuthenticationResults.class);
@@ -27,13 +27,14 @@ public class AuthenticationResults {
     this.login = login;
     this.deniedReasonLogin = deniedReasonLogin;
     this.deniedReasonPassword = deniedReasonPassword;
-    this.session = Session.instance( );
+    this.session = Session.instance();
   }
 
   public static AuthenticationResults createConfirmAuthResults(String login) {
     logger.debug("Creating confirmation authentication results for login: {}", login);
-    AuthenticationResults authenticationResults = new AuthenticationResults( true , login , null , null );
-    Session.initialize( login );
+    AuthenticationResults authenticationResults =
+        new AuthenticationResults(true, login, null, null);
+    Session.initialize(login);
     logger.traceExit();
     return authenticationResults;
   }
