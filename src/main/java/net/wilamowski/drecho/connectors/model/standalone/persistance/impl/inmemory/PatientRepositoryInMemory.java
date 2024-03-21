@@ -168,9 +168,18 @@ public class PatientRepositoryInMemory implements PatientRepository {
       return Collections.emptyList();
     }
     String paramLowerCase = param.trim().toLowerCase();
-    return patients.stream( )
+
+
+    List<Patient> collect = Collections.emptyList();
+    try{
+     collect = patients.stream( )
             .filter( patient -> patient.getLastName( ).toLowerCase( ).startsWith( paramLowerCase ) )
             .collect( Collectors.toList( ) );
+    logger.debug( "[REPOSITORY ]Returned patients: " + collect.size() );
+    } catch (Exception e){
+      logger.error( e.getMessage(), e );
+    }
+    return collect;
   }
 
   public static PatientRepositoryInMemory createPatientRepositoryInMemory( ) {
