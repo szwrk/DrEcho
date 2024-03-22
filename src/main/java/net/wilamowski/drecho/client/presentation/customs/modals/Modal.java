@@ -3,12 +3,12 @@ package net.wilamowski.drecho.client.presentation.customs.modals;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.presentation.customs.SimpleModalController;
+import net.wilamowski.drecho.client.presentation.customs.ModalController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class SimpleModal {
-  private static final Logger logger = LogManager.getLogger(SimpleModal.class);
+public class Modal {
+  private static final Logger logger = LogManager.getLogger( Modal.class);
   private static final String MODAL_NAME_PATIENT_SEARCHER = "Modal";
   private final GeneralViewHandler viewHandler;
   private final Stage modal;
@@ -19,9 +19,9 @@ public class SimpleModal {
   //    private Node includedNode;
   //    private Object includedController;
   private Stage owner;
-  private SimpleModalController simpleModalController;
+  private ModalController modalController;
 
-  private SimpleModal(GeneralViewHandler handler, Parent modalRoot, String pathToSubview) {
+  private Modal(GeneralViewHandler handler, Parent modalRoot, String pathToSubview) {
     this.modalRoot = modalRoot;
     this.viewHandler = handler;
     this.modal = new Stage();
@@ -34,10 +34,10 @@ public class SimpleModal {
   private void setupModal() {
     GeneralViewHandler.setupStageTitle(modal, MODAL_NAME_PATIENT_SEARCHER);
     Object controller = viewHandler.switchSceneForStage("modal/SimpleModal", modal);
-    simpleModalController = (SimpleModalController) controller;
-    simpleModalController.loadNestedExamByFxmlPath(subviewPath);
+    modalController = (ModalController) controller;
+    modalController.loadNestedExamByFxmlPath(subviewPath);
 
-    simpleModalController.addConfirmButton(
+    modalController.addConfirmButton(
         event -> {
           GeneralViewHandler.disableBlur(owner);
           modal.close();
@@ -48,10 +48,10 @@ public class SimpleModal {
     this.owner = (Stage) modalRoot.getScene().getWindow();
   }
 
-  public static SimpleModal setupPatientSearcherView(
+  public static Modal setupPatientSearcherView(
       GeneralViewHandler handler, Parent windowOwner) {
     final String pathToSubview = "patient/PatientsSearcherView.fxml";
-    return new SimpleModal(handler, windowOwner, pathToSubview);
+    return new Modal(handler, windowOwner, pathToSubview);
   }
 
   public void showWithBlur() {
@@ -70,6 +70,6 @@ public class SimpleModal {
   }
 
   public Object getModalController() {
-    return simpleModalController;
+    return modalController;
   }
 }

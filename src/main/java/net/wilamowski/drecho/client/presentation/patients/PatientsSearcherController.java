@@ -153,7 +153,7 @@ public class PatientsSearcherController
     setupPlayAnimationOnNewPatient();
     initializePatientPagination();
     bindSearchTextFieldWithViewModel();
-    playAnimationFocusUserOnSearchTextField();
+    playAnimationFocusUserOnSearchFieldAndMoveCaret();
     enableButtonWhenPatientIsSelected(editPatientButton);
     enableButtonWhenPatientIsSelected(previewPatientButton);
   }
@@ -181,7 +181,7 @@ public class PatientsSearcherController
             });
   }
 
-  private void playAnimationFocusUserOnSearchTextField() {
+  private void playAnimationFocusUserOnSearchFieldAndMoveCaret() {
     Platform.runLater(
         () -> {
           Timeline timeline =
@@ -194,10 +194,12 @@ public class PatientsSearcherController
                         Platform.runLater(
                             () -> {
                               searcherTextField.requestFocus();
+                              searcherTextField.positionCaret( searcherTextField.getText().length());
                             });
                       }));
           timeline.play();
         });
+
   }
 
   private void bindSearchTextFieldWithViewModel() {
@@ -388,7 +390,6 @@ public class PatientsSearcherController
   }
 
   private void bindTableWithViewModel() {
-    //    resultTable.setItems(patientSearcherViewModel.getPatients());
     resultTable.itemsProperty().bindBidirectional(patientSearcherViewModel.patientsProperty());
   }
 
@@ -445,6 +446,8 @@ public class PatientsSearcherController
   public void inititalizeSearchValue(String searchValue) {
     searcherTextField.setText(searchValue);
   }
+
+
 
   @Override
   public void initializeViewHandler(GeneralViewHandler viewHandler) {

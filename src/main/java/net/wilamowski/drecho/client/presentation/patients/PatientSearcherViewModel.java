@@ -158,4 +158,8 @@ public class PatientSearcherViewModel {
   public int countPatientByAnyInput(String searchInput) {
     return patientService.counterByLastName(searchInput);
   }
+
+  public Property<String> searchValueProperty() {
+    return searchTextProperty;
+  }
 }

@@ -25,8 +25,8 @@ import org.apache.logging.log4j.Logger;
  *     <p></><a href="https://github.com/szwrk">GitHub</a>
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-public class SimpleModalController implements Initializable, ViewHandlerInitializer {
-  private static final Logger logger = LogManager.getLogger(SimpleModalController.class);
+public class ModalController implements Initializable, ViewHandlerInitializer {
+  private static final Logger logger = LogManager.getLogger( ModalController.class);
   @FXML private Pane root;
   @FXML private HBox buttonBar;
   private Parent includedNode;
@@ -36,7 +36,7 @@ public class SimpleModalController implements Initializable, ViewHandlerInitiali
   private Stage stage;
   private ResourceBundle bundle;
 
-  public SimpleModalController() {}
+  public ModalController() {}
 
   public void loadNestedExamByFxmlPath(String subView) {
     logger.debug("Loading nested examination. Param: {}", subView);

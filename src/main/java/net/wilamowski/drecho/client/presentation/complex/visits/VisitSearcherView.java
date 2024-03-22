@@ -21,9 +21,9 @@ import net.wilamowski.drecho.client.application.infra.ViewModels;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
+import net.wilamowski.drecho.client.presentation.customs.ModalController;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
-import net.wilamowski.drecho.client.presentation.customs.SimpleModalController;
-import net.wilamowski.drecho.client.presentation.customs.modals.SimpleModal;
+import net.wilamowski.drecho.client.presentation.customs.modals.Modal;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
@@ -66,8 +66,8 @@ public class VisitSearcherView
   @FXML private TableColumn<VisitVM, PatientFx> patientCodePeselColumn;
   @FXML private TableColumn<VisitVM, PatientFx> patientColumn;
   private VisitDashboardViewModel visitDashboardViewModel;
-  private PatientSearcherViewModel patientSearcherViewModel;
-  private SimpleModal searcherModal;
+  private PatientSearcherViewModel includedPatientSearcherViewModel;
+  private Modal modal;
 
   @FXML
   void onActionSearchByDate(ActionEvent event) {
@@ -109,43 +109,46 @@ public class VisitSearcherView
   @FXML
   void onActionSearchVisitsByPatient(ActionEvent event) {
     logger.debug("Clicked on search by patient");
-    SimpleModal patientModal = SimpleModal.setupPatientSearcherView(viewHandler, root);
-    SimpleModalController simpleModalController =
-        (SimpleModalController) patientModal.getModalController();
-    PatientsSearcherController patientsSearcherController =
-        (PatientsSearcherController) simpleModalController.getIncludedController();
-    patientSearcherViewModel =
-        patientsSearcherController.getPatientSearcherViewModel();
+    modal = Modal.setupPatientSearcherView(viewHandler, root);
+    PatientsSearcherController includedPatientController = getIncludedController(modal);
+    includedPatientSearcherViewModel = getIncludedViewModel(includedPatientController);
+    includedPatientController.inititalizeSearchValue(searchByPatientTextField.getText());
 
-    searchByPatientTextField
-        .textProperty()
-        .addListener(
-            (observableValue, oldVal, newVal) -> {
-              patientSearcherViewModel.initializeSearchValue(newVal);
-            });
-    logger.debug("searchByPatientTextField value: {}", searchByPatientTextField.getText());
-    patientsSearcherController.inititalizeSearchValue(searchByPatientTextField.getText());
     int findedMatchedPatients =
-        patientSearcherViewModel.searchPatientByAnyInput(searchByPatientTextField.getText(), 0);
+        includedPatientSearcherViewModel.searchPatientByAnyInput(
+            searchByPatientTextField.getText(), 0);
     logger.debug("findedMatchedPatients {}", findedMatchedPatients);
 
     if (findedMatchedPatients == 1) {
-      visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
+      visitDashboardViewModel.searchByPatient(
+          includedPatientSearcherViewModel.getSelectedPatient(), 0);
     } else if (findedMatchedPatients == 0) {
-      logger.debug( "Found 0. Open and wait." );
-      patientModal.showAndWaitWithBlur();
+      logger.debug("Found 0. Open and wait.");
+      modal.showAndWaitWithBlur();
 
-
-        visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
+      visitDashboardViewModel.searchByPatient(
+          includedPatientSearcherViewModel.getSelectedPatient(), 0);
 
     } else {
       logger.debug("Clearing search results and showing modal with blur");
       visitDashboardViewModel.clearSearchResults();
-      patientModal.showAndWaitWithBlur();
+      modal.showAndWaitWithBlur();
 
-          visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
-
+      visitDashboardViewModel.searchByPatient(
+          includedPatientSearcherViewModel.getSelectedPatient(), 0);
     }
+  }
+
+  private static PatientSearcherViewModel getIncludedViewModel(
+      PatientsSearcherController includedPatientController) {
+    return includedPatientController.getPatientSearcherViewModel();
+  }
+
+  private PatientsSearcherController getIncludedController(Modal modal) {
+    ModalController rootModalController = (ModalController) modal.getModalController();
+    PatientsSearcherController includedPatientController =
+        (PatientsSearcherController) rootModalController.getIncludedController();
+    return includedPatientController;
   }
 
   @Override

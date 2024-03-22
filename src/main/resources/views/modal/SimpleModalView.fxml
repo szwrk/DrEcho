@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.*?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/21"
-      fx:controller="net.wilamowski.drecho.client.presentation.customs.SimpleModalController">
+      fx:controller="net.wilamowski.drecho.client.presentation.customs.ModalController">
     <children>
         <Pane fx:id="root"/>
         <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
