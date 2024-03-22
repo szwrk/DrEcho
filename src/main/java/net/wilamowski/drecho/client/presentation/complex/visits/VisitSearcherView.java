@@ -109,19 +109,19 @@ public class VisitSearcherView
   @FXML
   void onActionSearchVisitsByPatient(ActionEvent event) {
     logger.debug("Clicked on search by patient");
-    SimpleModal modal = SimpleModal.setupPatientSearcherView(viewHandler, root);
+    SimpleModal patientModal = SimpleModal.setupPatientSearcherView(viewHandler, root);
     SimpleModalController simpleModalController =
-        (SimpleModalController) modal.getModalController();
+        (SimpleModalController) patientModal.getModalController();
     PatientsSearcherController patientsSearcherController =
         (PatientsSearcherController) simpleModalController.getIncludedController();
-    PatientSearcherViewModel patientSearcherViewModel =
+    patientSearcherViewModel =
         patientsSearcherController.getPatientSearcherViewModel();
 
     searchByPatientTextField
         .textProperty()
         .addListener(
-            (observableValue, s, t1) -> {
-              patientSearcherViewModel.initializeSearchValue(t1);
+            (observableValue, oldVal, newVal) -> {
+              patientSearcherViewModel.initializeSearchValue(newVal);
             });
     logger.debug("searchByPatientTextField value: {}", searchByPatientTextField.getText());
     patientsSearcherController.inititalizeSearchValue(searchByPatientTextField.getText());
@@ -132,11 +132,14 @@ public class VisitSearcherView
     if (findedMatchedPatients == 1) {
       visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
     } else if (findedMatchedPatients == 0) {
-      modal.showWithBlur();
+      logger.debug( "Found 0. Open and wait." );
+      patientModal.showAndWaitWithBlur();
+      visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
     } else {
       logger.debug("Clearing search results and showing modal with blur");
       visitDashboardViewModel.clearSearchResults();
-      modal.showWithBlur();
+      patientModal.showAndWaitWithBlur();
+      visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
     }
   }
 

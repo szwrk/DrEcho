@@ -37,6 +37,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   @FXML private ChoiceBox<PositionFx> realizationHourChoiceBox;
   @FXML private ChoiceBox<PositionFx> realizationTimeChoiceBox;
 
+
   @FXML private DatePicker saveDatePicker;
 
   @FXML private TitledPane visitVBox;

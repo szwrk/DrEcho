@@ -59,6 +59,11 @@ public class SimpleModal {
     modal.show();
   }
 
+  public void showAndWaitWithBlur() {
+    GeneralViewHandler.setupAsBlurModal(modal, owner);
+    modal.showAndWait();
+  }
+
   public void close() {
     GeneralViewHandler.disableBlur(owner);
     modal.close();
