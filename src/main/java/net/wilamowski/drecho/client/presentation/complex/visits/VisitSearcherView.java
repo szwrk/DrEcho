@@ -134,12 +134,17 @@ public class VisitSearcherView
     } else if (findedMatchedPatients == 0) {
       logger.debug( "Found 0. Open and wait." );
       patientModal.showAndWaitWithBlur();
-      visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
+
+
+        visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
+
     } else {
       logger.debug("Clearing search results and showing modal with blur");
       visitDashboardViewModel.clearSearchResults();
       patientModal.showAndWaitWithBlur();
-      visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
+
+          visitDashboardViewModel.searchByPatient(patientSearcherViewModel.getSelectedPatient(), 0);
+
     }
   }
 
