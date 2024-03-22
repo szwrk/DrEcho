@@ -35,10 +35,10 @@ public class VisitDashboardViewModel {
 
   public void searchByPatient(PatientFx patientFx, int page) {
     logger.trace("Clicked search by selected patient");
-    if (patientFx!=null){
-    Patient patient = PatientVmMapper.toDomain(patientFx);
-    Set<VisitDto> visitSet = visitModel.listVisitsBy(patient, page);
-    loadVisitsToTable(visitSet);
+    if (patientFx != null) {
+      Patient patient = PatientVmMapper.toDomain(patientFx);
+      Set<VisitDto> visitSet = visitModel.listVisitsBy(patient, page);
+      loadVisitsToTable(visitSet);
     }
   }
 
