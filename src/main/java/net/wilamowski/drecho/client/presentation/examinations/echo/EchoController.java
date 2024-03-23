@@ -214,6 +214,7 @@ public class EchoController
   }
 
   void reinitializeEchoFormProperties(EchoTte echoTte) {
+    initAnimationTypeForCalculation();
     viewModel.initEchoTteFormData(echoTte);
     // dimension
     heartDimensionSectionBindings();
@@ -235,6 +236,7 @@ public class EchoController
     contextMenuCreator = FormContextMenu.setup(viewHandler);
     contextMenuCreator.applyForRootNode(root);
     // calcs
+
     viewModel.autoCalculateLVM();
     configLvmInfoBox();
 
@@ -454,6 +456,7 @@ public class EchoController
   }
 
   private void showRequiredFieldAnimation(String animationType, Node... node) {
+   try {
     if (animationType.equals("1")) {
       List<Node> nodes = Arrays.asList(node);
       nodes.stream()
@@ -466,9 +469,16 @@ public class EchoController
           .map(node1 -> Animations.zoomIn(node1, Duration.millis(1000)))
           .collect(Collectors.toSet())
           .forEach(Animation::playFromStart);
-    } else {
-      logger.warn(String.format("Settings %s is empty: ", animationType));
     }
+   } catch (Exception e){
+     logger.error(String.format(e.getMessage(),e));
+     //default
+     List<Node> nodes = Arrays.asList(node);
+     nodes.stream()
+            .map(Animations::flash)
+            .collect(Collectors.toSet())
+            .forEach(Animation::playFromStart);
+   }
   }
 
   private void configRwtInfoBox() {
