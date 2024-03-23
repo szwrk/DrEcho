@@ -29,17 +29,19 @@ public class PatientStandaloneService implements PatientService {
 
   @Override
   public List<Patient> findByAny(String input) {
+    logger.trace("[SERVICE] Entering findByAny...");
     logger.warn("Find by by any is not impl yet!");
     throw new NotImplementedException("Find by by any is not impl yet!");
   }
 
   @Override
   public List<Patient> findByPesel(String param, int page) {
+    logger.trace("[SERVICE] Entering findByPesel...");
     return getPatients(param, page);
   }
 
   private List<Patient> getPatients(String param, int page) {
-    logger.debug("Service, find by any param: {}", param);
+    logger.trace("[SERVICE] Entering getPatients...");
     logger.debug("Patient repository findBy input: {}", param.isBlank() ? "/blank/" : param);
     if (param == null) {
       IllegalArgumentException exception = new IllegalArgumentException("Search parameter is null");
@@ -58,36 +60,42 @@ public class PatientStandaloneService implements PatientService {
   }
 
   @Override
-  public List<Patient> findByLastName(String param, int page) {
-    logger.debug("[SERVICE] Find by any param: {}", param);
+  public List<Patient> findByFullName(String param, int page) {
+    logger.trace("[SERVICE] Entering findByFullName...");
     logger.debug(
         "[SERVICE] Patient repository findBy input: {}", param.isBlank() ? "/blank/" : param);
-    if (param == null) {
-      IllegalArgumentException exception = new IllegalArgumentException("Search parameter is null");
-      logger.error(exception);
-    }
 
     if (param.isBlank()) {
-      logger.debug("[SERVICE] Searching parameter is null. Returning all patients");
-    } else {
-      if (StringUtils.isAlpha(param)) {
-        logger.debug("[SERVICE] Searching parametr is alpha. Returning all patient by last name");
-        List<Patient> byLastName = patientRepository.findByLastName(param, page);
-        logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
-        return byLastName;
-      }
+      logger.debug("[SERVICE] Parameter is null. Returning all patients");
+      return Collections.emptyList();
     }
-    return Collections.emptyList();
+
+    logger.debug("[SERVICE] Searching parameter is NOT null");
+    if (StringUtils.isAlpha(param)) {
+      logger.debug("[SERVICE] Parameter  is alpha. Returning all patient by last name");
+      List<Patient> byLastName = patientRepository.findByFullName(param, page);
+      logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
+      return byLastName;
+    } else if (param.contains(" ")) {
+      logger.debug("[SERVICE] Parameter contain white char. Returning all patient by full name");
+      List<Patient> byLastName = patientRepository.findByFullName(param, page);
+      logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
+      return byLastName;
+    } else {
+      logger.debug("[SERVICE] Parameter {} not handled. Return empty list.", param);
+      return Collections.emptyList();
+    }
   }
 
   @Override
-  public int counterByLastName(String lastName) {
-    return patientRepository.countByLastName(lastName);
+  public int counterByFullName(String lastName) {
+    logger.trace("[SERVICE] Entering counterByFullName...");
+    return patientRepository.countByFullName(lastName);
   }
 
   @Override
   public Optional<Patient> createPatientRecord(Patient patient) throws ValidationExceptions {
-    logger.debug("[SERVICE-PATIENT] Creating patient start...");
+    logger.trace("[SERVICE] Entering createPatientRecord...");
     Validator newPatientValidator = Validator.instance();
     newPatientValidator.registerValidations(Constraint.nameNotNullConstraint(patient));
     newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint(patient));
@@ -108,7 +116,7 @@ public class PatientStandaloneService implements PatientService {
 
   @Override
   public Optional<Patient> updatePatient(Patient patient) throws ValidationExceptions {
-    logger.debug("[SERVICE-PATIENT] Updating patient start...");
+    logger.trace("[SERVICE-PATIENT] Entering updatePatient...");
     Validator newPatientValidator = Validator.instance();
     newPatientValidator.registerValidations(Constraint.nameNotNullConstraint(patient));
     newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint(patient));
@@ -118,6 +126,7 @@ public class PatientStandaloneService implements PatientService {
     newPatientValidator.registerValidations(Constraint.patientPeselUniqueConstraint(this, patient));
     List<String> errorList = newPatientValidator.validateAll();
     if (errorList.isEmpty()) {
+      logger.debug("[SERVICE] Updating patient... SUCCESS");
       return patientRepository.update(patient);
     } else {
       logger.debug("[SERVICE-PATIENT] Updating patient... FAILED");

@@ -7,6 +7,7 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.PatientRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.demo.DemoDataGeneratorInMemory;
 import net.wilamowski.drecho.connectors.properties.BackendPropertyReader;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -86,11 +87,13 @@ public class PatientRepositoryInMemory implements PatientRepository {
   }
 
   @Override
-  public List<Patient> findByLastName(String param, int pageNumber) {
-    if (patients == null || param == null || param.isBlank()) {
+  public List<Patient> findByFullName(String param, int pageNumber) {
+    if ( param == null || param.isBlank( ) ) {
+      logger.trace("[REPOSITORY] The passed parameter is empty, returning an empty list.");
       return Collections.emptyList();
     }
-    List<Patient> filteredPatients = filterByLastName(param);
+    logger.trace("[REPOSITORY] The passed parameter is not empty.");
+    List<Patient> filteredPatients = filterByFullName(param);
     int pageSize =
         BackendPropertyReader.getInt("backend.patient.pagination.result-table-rows-on-page");
     int totalPatients = patients.size();
@@ -113,8 +116,13 @@ public class PatientRepositoryInMemory implements PatientRepository {
   }
 
   @Override
-  public int countByLastName(String param) {
-    return filterByLastName(param).size();
+  public int countByFullName(String param) {
+    logger.trace( "[REPOSITORY] Entering countByLastName..." );
+    logger.trace( "[REPOSITORY] Retriving number of record for pagination.... START" );
+    int size = filterByFullName( param ).size( );
+    logger.trace( "[REPOSITORY] Retriving number of record for pagination.... END" );
+    logger.trace( "[REPOSITORY] Retriving results {}", size );
+    return size;
   }
 
   @Override
@@ -166,25 +174,57 @@ public class PatientRepositoryInMemory implements PatientRepository {
     return patients;
   }
 
-  private List<Patient> filterByLastName(String param) {
+  private List<Patient> filterByFullName(String param) {
+    logger.trace("[REPOSITORY] Entering filterByFullName");
     if (param == null) {
+      logger.trace("[REPOSITORY] The passed parameter is empty, returning an empty list.");
       return Collections.emptyList();
     }
+    logger.trace("[REPOSITORY] The passed parameter is NOT empty so analyze String...");
     String paramLowerCase = param.trim().toLowerCase();
 
-    List<Patient> collect = Collections.emptyList();
+    List<Patient> collect = new ArrayList<>();
+    String[]      passedWords   = paramLowerCase.split( " " );
+    int           passedWordCounter  = passedWords.length;
     try {
-      collect =
-          patients.stream()
-              .filter(patient -> patient.getLastName().toLowerCase().startsWith(paramLowerCase))
-              .collect(Collectors.toList());
-      logger.debug("[REPOSITORY ]Returned patients: " + collect.size());
+      if (passedWordCounter == 1){
+        collect = handleOneWordProbablyLastName( paramLowerCase );
+      } else if(passedWordCounter == 2){
+        collect = handleOneWordProbablyFullName( passedWords );
+      } else {
+        logger.error("[REPOSITORY] . Passed words number: " + passedWords);
+        throw new NotImplementedException("Passed name is more then two words: " + passedWords);
+      }
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }
+    logger.debug("[REPOSITORY] Returned patients: " + collect.size());
     return collect;
   }
 
+  private List<Patient> handleOneWordProbablyFullName(String[] words) {
+    logger.debug( "[REPOSITORY] Entering handleOneWordProbablyFullName" );
+    String        lastName = words[0];
+    String        firstName = words[1];
+    logger.debug("[REPOSITORY] " + firstName + "-"+ lastName  );
+    List<Patient> collect;
+    collect =
+            patients.stream()
+                    .filter(patient -> patient.getLastName().toLowerCase().startsWith( lastName )
+                            && patient.getName().toLowerCase().startsWith( firstName ) )
+                    .collect(Collectors.toList());
+    logger.trace("[REPOSITORY] Escaping with size: " + collect.size()  );
+    return collect;
+  }
+  private List<Patient> handleOneWordProbablyLastName(String paramLowerCase) {
+    logger.debug( "Repository handleOneWordProbablyLastName" );
+    List<Patient> collect;
+    collect =
+        patients.stream()
+            .filter(patient -> patient.getLastName().toLowerCase().startsWith( paramLowerCase ))
+            .collect(Collectors.toList());
+    return collect;
+  }
   public static PatientRepositoryInMemory createPatientRepositoryInMemory(
       DemoDataGeneratorInMemory demoDataGeneratorInMemory) {
     return new PatientRepositoryInMemory(demoDataGeneratorInMemory);

@@ -68,6 +68,7 @@ public class VisitSearcherView
   private VisitDashboardViewModel visitDashboardViewModel;
   private PatientSearcherViewModel includedPatientSearcherViewModel;
   private Modal modal;
+  private PatientsSearcherController includedPatientController;
 
   @FXML
   void onActionSearchByDate(ActionEvent event) {
@@ -109,15 +110,14 @@ public class VisitSearcherView
   @FXML
   void onActionSearchVisitsByPatient(ActionEvent event) {
     logger.debug("Clicked on search by patient");
-    modal = Modal.setupPatientSearcherView(viewHandler, root);
-    PatientsSearcherController includedPatientController = getIncludedController(modal);
-    includedPatientSearcherViewModel = getIncludedViewModel(includedPatientController);
-    includedPatientController.inititalizeSearchValue(searchByPatientTextField.getText());
+    initializePatientModal( );
+    String passedSearchValue = searchByPatientTextField.getText( );
+    includedPatientController.inititalizeSearchValue( passedSearchValue );
 
     int findedMatchedPatients =
-        includedPatientSearcherViewModel.searchPatientByAnyInput(
-            searchByPatientTextField.getText(), 0);
-    logger.debug("findedMatchedPatients {}", findedMatchedPatients);
+        includedPatientSearcherViewModel.searchPatientByFullName(
+                passedSearchValue );
+    logger.debug("foundMatchedPatients {}", findedMatchedPatients);
 
     if (findedMatchedPatients == 1) {
       visitDashboardViewModel.searchByPatient(
@@ -138,6 +138,13 @@ public class VisitSearcherView
           includedPatientSearcherViewModel.getSelectedPatient(), 0);
     }
   }
+
+  private void initializePatientModal() {
+    modal = Modal.setupPatientSearcherView(viewHandler, root);
+    includedPatientController = getIncludedController(modal);
+    includedPatientSearcherViewModel = getIncludedViewModel( includedPatientController );
+  }
+
 
   private static PatientSearcherViewModel getIncludedViewModel(
       PatientsSearcherController includedPatientController) {

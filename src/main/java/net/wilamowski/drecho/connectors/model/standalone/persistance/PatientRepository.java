@@ -9,9 +9,9 @@ public interface PatientRepository {
 
   Optional<Patient> findById(long id);
 
-  List<Patient> findByLastName(String param, int page);
+  List<Patient> findByFullName(String param, int page);
 
-  int countByLastName(String param);
+  int countByFullName(String param);
 
   List<Patient> findByPeselCode(String param, int page);
 

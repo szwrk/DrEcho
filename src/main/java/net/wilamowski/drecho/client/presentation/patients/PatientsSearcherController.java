@@ -93,7 +93,7 @@ public class PatientsSearcherController
     Platform.runLater(
         () -> {
           if (searcherTextField.getText() != null) {
-            patientSearcherViewModel.searchPatientByAnyInput(searcherTextField.getText(), 0);
+            patientSearcherViewModel.searchPatientByFullName(searcherTextField.getText());
             logger.debug("Controller table view after {}", resultTable.getItems().size());
           }
         });
@@ -224,14 +224,15 @@ public class PatientsSearcherController
 
     patientPagination.setPageFactory(
         (pageIndex) -> {
-          logger.debug(
+            String text = searcherTextField.getText( );
+            logger.debug(
               "[CONTROLLER] Page factory. Input:"
-                  + searcherTextField.getText()
+                  + text
                   + " Page index: "
                   + pageIndex);
           updatePaginationCounter();
 
-          patientSearcherViewModel.searchPatientByAnyInput(searcherTextField.getText(), pageIndex);
+          patientSearcherViewModel.searchPatientByFullName( text );
 
           var label = new Label("#" + (pageIndex + 1));
           label.setStyle("-fx-font-size: 1em;");
@@ -305,7 +306,7 @@ public class PatientsSearcherController
                     Platform.runLater(
                         () -> {
                           int searchResultsCounter =
-                              patientSearcherViewModel.searchPatientByAnyInput(newVal, 0);
+                              patientSearcherViewModel.searchPatientByFullName(newVal);
                           turnOnPaginationUiElement();
                           updatePaginationCounter();
                           if (searchResultsCounter == 0

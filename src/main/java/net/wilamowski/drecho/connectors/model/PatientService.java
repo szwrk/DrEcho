@@ -10,11 +10,12 @@ public interface PatientService {
 
   List<Patient> findByPesel(String peselCode, int page);
 
-  List<Patient> findByLastName(String lastName, int page);
+  List<Patient> findByFullName(String lastName, int page);
 
-  int counterByLastName(String lastName);
+  int counterByFullName(String lastName);
 
   Optional<Patient> createPatientRecord(Patient patient) throws ValidationExceptions;
 
   Optional<Patient> updatePatient(Patient patient) throws ValidationExceptions;
+
 }
