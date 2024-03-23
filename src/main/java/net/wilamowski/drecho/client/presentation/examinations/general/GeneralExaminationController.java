@@ -98,6 +98,8 @@ public class GeneralExaminationController
 
   public void onActionSave(ActionEvent event) {
     logger.debug("Clicked on Save button");
+    Stage stage = (Stage) root.getScene().getWindow();
+    stage.close();
   }
 
   public void onActionHideWindow(ActionEvent event) {
