@@ -209,7 +209,9 @@ public class EchoController
   }
 
   @Override
-  public void postInitialize() {}
+  public void postInitialize() {
+    initAnimationTypeForCalculation();
+  }
 
   void reinitializeEchoFormProperties(EchoTte echoTte) {
     viewModel.initEchoTteFormData(echoTte);
@@ -233,7 +235,6 @@ public class EchoController
     contextMenuCreator = FormContextMenu.setup(viewHandler);
     contextMenuCreator.applyForRootNode(root);
     // calcs
-    initAnimationTypeForCalculation();
     viewModel.autoCalculateLVM();
     configLvmInfoBox();
 
