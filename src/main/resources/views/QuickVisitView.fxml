@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<TitledPane fx:id="root" collapsible="false" styleClass="dense" text="Nowa wizyta" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController">
+<TitledPane fx:id="root" collapsible="false" styleClass="dense" text="%ui.examinations.quickvisit.title-view" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController">
     <content>
         <VBox alignment="TOP_CENTER" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="819.0" prefWidth="1034.0">
             <children>
                 <TabPane fx:id="tabPane" prefHeight="807.0" prefWidth="1034.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                     <tabs>
-                        <Tab fx:id="visitDetailTab" closable="false" text="Dane wizyty">
+                        <Tab fx:id="visitDetailTab" closable="false" text="%ui.examinations.quickvisit.basic-visits-info.tab-name">
                             <content>
                                 <VBox prefHeight="459.0" prefWidth="1034.0">
                                     <children>
@@ -26,7 +26,7 @@
                                         </VBox>
                                         <VBox alignment="TOP_CENTER" prefHeight="42.0" prefWidth="1034.0">
                                             <children>
-                                                <Button fx:id="confirmButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConfirmVisitDetails" text="Zatwierdź dane wizyty">
+                                                <Button fx:id="confirmButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionConfirmVisitDetails" text="%ui.examinations.quickvisit.save-and-next-page">
                                                     <VBox.margin>
                                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                     </VBox.margin>
@@ -40,7 +40,7 @@
                                 </VBox>
                             </content>
                         </Tab>
-                        <Tab fx:id="examinationsTab" closable="false" text="Badania">
+                        <Tab fx:id="examinationsTab" closable="false" text="%ui.examinations.quickvisit.examinations.tab-name">
                             <content>
                                 <VBox alignment="CENTER_RIGHT" prefHeight="33.0" prefWidth="1138.0">
                                     <children>
