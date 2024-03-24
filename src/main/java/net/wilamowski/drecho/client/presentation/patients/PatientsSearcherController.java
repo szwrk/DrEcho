@@ -194,7 +194,7 @@ public class PatientsSearcherController
                         Platform.runLater(
                             () -> {
                               searcherTextField.requestFocus();
-                              searcherTextField.positionCaret( searcherTextField.getText().length());
+                                moveCaretToEndOfSearchField( );
                             });
                       }));
           timeline.play();
@@ -202,7 +202,13 @@ public class PatientsSearcherController
 
   }
 
-  private void bindSearchTextFieldWithViewModel() {
+    private void moveCaretToEndOfSearchField() {
+        if (searcherTextField.getText()!=null){
+            searcherTextField.positionCaret( searcherTextField.getText().length());
+        }
+    }
+
+    private void bindSearchTextFieldWithViewModel() {
     searcherTextField
         .textProperty()
         .bindBidirectional(patientSearcherViewModel.searchTextProperty());
