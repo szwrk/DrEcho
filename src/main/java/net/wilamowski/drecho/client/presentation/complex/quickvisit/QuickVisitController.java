@@ -54,6 +54,7 @@ public class QuickVisitController
   @FXML private TabPane tabPane;
   @FXML private Tab visitDetailTab;
   @FXML private Tab examinationsTab;
+  @FXML private Tab summaryTab;
   @FXML private Button confirmButton;
   private ResourceBundle bundle;
   private ViewModels factory;
@@ -89,13 +90,20 @@ public class QuickVisitController
       initQuickVisitRealizationDate();
       initRegistrationSystemSaveDate();
       fireConfirmButtonWhenPressKeyCombination();
-      bindSelectedOfPatientAndExaminationTabDisable();
+      bindExaminationTabDisableToSelectedPatient();
+      bindSummaryTabDisableToSelectedPatient( );
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }
   }
 
-  private void bindSelectedOfPatientAndExaminationTabDisable() {
+  private void bindSummaryTabDisableToSelectedPatient() {
+    summaryTab
+            .disableProperty()
+            .bind(patientController.getPatientSearcherViewModel().selectedPatientProperty().isNull());
+  }
+
+  private void bindExaminationTabDisableToSelectedPatient() {
     examinationsTab
         .disableProperty()
         .bind(patientController.getPatientSearcherViewModel().selectedPatientProperty().isNull());
@@ -165,5 +173,9 @@ public class QuickVisitController
   @Override
   public Node getRootUiNode() {
     return root;
+  }
+
+  public void onActionSaveVisit(ActionEvent event) {
+    logger.trace("Clicked on save visit");
   }
 }

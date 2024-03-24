@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
 <TitledPane fx:id="root" collapsible="false" styleClass="dense" text="%ui.examinations.quickvisit.title-view" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController">
@@ -49,10 +48,17 @@
                                 </VBox>
                             </content>
                         </Tab>
-                  <Tab fx:id="endVisitTabl" text="%ui.examinations.quickvisit.summary.tab-name">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                    </content>
+                  <Tab fx:id="summaryTab" text="%ui.examinations.quickvisit.summary.tab-name">
+                     <content>
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionSaveVisit" text="%ui.examinations.quickvisit.summary.end-visit-btn" />
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </content>
                   </Tab>
                     </tabs>
                 </TabPane>
