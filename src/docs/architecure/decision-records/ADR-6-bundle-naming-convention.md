@@ -2,12 +2,11 @@
 
 ## Status
 
-- Date: 06/01/2024
 - Accepted->**In use**
 
 ## Context
 
-Need standarize bundle key conventions
+Need standardize bundle key conventions
 
 ## Decision
 

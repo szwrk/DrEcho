@@ -2,7 +2,6 @@
 
 ## Status
 
-- Date: 06/01/2024
 - Accepted->**In use**
 
 ## Context
