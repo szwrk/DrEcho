@@ -1,6 +1,5 @@
 package net.wilamowski.drecho.client.presentation.complex.quickvisit;
 
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -26,6 +25,7 @@ import net.wilamowski.drecho.client.presentation.examinations.chooser.Examinatio
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.visit.VisitController;
+import net.wilamowski.drecho.client.presentation.visit.VisitDetailsViewModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,6 +59,7 @@ public class QuickVisitController
   private ResourceBundle bundle;
   private ViewModels factory;
   private GeneralViewHandler handler;
+  private VisitDetailsViewModel visitDetailsViewModel;
 
   public QuickVisitController() {}
 
@@ -66,6 +67,7 @@ public class QuickVisitController
   void onActionConfirmVisitDetails(ActionEvent event) {
     logger.debug("Clicked on confirm visit details...");
     tabPane.getSelectionModel().select(examinationsTab);
+    visitDetailsViewModel.confirmVisit();
   }
 
   @Override
@@ -77,7 +79,7 @@ public class QuickVisitController
 
   @Override
   public void initializeViewModels(ViewModels factory) {
-    this.factory = factory;
+    this.visitDetailsViewModel = factory.visitViewModel( );
   }
 
   @Override
@@ -87,8 +89,6 @@ public class QuickVisitController
       informVisitAboutSelectedPatient();
       informExaminationAboutSelectedPatient();
       requestFocusOnViewStart();
-      initQuickVisitRealizationDate();
-      initRegistrationSystemSaveDate();
       fireConfirmButtonWhenPressKeyCombination();
       bindExaminationTabDisableToSelectedPatient();
       bindSummaryTabDisableToSelectedPatient( );
@@ -118,14 +118,7 @@ public class QuickVisitController
           }
         });
   }
-
-  private void initRegistrationSystemSaveDate() {
-    visitController.getViewModel().getViewStartDtProperty().set(LocalDate.now());
-  }
-
-  private void initQuickVisitRealizationDate() {
-    visitController.getViewModel().getRealizationDtProperty().set(LocalDate.now());
-  }
+  
 
   private void initializeNestedViewControllers() {
     Objects.requireNonNull(patientController);
@@ -177,5 +170,6 @@ public class QuickVisitController
 
   public void onActionSaveVisit(ActionEvent event) {
     logger.trace("Clicked on save visit");
+
   }
 }

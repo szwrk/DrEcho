@@ -6,13 +6,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.mapper.PatientVmMapper;
-import net.wilamowski.drecho.client.application.mapper.VisitVmMapper;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
+import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
+import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
-import net.wilamowski.drecho.connectors.infrastructure.VisitDto;
 import net.wilamowski.drecho.connectors.model.VisitModel;
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
+import net.wilamowski.drecho.shared.dto.PatientDto;
+import net.wilamowski.drecho.shared.dto.VisitDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,10 +33,10 @@ public class VisitDashboardViewModel {
     this.visitModel = visitModel;
   }
 
-  public void searchByPatient(PatientFx patientFx, int page) {
+  public void searchByPatient(PatientVM patientVM , int page) {
     logger.trace("Clicked search by selected patient");
-    if (patientFx != null) {
-      Patient patient = PatientVmMapper.toDomain(patientFx);
+    if ( patientVM != null) {
+      PatientDto    patient  = PatientDtoVmMapper.toDto( patientVM );
       Set<VisitDto> visitSet = visitModel.listVisitsBy(patient, page);
       loadVisitsToTable(visitSet);
     }
@@ -45,7 +45,7 @@ public class VisitDashboardViewModel {
   private void loadVisitsToTable(Set<VisitDto> visitSet) {
     if (visitSet != null) {
       logger.debug("SERVICE - visit service returns: {} entity items", visitSet.size());
-      Set<VisitVM> patientsFxBean = VisitVmMapper.toListToVM(visitSet);
+      Set<VisitVM> patientsFxBean = VisitDtoVmMapper.toListToVM(visitSet);
       if (patientsFxBean != null) {
         logger.debug("VIEW MODEL - visit mapper returns: {} fx items", patientsFxBean.size());
         updatePatientsTable(patientsFxBean);

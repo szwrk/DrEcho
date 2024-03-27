@@ -120,7 +120,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
         .valueProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
-                if (newValue != null) {
+                if (newValue != null && realizationHourChoiceBox.getValue()!=null && realizationTimeChoiceBox.getValue()!=null) {
                     LocalDateTime newTime =
                             LocalDateTime.of(
                                     realizationDatePicker.getValue().getYear(),

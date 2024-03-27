@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.ToString;
-import net.wilamowski.drecho.connectors.infrastructure.VisitDto;
 import net.wilamowski.drecho.connectors.model.VisitModel;
-import net.wilamowski.drecho.connectors.model.servicemapper.VisitAssembler;
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
+import net.wilamowski.drecho.connectors.model.mapper.VisitDomainDtoMapper;
+import net.wilamowski.drecho.connectors.model.standalone.infra.mapper.VisitEntityMapper;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.PatientRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.UserRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.VisitRepository;
-import net.wilamowski.drecho.connectors.model.standalone.persistance.mapper.VisitEntityMapper;
+import net.wilamowski.drecho.shared.dto.PatientDto;
+import net.wilamowski.drecho.shared.dto.VisitDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,25 +34,29 @@ public class VisitStandaloneModel implements VisitModel {
   }
 
   @Override
-  public Set<VisitDto> listVisitsBy(Patient patient, int page) {
+  public Set<VisitDto> listVisitsBy(PatientDto patient, int page) {
     assert patient != null;
     logger.debug("[SERVICE] Getting data by patient {}...", patient.getId());
-    Set<VisitEntity> visitEntities = visitRepository.findVisitsByPatientId(patient.getId());
-    return mapVisitsToDto(visitEntities, patient.getId());
+    Set<Visit> visits = visitRepository.findVisitsByPatientId(patient.getId());
+    return toDto(visits, patient.getId());
   }
 
   @Override
   public Set<VisitDto> listVisitsBy(LocalDate date, int page) {
     logger.debug("[SERVICE] Getting data by date {}...", date);
-    Set<VisitEntity> visitEntities = visitRepository.findVisitByDate(date);
-    return mapVisitsToDto(visitEntities, date);
+    Set<Visit> visits = visitRepository.findVisitByDate(date);
+    return toDto(visits, date);
   }
 
-  private Set<VisitDto> mapVisitsToDto(Set<VisitEntity> visitEntities, Object... parameters) {
-    Set<Visit> visits =
-        visitEntities.stream().map(visitEntityMapper::toDomain).collect(Collectors.toSet());
+  @Override
+  public void save(VisitDto dto) {
+    Visit visit = VisitDomainDtoMapper.toDomain( dto );
+    visitRepository.save(visit);
+  }
+
+  private Set<VisitDto> toDto(Set<Visit> visits, Object... parameters) {
     logger.debug(
         "[SERVICE] - Visit Service returns {} items. Parameter: {}", visits.size(), parameters);
-    return visits.stream().map(VisitAssembler::toDto).collect(Collectors.toSet());
+    return visits.stream().map( VisitDomainDtoMapper::toDto).collect(Collectors.toSet());
   }
 }

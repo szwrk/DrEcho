@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-import net.wilamowski.drecho.connectors.model.standalone.domain.visit.VisitEntity;
+import net.wilamowski.drecho.connectors.model.standalone.domain.visit.Visit;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.VisitRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.demo.DemoDataGeneratorInMemory;
 import net.wilamowski.drecho.connectors.properties.BackendPropertyReader;
@@ -15,7 +15,7 @@ public class VisitRepositoryInMemory implements VisitRepository {
   private static final Logger logger = LogManager.getLogger(VisitRepositoryInMemory.class);
   private static VisitRepositoryInMemory instance;
   private static DemoDataGeneratorInMemory demoDataGeneratorInMemory;
-  private Set<VisitEntity> visitsDatabase = new HashSet<>();
+  private Set<Visit> visitsDatabase = new HashSet<>();
 
   private VisitRepositoryInMemory(DemoDataGeneratorInMemory demoDataGeneratorInMemory) {
     VisitRepositoryInMemory.demoDataGeneratorInMemory = demoDataGeneratorInMemory;
@@ -40,10 +40,10 @@ public class VisitRepositoryInMemory implements VisitRepository {
   }
 
   @Override
-  public Set<VisitEntity> findVisitsByPatientId(long patientId) {
-    Set<VisitEntity> matchingVisits =
+  public Set<Visit> findVisitsByPatientId(long patientId) {
+    Set<Visit> matchingVisits =
         visitsDatabase.stream()
-            .filter(patient -> patient.getPatientId().equals(patientId))
+            .filter(patient -> patient.getPatient().getId().equals(patientId))
             .collect(Collectors.toSet());
     logger.debug(
         "[REPOSITORY] - Visit repository returned {}/{} items",
@@ -53,10 +53,10 @@ public class VisitRepositoryInMemory implements VisitRepository {
   }
 
   @Override
-  public Set<VisitEntity> findVisitByDate(LocalDate date) {
-    Set<VisitEntity> matchingVisits =
+  public Set<Visit> findVisitByDate(LocalDate date) {
+    Set<Visit> matchingVisits =
         visitsDatabase.stream()
-            .filter(patient -> patient.getRealizationDateTimeProperty().toLocalDate().equals(date))
+            .filter(patient -> patient.getRealizationDateTime().toLocalDate().equals(date))
             .collect(Collectors.toSet());
     logger.debug(
         "[REPOSITORY] - Visit repository returned {}/{} items",
@@ -65,7 +65,12 @@ public class VisitRepositoryInMemory implements VisitRepository {
     return matchingVisits;
   }
 
-  private Set<VisitEntity> ignoreFilterAndReturnAll() {
+  @Override
+  public void save(Visit visit) {
+    visitsDatabase.add( visit );
+  }
+
+  private Set<Visit> ignoreFilterAndReturnAll() {
     logger.warn("[REPOSITORY] Visit repository - ignoring filter is on!");
     return visitsDatabase;
   }

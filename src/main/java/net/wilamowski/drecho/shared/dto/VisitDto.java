@@ -1,30 +1,28 @@
-package net.wilamowski.drecho.connectors.infrastructure;
+package net.wilamowski.drecho.shared.dto;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
 
 @ToString
 @Getter
 @Setter
 @Builder
 public class VisitDto {
-  private User selectedRegistrant;
-  private User selectedPerformer;
+  private UserDto selectedRegistrant;
+  private UserDto selectedPerformer;
   private LocalDateTime realizationDateTime;
   private LocalDateTime viewStartDateTime;
-  private Patient patient;
+  private PatientDto patient;
 
   private VisitDto(
-      User selectedRegistrant,
-      User selectedPerformer,
+      UserDto selectedRegistrant,
+      UserDto selectedPerformer,
       LocalDateTime realizationDateTime,
       LocalDateTime viewStartDateTime,
-      Patient patient) {
+      PatientDto patient) {
     this.selectedRegistrant = selectedRegistrant;
     this.selectedPerformer = selectedPerformer;
     this.realizationDateTime = realizationDateTime;

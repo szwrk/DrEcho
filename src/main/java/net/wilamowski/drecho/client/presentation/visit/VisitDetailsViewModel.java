@@ -1,6 +1,7 @@
 package net.wilamowski.drecho.client.presentation.visit;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -12,17 +13,19 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import lombok.Getter;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.mapper.UserVmMapper;
+import net.wilamowski.drecho.client.application.mapper.UserDtoVmMapper;
+import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.ListLoader;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
 import net.wilamowski.drecho.connectors.model.VisitModel;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
 import net.wilamowski.drecho.shared.auth.Session;
+import net.wilamowski.drecho.shared.dto.UserDto;
+import net.wilamowski.drecho.shared.dto.VisitDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,13 +38,15 @@ import org.apache.logging.log4j.Logger;
 @Getter
 public class VisitDetailsViewModel {
   private static final Logger logger = LogManager.getLogger(VisitDetailsViewModel.class);
-  private final ObjectProperty<PatientFx> selectedPatient = new SimpleObjectProperty<>();
+
   private final UserService userService;
+  //Form values - Visit details
+  private final ObjectProperty<PatientVM> selectedPatient = new SimpleObjectProperty<>();
   private final ObjectProperty<UserVM> selectedRegistrant = new SimpleObjectProperty<>();
   private final ObjectProperty<UserVM> selectedPerformer = new SimpleObjectProperty<>();
-  private final ObjectProperty<LocalDate> viewStartDtProperty = new SimpleObjectProperty<>();
-  private final ObjectProperty<LocalTime> viewStartTimeProperty = new SimpleObjectProperty<>();
-  private final ObjectProperty<LocalDate> realizationDtProperty = new SimpleObjectProperty<>();
+  private final ObjectProperty<LocalDateTime> viewStartProperty = new SimpleObjectProperty<>();
+  private final ObjectProperty<LocalDateTime> realizationDateTimeProperty = new SimpleObjectProperty<>();
+  //List of values
   private final ListProperty<PositionFx> realizationHoursValues =
       new SimpleListProperty<>(FXCollections.observableArrayList());
   private final ListProperty<PositionFx> realizationMinutesValues =
@@ -50,10 +55,10 @@ public class VisitDetailsViewModel {
       new SimpleListProperty<>(FXCollections.observableArrayList());
   private final ListProperty<PositionFx> performerValues =
       new SimpleListProperty<>(FXCollections.observableArrayList());
+
   private final ResourceBundle bundle = null;
   private VisitModel service = null;
   private SimpleDictionariesService dictService = null;
-
   public VisitDetailsViewModel(
       VisitModel service, SimpleDictionariesService dictService, UserService userService) {
     this.service = service;
@@ -71,7 +76,7 @@ public class VisitDetailsViewModel {
         Boolean.valueOf(
             ClientPropertyReader.getString("user.ui.quick-visit-view.initialize-realization-time"));
     if (initVisitRealizationTime) {
-      viewStartTimeProperty.set(LocalTime.now());
+      viewStartProperty.set(LocalDateTime.now());
     }
   }
 
@@ -80,7 +85,7 @@ public class VisitDetailsViewModel {
         Boolean.valueOf(
             ClientPropertyReader.getString("user.ui.quick-visit-view.initialize-realization-date"));
     if (initVisitRealizationTime) {
-      viewStartDtProperty.set(LocalDate.now());
+      viewStartProperty.set(LocalDateTime.now());
     }
   }
 
@@ -107,8 +112,19 @@ public class VisitDetailsViewModel {
   }
 
   public void selectUserByLogin(String login) {
-    Optional<User> userByLogin = userService.getUserByLogin(login);
-    userByLogin.ifPresent(user -> getSelectedPerformer().set(UserVmMapper.of(user)));
+    logger.trace("[VM] Enter selectUserByLogin: {}", login);
+    try {
+      Optional<UserDto> userByLogin = userService.getUserByLogin(login);
+      if (userByLogin.isPresent()) {
+        UserDto userDto = userByLogin.get();
+        logger.debug("[VM] Set performer: {}", userDto.getLogin());
+        getSelectedPerformer().set(UserDtoVmMapper.toVm(userDto));
+      } else {
+        logger.debug("[VM] User not found for login: {}", login);
+      }
+    } catch (Exception e) {
+      logger.error("[VM] Error selecting user by login: {}", e.getMessage());
+    }
   }
 
   void initPerformer(ComboBox perfomerComboBox) {
@@ -121,7 +137,24 @@ public class VisitDetailsViewModel {
     selectUserByLogin(userPosition.getCode());
   }
 
-  public void setViewStartTimeProperty(LocalTime viewStartTimeProperty) {
-    this.viewStartTimeProperty.set(viewStartTimeProperty);
+  public void setViewStartTimeProperty(LocalDateTime dateTime) {
+    this.viewStartProperty.set(dateTime);
+  }
+
+  public void confirmVisit() {
+    VisitVM visitVM = new VisitVMBuilder( )
+            .setViewStartDateTimeProperty( viewStartProperty )
+            .setRealizationDateTimeProperty( realizationDateTimeProperty )
+            .setSelectedPatient( selectedPatient )
+            .setSelectedRegistrant( selectedRegistrant )
+            .setSelectedPerformer( selectedPerformer )
+            .createVisitVM( );
+
+    VisitDto dto = VisitDtoVmMapper.toDto( visitVM );
+    service.save(dto);
+  }
+  private ObjectProperty<LocalDateTime> createCombinedDateTimeProperty(
+          ObjectProperty<LocalDate> dateProperty, ObjectProperty<LocalTime> timeProperty) {
+    return new SimpleObjectProperty<>(LocalDateTime.of(dateProperty.get(), timeProperty.get()));
   }
 }

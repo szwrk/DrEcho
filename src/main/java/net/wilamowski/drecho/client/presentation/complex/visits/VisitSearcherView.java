@@ -27,7 +27,7 @@ import net.wilamowski.drecho.client.presentation.customs.modals.Modal;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.patients.PatientSearcherViewModel;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
@@ -63,8 +63,8 @@ public class VisitSearcherView
   @FXML private TableColumn<VisitVM, UserVM> performerColumn;
   @FXML private TableColumn<VisitVM, LocalDateTime> realizationDateTimeColumn;
   @FXML private TableColumn<VisitVM, UserVM> registrantColumn;
-  @FXML private TableColumn<VisitVM, PatientFx> patientCodePeselColumn;
-  @FXML private TableColumn<VisitVM, PatientFx> patientColumn;
+  @FXML private TableColumn<VisitVM, PatientVM> patientCodePeselColumn;
+  @FXML private TableColumn<VisitVM, PatientVM> patientColumn;
   private VisitDashboardViewModel visitDashboardViewModel;
   private PatientSearcherViewModel includedPatientSearcherViewModel;
   private Modal modal;
@@ -233,9 +233,9 @@ public class VisitSearcherView
 
     patientColumn.setCellFactory(
         column ->
-            new TableCell<VisitVM, PatientFx>() {
+            new TableCell<VisitVM, PatientVM>() {
               @Override
-              protected void updateItem(PatientFx patient, boolean empty) {
+              protected void updateItem(PatientVM patient, boolean empty) {
                 super.updateItem(patient, empty);
                 if (patient == null || empty) {
                   setText(null);
@@ -247,9 +247,9 @@ public class VisitSearcherView
 
     patientCodePeselColumn.setCellFactory(
         column ->
-            new TableCell<VisitVM, PatientFx>() {
+            new TableCell<VisitVM, PatientVM>() {
               @Override
-              protected void updateItem(PatientFx patient, boolean empty) {
+              protected void updateItem(PatientVM patient, boolean empty) {
                 super.updateItem(patient, empty);
                 if (patient == null || empty) {
                   setText(null);
