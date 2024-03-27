@@ -6,12 +6,12 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.ToString;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 
 @ToString
 public class ExaminationsChooserViewModel {
   private final Object examinationsModel;
-  private final ObjectProperty<PatientFx> patient = new SimpleObjectProperty<>();
+  private final ObjectProperty<PatientVM> patient = new SimpleObjectProperty<>();
 
   private final Property<ObservableList<ExaminationInstance>> choosedExams =
       new SimpleObjectProperty<>(FXCollections.observableArrayList());
@@ -20,7 +20,7 @@ public class ExaminationsChooserViewModel {
     this.examinationsModel = examinationsModel;
   }
 
-  public ObjectProperty<PatientFx> selectedPatientProperty() {
+  public ObjectProperty<PatientVM> selectedPatientProperty() {
     return patient;
   }
 

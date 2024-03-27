@@ -9,7 +9,7 @@ import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationDefinitionFx;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationInstance;
 import net.wilamowski.drecho.client.presentation.examinations.general.GeneralExaminationController;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,7 @@ public class EchoTteExaminationInstance extends ExaminationInstance {
   public EchoTteExaminationInstance(
       Integer id,
       ExaminationDefinitionFx definition,
-      ObjectProperty<PatientFx> patientFxObject,
+      ObjectProperty<PatientVM> patientFxObject,
       GeneralViewHandler viewHandler) {
     super(id, definition, patientFxObject, viewHandler);
   }
