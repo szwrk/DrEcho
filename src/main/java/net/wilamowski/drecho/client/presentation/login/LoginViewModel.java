@@ -96,14 +96,21 @@ public class LoginViewModel {
   }
 
   AuthenticationResults performAuthenticate() {
-    logger.traceEntry("[VM-LOGIN] Perform authenticate...");
-    AuthenticationResults authenticationResults =
-        authenticationService.performAuthentication(new Credentials(getLogin(), getPassword()));
+    try {
+      logger.trace("[VM-LOGIN] Perform authenticate...");
+      AuthenticationResults authenticationResults =
+              authenticationService.performAuthentication(new Credentials(getLogin(), getPassword()));
 
-    setLoginNotify(authenticationResults.loginMessage());
-    setPasswordNotify(authenticationResults.passwordMessage());
-    logger.traceEntry("[VM-LOGIN] Perform authenticate... DONE");
-    return authenticationResults;
+      setLoginNotify(authenticationResults.loginMessage());
+      setPasswordNotify(authenticationResults.passwordMessage());
+
+      logger.trace("[VM-LOGIN] Perform authenticate... DONE");
+      return authenticationResults;
+    } catch (Exception e) {
+      logger.error("[VM-LOGIN] Authentication failed: {}", e.getMessage());
+      // You might want to throw a more specific exception or return a specific error indication
+      throw new RuntimeException("Authentication failed", e);
+    }
   }
 
   public StringProperty loginTextProperty() {

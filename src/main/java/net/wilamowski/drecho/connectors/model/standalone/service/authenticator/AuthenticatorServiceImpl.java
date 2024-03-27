@@ -3,8 +3,8 @@ package net.wilamowski.drecho.connectors.model.standalone.service.authenticator;
 import java.util.*;
 import net.wilamowski.drecho.connectors.model.AuthenticatorService;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
 import net.wilamowski.drecho.shared.auth.AuthenticationResults;
+import net.wilamowski.drecho.shared.dto.UserDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,14 +23,14 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
     log.trace("[SERVICE] Perform authentication...");
     log.debug("[SERVICE] Perform authentication for user: {}", credential.getLogin());
     Objects.requireNonNull(credential);
-    String inputLogin = credential.getLogin();
-    Optional<User> optionalFoundUser = userService.getUserByLogin(inputLogin);
+    String            inputLogin        = credential.getLogin();
+    Optional<UserDto> optionalFoundUser = userService.getUserByLogin(inputLogin);
 
     AuthenticationResults authResults;
 
     if (optionalFoundUser.isPresent()) {
       log.debug("[SERVICE] User found. Process credentials...");
-      User foundUser = optionalFoundUser.get();
+      UserDto foundUser = optionalFoundUser.get();
       authResults = checkUserPassword(foundUser, credential);
     } else {
       String errorMessage = String.format("Wrong credentials! User %s does not exist!", inputLogin);
@@ -43,7 +43,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
     return authResults;
   }
 
-  private static AuthenticationResults checkUserPassword(User foundUser, Credentials credentials) {
+  private static AuthenticationResults checkUserPassword(UserDto foundUser, Credentials credentials) {
     log.trace("[SERVICE] Password checking...");
     AuthenticationResults authResults;
     if (foundUser.getPassword().equals(credentials.getPassword())) {
