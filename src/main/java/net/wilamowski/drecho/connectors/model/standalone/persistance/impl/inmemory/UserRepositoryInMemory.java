@@ -16,27 +16,33 @@ public class UserRepositoryInMemory implements UserRepository {
 
   private UserRepositoryInMemory() {
     User user1 =
-        new User.Builder("ADM", "123")
+        User.builder()
+            .login("ADM")
+            .password("123")
             .firstName("Jan")
             .surname("Kowalski")
             .specialization("Administrator")
             .titlePrefix("inz.")
             .build();
     User user2 =
-        new User.Builder("LEK", "123")
+        User.builder()
+            .login("ADM")
+            .password("123")
             .firstName("Anna")
             .surname("Nowak")
             .specialization("dermatologia")
             .titlePrefix("lekarz")
             .build();
     User user3 =
-        new User.Builder("REJ", "123")
+        User.builder()
+            .login("ADM")
+            .password("123")
             .firstName("Katarzyna")
             .surname("Malinowska")
             .specialization("rejestratorka")
             .titlePrefix("rej.")
+            .isBlocked(true)
             .build();
-    user3.setBlocked();
     list.add(user1);
     list.add(user2);
     list.add(user3);
