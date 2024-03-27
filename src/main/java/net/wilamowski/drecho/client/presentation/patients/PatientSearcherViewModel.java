@@ -7,10 +7,10 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.mapper.PatientVmMapper;
+import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import net.wilamowski.drecho.connectors.model.PatientService;
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
+import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,10 +28,10 @@ public class PatientSearcherViewModel {
   private final PatientService patientService;
 
   @ToString.Exclude
-  private final ObservableList<PatientFx> patients = FXCollections.observableArrayList();
+  private final ObservableList<PatientVM> patients = FXCollections.observableArrayList();
 
   @ToString.Exclude
-  private final ObjectProperty<PatientFx> selectedPatient = new SimpleObjectProperty<>();
+  private final ObjectProperty<PatientVM> selectedPatient = new SimpleObjectProperty<>();
 
   private final SimpleStringProperty searchTextProperty = new SimpleStringProperty();
 
@@ -47,7 +47,7 @@ public class PatientSearcherViewModel {
                 "admin.patient.searcher.autosearch-text-length-trigger"));
   }
 
-  public void setCurrentPatient(PatientFx patient) {
+  public void setCurrentPatient(PatientVM patient) {
     Objects.requireNonNull(patient, "Selected patient is null");
     selectedPatient.set(patient);
   }
@@ -98,10 +98,10 @@ public class PatientSearcherViewModel {
 
   private int handleSearchByPesel(String searchInput) {
     logger.trace("[VM] Entering handle search by pesel code");
-    List<Patient> fetchedPatients = patientService.findByPesel(searchInput, 0);
+    List<PatientDto> fetchedPatients = patientService.findByPesel(searchInput, 0);
     if (fetchedPatients.size() == 1) {
       logger.debug("[VM] Service return values: {}", fetchedPatients.size());
-      List<PatientFx> patientsFxBean = PatientVmMapper.toListToFx(fetchedPatients);
+      List<PatientVM> patientsFxBean = PatientDtoVmMapper.toListToFx(fetchedPatients);
       updatePatientsTable(patientsFxBean);
       chooseFirstPatientIfOnlyOneResult();
       return fetchedPatients.size();
@@ -112,7 +112,7 @@ public class PatientSearcherViewModel {
       return fetchedPatients.size();
     } else {
       logger.debug("[VM] Service return values: {}", fetchedPatients.size());
-      List<PatientFx> retrievedPatientsFx = PatientVmMapper.toListToFx(fetchedPatients);
+      List<PatientVM> retrievedPatientsFx = PatientDtoVmMapper.toListToFx(fetchedPatients);
       updatePatientsTable(retrievedPatientsFx);
       unsetCurrentPatient();
       return fetchedPatients.size();
@@ -122,23 +122,23 @@ public class PatientSearcherViewModel {
   private int handleSearchByFullName(String searchInput) {
     logger.trace("Entering handle search by full name...");
 //    List<Patient> fetchedPatients = patientService.findByLastName(searchInput, 0);
-    List<Patient> foundedPatients = patientService.findByFullName(searchInput, 0);
+    List<PatientDto> foundedPatients = patientService.findByFullName(searchInput, 0);
     int           fetchedPatientNumber            = foundedPatients.size( );
     if (fetchedPatientNumber==0) {
       logger.trace("Fetched patient: 0");
-      List<PatientFx> patientsFxBean = PatientVmMapper.toListToFx(foundedPatients);
+      List<PatientVM> patientsFxBean = PatientDtoVmMapper.toListToFx(foundedPatients);
       updatePatientsTable(patientsFxBean);
       unsetCurrentPatient();
       return fetchedPatientNumber;
     } else if ( fetchedPatientNumber == 1 ) {
       logger.trace("Fetched patient: 1");
-      List<PatientFx> patientsFxBean = PatientVmMapper.toListToFx(foundedPatients);
+      List<PatientVM> patientsFxBean = PatientDtoVmMapper.toListToFx(foundedPatients);
       updatePatientsTable(patientsFxBean);
       chooseFirstPatientIfOnlyOneResult();
       return fetchedPatientNumber;
     } else {
       logger.trace("Fetched patient: else");
-      List<PatientFx> retrievedPatientsFx = PatientVmMapper.toListToFx(foundedPatients);
+      List<PatientVM> retrievedPatientsFx = PatientDtoVmMapper.toListToFx(foundedPatients);
       updatePatientsTable(retrievedPatientsFx);
       unsetCurrentPatient();
       return fetchedPatientNumber;
@@ -149,16 +149,16 @@ public class PatientSearcherViewModel {
     selectedPatientProperty().set(patients.get(0));
   }
 
-  private void updatePatientsTable(List<PatientFx> patientsFxBean) {
+  private void updatePatientsTable(List<PatientVM> patientsFxBean) {
     patients.clear();
     patients.addAll(patientsFxBean);
   }
 
-  public ObservableList<PatientFx> getPatients() {
+  public ObservableList<PatientVM> getPatients() {
     return patients;
   }
 
-  public ListProperty<PatientFx> patientsProperty() {
+  public ListProperty<PatientVM> patientsProperty() {
     return new SimpleListProperty<>(patients);
   }
 
@@ -166,15 +166,15 @@ public class PatientSearcherViewModel {
     return searchTextProperty;
   }
 
-  public PatientFx getSelectedPatient() {
+  public PatientVM getSelectedPatient() {
     return selectedPatient.get();
   }
 
-  public ObjectProperty<PatientFx> getSelectedPatientAsObjectProperty() {
+  public ObjectProperty<PatientVM> getSelectedPatientAsObjectProperty() {
     return selectedPatient;
   }
 
-  public ObjectProperty<PatientFx> selectedPatientProperty() {
+  public ObjectProperty<PatientVM> selectedPatientProperty() {
     return selectedPatient;
   }
 

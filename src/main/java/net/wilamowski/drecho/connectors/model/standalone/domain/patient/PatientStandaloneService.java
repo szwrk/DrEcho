@@ -3,13 +3,16 @@ package net.wilamowski.drecho.connectors.model.standalone.domain.patient;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.ToString;
 import net.wilamowski.drecho.connectors.model.PatientService;
+import net.wilamowski.drecho.connectors.model.mapper.PatientDomainDtoMapper;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.Constraint;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.ValidationExceptions;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.Validator;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.PatientRepository;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.VersionedPatientRepository;
+import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -28,19 +31,19 @@ public class PatientStandaloneService implements PatientService {
   }
 
   @Override
-  public List<Patient> findByAny(String input) {
+  public List<PatientDto> findByAny(String input) {
     logger.trace("[SERVICE] Entering findByAny...");
     logger.warn("Find by by any is not impl yet!");
     throw new NotImplementedException("Find by by any is not impl yet!");
   }
 
   @Override
-  public List<Patient> findByPesel(String param, int page) {
+  public List<PatientDto> findByPesel(String param, int page) {
     logger.trace("[SERVICE] Entering findByPesel...");
     return getPatients(param, page);
   }
 
-  private List<Patient> getPatients(String param, int page) {
+  private List<PatientDto> getPatients(String param, int page) {
     logger.trace("[SERVICE] Entering getPatients...");
     logger.debug("Patient repository findBy input: {}", param.isBlank() ? "/blank/" : param);
     if (param == null) {
@@ -53,14 +56,15 @@ public class PatientStandaloneService implements PatientService {
     } else {
       if (StringUtils.isNumeric(param)) {
         logger.debug("Searching parametr is numeric. Returning all patient by pesel code");
-        return patientRepository.findByPeselCode(param, page);
+        List<Patient> byPeselCode = patientRepository.findByPeselCode( param , page );
+        return byPeselCode.stream().map( PatientDomainDtoMapper::toDto ).collect( Collectors.toList());
       }
     }
     return Collections.emptyList();
   }
 
   @Override
-  public List<Patient> findByFullName(String param, int page) {
+  public List<PatientDto> findByFullName(String param, int page) {
     logger.trace("[SERVICE] Entering findByFullName...");
     logger.debug(
         "[SERVICE] Patient repository findBy input: {}", param.isBlank() ? "/blank/" : param);
@@ -75,12 +79,12 @@ public class PatientStandaloneService implements PatientService {
       logger.debug("[SERVICE] Parameter  is alpha. Returning all patient by last name");
       List<Patient> byLastName = patientRepository.findByFullName(param, page);
       logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
-      return byLastName;
+      return byLastName.stream().map( PatientDomainDtoMapper::toDto ).collect( Collectors.toList());
     } else if (param.contains(" ")) {
       logger.debug("[SERVICE] Parameter contain white char. Returning all patient by full name");
       List<Patient> byLastName = patientRepository.findByFullName(param, page);
       logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
-      return byLastName;
+      return byLastName.stream().map( PatientDomainDtoMapper::toDto ).collect( Collectors.toList());
     } else {
       logger.debug("[SERVICE] Parameter {} not handled. Return empty list.", param);
       return Collections.emptyList();
@@ -94,19 +98,19 @@ public class PatientStandaloneService implements PatientService {
   }
 
   @Override
-  public Optional<Patient> createPatientRecord(Patient patient) throws ValidationExceptions {
+  public Optional<PatientDto> createPatientRecord(PatientDto patientDto) throws ValidationExceptions {
     logger.trace("[SERVICE] Entering createPatientRecord...");
-    Validator newPatientValidator = Validator.instance();
-    newPatientValidator.registerValidations(Constraint.nameNotNullConstraint(patient));
-    newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint(patient));
-    newPatientValidator.registerValidations(Constraint.peselNotNullConstraint(patient.getPesel()));
-    newPatientValidator.registerValidations(
-        Constraint.peselCodeLengthConstraint(patient.getPesel()));
-    newPatientValidator.registerValidations(Constraint.patientPeselUniqueConstraint(this, patient));
+    Patient   patient              = PatientDomainDtoMapper.toDomain( patientDto );
+    Validator newPatientValidator  = validatePatientCreate( patient );
     List<String> errorList = newPatientValidator.validateAll();
 
     if (errorList.isEmpty()) {
-      return patientRepository.addNew(patient);
+      Optional<Patient> optionalPatient = patientRepository.addNew( patient );
+      if (optionalPatient.isPresent() ){
+          return Optional.of( PatientDomainDtoMapper.toDto( patient ) );
+      } else {
+        return Optional.empty();
+      }
     } else {
       logger.debug("[SERVICE-PATIENT] Creating patient... FAILED");
       String errorsMsg = "- " + String.join("\n - ", errorList);
@@ -114,20 +118,47 @@ public class PatientStandaloneService implements PatientService {
     }
   }
 
-  @Override
-  public Optional<Patient> updatePatient(Patient patient) throws ValidationExceptions {
-    logger.trace("[SERVICE-PATIENT] Entering updatePatient...");
+  private Validator validatePatientCreate(Patient patient) {
+    logger.trace("[SERVICE-PATIENT] Entering validateNewPatient...");
     Validator newPatientValidator = Validator.instance();
-    newPatientValidator.registerValidations(Constraint.nameNotNullConstraint(patient));
-    newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint(patient));
-    newPatientValidator.registerValidations(Constraint.peselNotNullConstraint(patient.getPesel()));
+    newPatientValidator.registerValidations(Constraint.nameNotNullConstraint( patient ));
+    newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint( patient ));
+    newPatientValidator.registerValidations(Constraint.peselNotNullConstraint( patient.getPesel()));
     newPatientValidator.registerValidations(
-        Constraint.peselCodeLengthConstraint(patient.getPesel()));
-    newPatientValidator.registerValidations(Constraint.patientPeselUniqueConstraint(this, patient));
+        Constraint.peselCodeLengthConstraint( patient.getPesel()));
+    newPatientValidator.registerValidations(Constraint.patientPeselUniqueConstraint(this, patient ));
+    logger.trace("[SERVICE-PATIENT] Exiting validateNewPatient method");
+    return newPatientValidator;
+  }
+
+  private Validator validatPatientUpdate(Patient patient) {
+    logger.trace("[SERVICE-PATIENT] Entering validateNewPatient...");
+    Validator newPatientValidator = Validator.instance();
+    newPatientValidator.registerValidations(Constraint.nameNotNullConstraint( patient ));
+    newPatientValidator.registerValidations(Constraint.lastNameNotNullConstraint( patient ));
+    newPatientValidator.registerValidations(Constraint.peselNotNullConstraint( patient.getPesel()));
+    newPatientValidator.registerValidations(
+            Constraint.peselCodeLengthConstraint( patient.getPesel()));
+    logger.trace("[SERVICE-PATIENT] Exiting validateNewPatient method");
+    return newPatientValidator;
+  }
+
+  @Override
+  public Optional<PatientDto> updatePatient(PatientDto patientDto) throws ValidationExceptions {
+    logger.trace("[SERVICE-PATIENT] Entering updatePatient...");
+    Patient   patient              = PatientDomainDtoMapper.toDomain( patientDto );
+    Validator newPatientValidator  = validatPatientUpdate( patient );
     List<String> errorList = newPatientValidator.validateAll();
     if (errorList.isEmpty()) {
       logger.debug("[SERVICE] Updating patient... SUCCESS");
-      return patientRepository.update(patient);
+      Optional<Patient> fetchedPatient = patientRepository.update( patient );
+      if (fetchedPatient.isPresent()){
+        PatientDto newPatientDto = PatientDomainDtoMapper.toDto( fetchedPatient.get( ) );
+        return Optional.of( newPatientDto );
+      } else {
+        logger.warn( patient );
+      }
+      return Optional.empty();
     } else {
       logger.debug("[SERVICE-PATIENT] Updating patient... FAILED");
       String errorsMsg = "- " + String.join("\n - ", errorList);

@@ -53,11 +53,11 @@ public class PatientsSearcherController
   private static final Logger logger = LogManager.getLogger(PatientsSearcherController.class);
   @FXML private Button newPatientButton;
 
-  @FXML private TableView<PatientFx> resultTable;
-  @FXML private TableColumn<PatientFx, Long> idColumn;
-  @FXML private TableColumn<PatientFx, String> nameColumn;
-  @FXML private TableColumn<PatientFx, String> lastNameColumn;
-  @FXML private TableColumn<PatientFx, String> peselColumn;
+  @FXML private TableView<PatientVM> resultTable;
+  @FXML private TableColumn<PatientVM, Long> idColumn;
+  @FXML private TableColumn<PatientVM, String> nameColumn;
+  @FXML private TableColumn<PatientVM, String> lastNameColumn;
+  @FXML private TableColumn<PatientVM, String> peselColumn;
 
   @FXML private ToggleSwitch autosearchToggle;
 
@@ -119,7 +119,6 @@ public class PatientsSearcherController
 
     PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
     viewModel.turnOnAddPatientMode();
-    viewModel.configureListenersForPreventingUnsavedChanges();
 
     patientRegisterController.setTitle("Add patient");
     GeneralViewHandler.setupAsBlurModal(modal, owner);
@@ -371,7 +370,7 @@ public class PatientsSearcherController
   }
 
   private void updateCurrentPatientLabel() {
-    ObjectProperty<PatientFx> selectedPatientProperty =
+    ObjectProperty<PatientVM> selectedPatientProperty =
         patientSearcherViewModel.selectedPatientProperty();
     selectedPatientProperty.addListener(
         (obs, oldVal, newVal) -> {
@@ -411,6 +410,7 @@ public class PatientsSearcherController
     PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
     viewModel.selectPatientForEdit(patientSearcherViewModel.getSelectedPatient());
     viewModel.turnOnEditingPatientMode();
+
     patientRegisterController.viewModelReBindings();
 
     patientRegisterController.setTitle("Edit patient");

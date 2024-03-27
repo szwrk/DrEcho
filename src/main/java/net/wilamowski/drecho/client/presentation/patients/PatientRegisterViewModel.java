@@ -3,11 +3,12 @@ package net.wilamowski.drecho.client.presentation.patients;
 import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.mapper.PatientVmMapper;
+import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.connectors.model.PatientService;
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.ValidationExceptions;
+import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,88 +22,126 @@ public class PatientRegisterViewModel {
   private static final Logger logger = LogManager.getLogger(PatientRegisterViewModel.class);
   private final PatientService patientService;
   private final BooleanProperty addPatientModeDisable = new SimpleBooleanProperty(true);
-  private final BooleanProperty updatePatientModeDisable = new SimpleBooleanProperty(true);
-  private PatientFx currentPatientFx = null;
+  private final BooleanProperty isEditPatientMode = new SimpleBooleanProperty(true);
+  private final BooleanProperty disableCitizenCodeField = new SimpleBooleanProperty(false);
+  private PatientVM currentPatientVM = null;
   private PatientRegisterDataEntryMode dataEntryMode;
   private boolean isUserStartedWriting = false;
 
+  private final ChangeListener<String> nameListener =  (obs, oldval, newval) -> {
+    changeFlagIfNewValueIsNotEmpty( newval );
+  };
+  private final ChangeListener<String> lastNameListener = (obs, oldval, newval) -> {
+    changeFlagIfNewValueIsNotEmpty( newval );
+  };
+  private void changeFlagIfNewValueIsNotEmpty(String newval) {
+    if ( newval != null) {
+      if ( newval.isEmpty()) {
+        this.isUserStartedWriting = false;
+      } else {
+        this.isUserStartedWriting = true;
+      }
+    } else {
+      this.isUserStartedWriting = false;
+    }
+  }
+
+
   public PatientRegisterViewModel(PatientService patientService) {
     this.patientService = patientService;
-    this.currentPatientFx = PatientFx.createEmptyPatientFx();
+    this.currentPatientVM = PatientVM.createEmptyPatientFx();
     this.dataEntryMode = PatientRegisterDataEntryMode.READONLY;
   }
 
-  Optional<PatientFx> registerCurrentPatient() throws ValidationExceptions {
-    logger.trace("[VM] New patient registration...");
-    Patient patientToRegister = PatientVmMapper.toDomain(currentPatientFx);
+  Optional<PatientVM> registerCurrentPatient() throws ValidationExceptions {
+    logger.trace("[VM] New patient registration... START");
+    PatientDto patientToRegister = PatientDtoVmMapper.toDto( currentPatientVM );
     try {
-      Optional<Patient> createdPatient = patientService.createPatientRecord(patientToRegister);
+      Optional<PatientDto> createdPatient = patientService.createPatientRecord(patientToRegister);
       if (createdPatient.isPresent()) {
-        PatientFx fx = PatientVmMapper.toFx(createdPatient.get());
-        return Optional.of(fx);
+        PatientVM createdPatentVm = PatientDtoVmMapper.toVm(createdPatient.get());
+        removeCurrentPatient( );
+        logger.trace("[VM] New patient registration... DONE");
+        return Optional.of(createdPatentVm);
       } else {
+        logger.trace("[VM] New patient registration... FAILED");
         return Optional.empty();
       }
     } catch (ValidationExceptions e) {
-      logger.error(" [VM-PATIENT] Creating patient... FAILED");
+      logger.error(" [VM-PATIENT] New patient registration... FAILED");
+      logger.error(e.getMessage(),e);
       throw e;
     }
   }
 
-  public PatientFx getCurrentPatientFx() {
-    return currentPatientFx;
+  private void removeCurrentPatient() {
+    this.currentPatientVM = PatientVM.createEmptyPatientFx();
   }
 
-  public void selectPatientForEdit(PatientFx patientFx) {
-    this.currentPatientFx = patientFx;
+  public PatientVM getCurrentPatientVM() {
+    return currentPatientVM;
   }
 
-  void removePatient() {
-    this.currentPatientFx = PatientFx.createEmptyPatientFx();
+  public void selectPatientForEdit(PatientVM patientVM) {
+    this.currentPatientVM = patientVM;
   }
 
   public void initializePeselTextField(String peselCode) {
-    this.currentPatientFx.getPesel().set(peselCode);
+    this.currentPatientVM.getPesel().set(peselCode);
   }
 
   BooleanProperty addPatientModeDisableProperty() {
     return addPatientModeDisable;
   }
 
-  BooleanProperty updatePatientModeDisableProperty() {
-    return updatePatientModeDisable;
+  BooleanProperty isEditPatientModeProperty() {
+    return isEditPatientMode;
   }
 
   void turnOnAddPatientMode() {
     this.dataEntryMode = PatientRegisterDataEntryMode.ADD;
     this.addPatientModeDisable.set(false);
+    turnOnListenersForPreventingUnsavedChanges();
+  }
+
+  public void turnOnListenersForPreventingUnsavedChanges() {
+    currentPatientVM
+        .getName()
+        .addListener( nameListener);
+    currentPatientVM
+        .getLastName()
+        .addListener(lastNameListener);
   }
 
   void turnOnEditingPatientMode() {
     this.dataEntryMode = PatientRegisterDataEntryMode.EDIT;
-    this.updatePatientModeDisable.set(false);
+    this.isEditPatientMode.set(false);
+    this.disableCitizenCodeField.set( true );
   }
 
   public PatientRegisterDataEntryMode dataEntryMode() {
     return dataEntryMode;
   }
-
-  public void configureListenersForPreventingUnsavedChanges() {
-    currentPatientFx
-        .getName()
-        .addListener((obs, oldval, newval) -> this.isUserStartedWriting = true);
-    currentPatientFx
-        .getLastName()
-        .addListener((obs, oldval, newval) -> this.isUserStartedWriting = true);
+  public BooleanProperty disableCitizenCodeFieldProperty() {
+    return disableCitizenCodeField;
   }
 
-  public Optional<PatientFx> commitCurrentPatientChanges() throws ValidationExceptions {
+  public void turnOffListenersForPreventingUnsavedChanges() {
+    currentPatientVM
+            .getName()
+            .removeListener( nameListener);
+    currentPatientVM
+            .getLastName()
+            .removeListener(lastNameListener);
+  }
+
+  public Optional<PatientVM> commitCurrentPatientChanges() throws ValidationExceptions {
     logger.trace("[VM] Updating patient...");
-    Patient patientToRegister = PatientVmMapper.toDomain(currentPatientFx);
+    PatientDto patientToRegister = PatientDtoVmMapper.toDto( currentPatientVM );
     try {
-      Optional<Patient> createdPatient = patientService.updatePatient(patientToRegister);
+      Optional<PatientDto> createdPatient = patientService.updatePatient(patientToRegister);
       if (createdPatient.isPresent()) {
-        PatientFx fx = PatientVmMapper.toFx(createdPatient.get());
+        PatientVM fx = PatientDtoVmMapper.toVm(createdPatient.get());
         return Optional.of(fx);
       } else {
         return Optional.empty();
@@ -115,6 +154,11 @@ public class PatientRegisterViewModel {
 
   public boolean isUserStartedWriting() {
     return isUserStartedWriting;
+  }
+
+  public void clearFields() {
+    logger.debug( "[VM] Clear temp patient variable values..." );
+    this.currentPatientVM = PatientVM.createEmptyPatientFx();
   }
 
   enum PatientRegisterDataEntryMode {

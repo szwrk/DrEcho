@@ -27,13 +27,13 @@ public class PatientRepositoryInMemory implements PatientRepository {
   private void initDemoPatients(int numberOfPatient) {
     List<Patient> patients = dummyDataGeneratorInMemory.patients(numberOfPatient);
     patients.forEach(p -> addNew(p));
-    logger.debug(
-        "[REPOSITORY] Added genereted patients to repository. Repository size: {}",
-        patients.size());
+    logger.debug("Patients added to repository. Current repository size: {}", patients.size());
+
   }
 
   @Override
   public Optional<Patient> addNew(Patient patient) {
+    logger.trace("[REPOSITORY] Entering addNew method");
     Long currentId = patientId++;
     Patient newPatient =
         Patient.builder()
@@ -47,7 +47,6 @@ public class PatientRepositoryInMemory implements PatientRepository {
             .generalPatientNote(patient.getGeneralPatientNote())
             .patientTelephoneNumber(patient.getPatientTelephoneNumber())
             .build();
-    patient = null;
     try {
       boolean added = patients.add(newPatient);
       if (!added) {

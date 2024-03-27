@@ -258,7 +258,7 @@
                                                                 mnemonicParsing="false" onAction="#onActionEditPatient"
                                                                 text="%ui.patient.record.edit-button"/>
                                                         <Button fx:id="savePatientButton" disable="true"
-                                                                mnemonicParsing="false" onAction="#onActionSavePatient"
+                                                                mnemonicParsing="false" onAction="#onActionAddNewPatient"
                                                                 text="%ui.patient.record.save-button"/>
                                                         <Button fx:id="closeButton" mnemonicParsing="false"
                                                                 onAction="#onActionClosePatient"

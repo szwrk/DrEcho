@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
-import net.wilamowski.drecho.client.presentation.patients.PatientFx;
-import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
+import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,16 +16,16 @@ import org.apache.logging.log4j.Logger;
  *     <p></><a href="https://github.com/szwrk">GitHub</a>
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-public class PatientVmMapper {
-  private static final Logger logger = LogManager.getLogger(PatientVmMapper.class);
+public class PatientDtoVmMapper {
+  private static final Logger logger = LogManager.getLogger( PatientDtoVmMapper.class);
 
-  public static List<PatientFx> toListToFx(List<Patient> fetchedPatients) {
-    return fetchedPatients.stream().map(PatientVmMapper::toFx).collect(Collectors.toList());
+  public static List<PatientVM> toListToFx(List<PatientDto> fetchedPatients) {
+    return fetchedPatients.stream().map( PatientDtoVmMapper::toVm ).collect(Collectors.toList());
   }
 
-  public static PatientFx toFx(Patient patient) throws NullPointerException {
+  public static PatientVM toVm(PatientDto patient) throws NullPointerException {
     assert patient != null : "Error occurred during mapping: patientFx object is null";
-    return PatientFx.builder()
+    return PatientVM.builder()
         .id(new SimpleLongProperty(patient.getId()))
         .name(new SimpleStringProperty(patient.getName()))
         .lastName(new SimpleStringProperty(patient.getLastName()))
@@ -37,19 +37,19 @@ public class PatientVmMapper {
         .dateBirth(new SimpleObjectProperty<>(patient.getDateBirth()))
         .build();
   }
+  public static PatientDto toDto(PatientVM patientVM) {
+    Objects.requireNonNull(patientVM, "Error occurred during mapping: patientVM object is null");
 
-  public static Patient toDomain(PatientFx patientFx) {
-    Objects.requireNonNull(patientFx, "Error occurred during mapping: patientFx object is null");
-    return Patient.builder()
-        .id(patientFx.getId().getValue())
-        .name(patientFx.getName().getValueSafe())
-        .lastName(patientFx.getLastName().getValueSafe())
-        .pesel(patientFx.getPesel().getValueSafe())
-        .nameOfCityBirth(patientFx.getNameOfCityBirth().getValueSafe())
-        .codeOfCityBirth(patientFx.getCodeOfCityBirth().getValueSafe())
-        .patientTelephoneNumber(patientFx.getPatientTelephoneNumber().getValueSafe())
-        .generalPatientNote(patientFx.getGeneralPatientNote().getValueSafe())
-        .dateBirth(patientFx.getDateBirth().getValue())
-        .build();
+    return PatientDto.builder()
+            .name(patientVM.getName().get())
+            .lastName(patientVM.getLastName().get())
+            .pesel(patientVM.getPesel().get()) // Assuming you want to include pesel
+            .id(patientVM.getId().get())
+            .nameOfCityBirth(patientVM.getNameOfCityBirth().get())
+            .codeOfCityBirth(patientVM.getCodeOfCityBirth().get())
+            .dateBirth(patientVM.getDateBirth().get())
+            .generalPatientNote(patientVM.getGeneralPatientNote().get())
+            .patientTelephoneNumber(patientVM.getPatientTelephoneNumber().get())
+            .build();
   }
 }

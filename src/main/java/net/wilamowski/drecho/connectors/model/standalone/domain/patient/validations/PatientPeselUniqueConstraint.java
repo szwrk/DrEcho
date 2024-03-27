@@ -3,6 +3,7 @@ package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validat
 import java.util.List;
 import net.wilamowski.drecho.connectors.model.PatientService;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
+import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,8 +19,8 @@ class PatientPeselUniqueConstraint implements Constraint {
   }
 
   public boolean validate() {
-    Patient patient = (Patient) object;
-    List<Patient> findByPesel = service.findByPesel(patient.getPesel(), 0);
+    Patient          patient     = (Patient) object;
+    List<PatientDto> findByPesel = service.findByPesel(patient.getPesel(), 0);
     if (findByPesel.isEmpty()) { // not using code so ok
       logger.debug("[SERVICE-PATIENT] Pesel code validation... OK");
       return true;

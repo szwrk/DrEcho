@@ -14,8 +14,8 @@ import org.apache.logging.log4j.Logger;
 @ToString
 @Getter
 @Builder
-public class PatientFx {
-  private static final Logger logger = LogManager.getLogger(PatientFx.class);
+public class PatientVM {
+  private static final Logger logger = LogManager.getLogger( PatientVM.class);
   private LongProperty id;
   private StringProperty name;
   private StringProperty lastName;
@@ -26,7 +26,7 @@ public class PatientFx {
   private StringProperty generalPatientNote;
   private StringProperty patientTelephoneNumber;
 
-  public static PatientFx createEmptyPatientFx() {
+  public static PatientVM createEmptyPatientFx() {
     logger.debug("Creating an empty PatientFx object");
     SimpleLongProperty id = new SimpleLongProperty();
     SimpleStringProperty name = new SimpleStringProperty();
@@ -37,7 +37,7 @@ public class PatientFx {
     SimpleObjectProperty dateBirth = new SimpleObjectProperty<>();
     SimpleStringProperty generalPatientNote = new SimpleStringProperty();
     SimpleStringProperty patientTelephoneNumber = new SimpleStringProperty();
-    return new PatientFx(
+    return new PatientVM(
         id,
         name,
         lastName,
@@ -48,4 +48,5 @@ public class PatientFx {
         generalPatientNote,
         patientTelephoneNumber);
   }
+
 }

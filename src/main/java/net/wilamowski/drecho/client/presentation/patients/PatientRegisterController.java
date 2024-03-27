@@ -21,6 +21,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.PostInitial
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
+import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,26 +70,34 @@ public class PatientRegisterController
 
   private GeneralViewHandler viewHandler;
   private PatientRegisterViewModel viewModel;
-  private ResourceBundle bundle;
 
-  public void onActionSavePatient(ActionEvent event) {
+
+  public void onActionAddNewPatient(ActionEvent event) {
     logger.debug("Click on save new patient...");
-
-    Optional<PatientFx> savedPatient = Optional.empty();
+    Optional<PatientVM> newPatient = Optional.empty();
     try {
-      savedPatient = viewModel.commitCurrentPatientChanges();
+      newPatient = viewModel.registerCurrentPatient();
     } catch (RuntimeException e) {
-      logger.error("[CONTROLLER-PATIENT] An error occurred:", e.getMessage());
-      String header = bundle.getString("e.012.header");
+      logger.error("[CONTROLLER-PATIENT] An error occurred: {}\n{}", e.getMessage(), e);
+      String header = Lang.getString("e.012.header");
       String msg = e.getMessage();
       ExceptionAlert.create().showError(e, header, msg);
     }
 
-    //    if (savedPatient.isPresent()) {
-    //      handleAddNewPatient(savedPatient);
-    //    } else {
-    //      handleNullPatient();
-    //    }
+      if (newPatient.isPresent()){
+        PatientVM patient = newPatient.get();
+        UserAlert userAlert = new UserAlert();
+        userAlert.showInfo("Successfully added patient", "New patient data:\n" + addPatientInfo(patient));
+        clearFields();
+      } else {
+        UserAlert userAlert = new UserAlert();
+        userAlert.showWarn("Failed", "Patient is empty");
+      }
+  }
+
+  void clearFields() {
+    viewModelReBindings();
+    viewModel.clearFields();
   }
 
   public void setTitle(String text) {
@@ -141,32 +150,38 @@ public class PatientRegisterController
     Bindings.bindBidirectional(
         savePatientButton.disableProperty(), viewModel.addPatientModeDisableProperty());
     Bindings.bindBidirectional(
-        updatePatientButton.disableProperty(), viewModel.updatePatientModeDisableProperty());
+        updatePatientButton.disableProperty(), viewModel.isEditPatientModeProperty());
+    Bindings.bindBidirectional(
+        patientPeselTextField.disableProperty(), viewModel.disableCitizenCodeFieldProperty());
   }
 
   public void viewModelReBindings() {
+    PatientVM currentPatientVM = viewModel.getCurrentPatientVM( );
+
     Bindings.bindBidirectional(
         Objects.requireNonNull(patientIdTextField.textProperty()),
-        Objects.requireNonNull(viewModel.getCurrentPatientFx().getId()),
+        Objects.requireNonNull( currentPatientVM.getId()),
         new NumberStringConverter());
     Bindings.bindBidirectional(
-        patientNameTextField.textProperty(), viewModel.getCurrentPatientFx().getName());
+        patientNameTextField.textProperty(), currentPatientVM.getName());
     Bindings.bindBidirectional(
-        patientLastNameTextField.textProperty(), viewModel.getCurrentPatientFx().getLastName());
+        patientLastNameTextField.textProperty(), currentPatientVM.getLastName());
     Bindings.bindBidirectional(
-        patientPeselTextField.textProperty(), viewModel.getCurrentPatientFx().getPesel());
+        patientPeselTextField.textProperty(), currentPatientVM.getPesel());
     Bindings.bindBidirectional(
-        patientDateBirthTextField.valueProperty(), viewModel.getCurrentPatientFx().getDateBirth());
+        patientDateBirthTextField.valueProperty(), currentPatientVM.getDateBirth());
     Bindings.bindBidirectional(
         patientCityOfBirthTextField.textProperty(),
-        viewModel.getCurrentPatientFx().getCodeOfCityBirth());
+        currentPatientVM.getCodeOfCityBirth());
     Bindings.bindBidirectional(
         patientGeneralPatientNote.textProperty(),
-        viewModel.getCurrentPatientFx().getGeneralPatientNote());
+        currentPatientVM.getGeneralPatientNote());
     Bindings.bindBidirectional(
         patientTelephoneNumberTextField.textProperty(),
-        viewModel.getCurrentPatientFx().getPatientTelephoneNumber());
+        currentPatientVM.getPatientTelephoneNumber());
   }
+
+
 
   private void requestFocus() {
     Platform.runLater(
@@ -182,7 +197,7 @@ public class PatientRegisterController
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
-    this.bundle = resourceBundle;
+
   }
 
   public PatientRegisterViewModel getViewModel() {
@@ -192,18 +207,18 @@ public class PatientRegisterController
   public void onActionEditPatient(ActionEvent event) {
     logger.debug("Clicked on the Edit button...");
 
-    Optional<PatientFx> patientFxOptional = Optional.empty();
+    Optional<PatientVM> patientFxOptional = Optional.empty();
     try {
-      patientFxOptional = viewModel.registerCurrentPatient();
+      patientFxOptional = viewModel.commitCurrentPatientChanges();
     } catch (RuntimeException e) {
       logger.error("[CONTROLLER-PATIENT] An error occurred:", e.getMessage());
-      String header = bundle.getString("e.012.header");
+      String header = Lang.getString("e.012.header");
       String msg = e.getMessage();
       ExceptionAlert.create().showError(e, header, msg);
     }
 
     if (patientFxOptional.isPresent()) {
-      handleAddNewPatient(patientFxOptional);
+      handleSuccessAddNewPatient(patientFxOptional.get());
     } else {
       handleNullPatient();
     }
@@ -213,26 +228,24 @@ public class PatientRegisterController
     logger.error("[CONTROLLER-PATIENT] Failed to save new patient.");
   }
 
-  private void handleAddNewPatient(Optional<PatientFx> patientFxOptional) {
-    PatientFx patientFx = patientFxOptional.get();
+  private void handleSuccessAddNewPatient(PatientVM patient) {
     UserAlert userAlert = new UserAlert();
     userAlert.showInfo(
-        "New patient", "Patient added successfully: \n" + addedPatientInfo(patientFx));
-    clearAllFields();
-    logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patientFx);
+            Lang.getString("u.003.header"),  Lang.getString("e.003.msg") + "\n" + addPatientInfo( patient ));
+    logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patient );
   }
 
-  private static String addedPatientInfo(PatientFx patientFx) {
+  private static String addPatientInfo(PatientVM patientVM) {
     StringBuilder infoBuilder = new StringBuilder();
-    Long id = patientFx.getId().getValue();
-    String name = patientFx.getName().getValue();
-    String lastName = patientFx.getLastName().getValue();
-    String pesel = patientFx.getPesel().getValue();
-    LocalDate dateOfBith = patientFx.getDateBirth().getValue();
+    Long id = patientVM.getId().getValue();
+    String name = patientVM.getName().getValue();
+    String lastName = patientVM.getLastName().getValue();
+    String pesel = patientVM.getPesel().getValue();
+    LocalDate dateOfBith = patientVM.getDateBirth().getValue();
     String formattedDate =
         dateOfBith == null ? " - " : dateOfBith.format(DateTimeFormatter.ISO_DATE);
-    String birthCityName = patientFx.getNameOfCityBirth().getValue();
-    String telephone = patientFx.getPatientTelephoneNumber().getValue();
+    String birthCityName = patientVM.getNameOfCityBirth().getValue();
+    String telephone = patientVM.getPatientTelephoneNumber().getValue();
     infoBuilder
         .append(id == null ? " - " : "\n" + id)
         .append(name == null ? " - " : "\n" + name)
@@ -244,7 +257,7 @@ public class PatientRegisterController
     return infoBuilder.toString();
   }
 
-  private void clearAllFields() {
+  private void clearControllerFields() {
     caregiverNoteTextField.setText("");
     caregiverTelephoneTextField.setText("");
     caregiverTelephoneTextField1.setText("");
