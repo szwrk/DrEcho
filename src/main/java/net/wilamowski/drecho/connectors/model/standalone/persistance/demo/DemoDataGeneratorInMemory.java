@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
-import net.wilamowski.drecho.connectors.model.standalone.domain.visit.VisitEntity;
+import net.wilamowski.drecho.connectors.model.standalone.domain.user.account.User;
+import net.wilamowski.drecho.connectors.model.standalone.domain.visit.Visit;
 import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -134,9 +135,9 @@ public class DemoDataGeneratorInMemory {
     return Lang.getString("demo.sentence.short");
   }
 
-  public Set<VisitEntity> generateVisitsForPatients() {
+  public Set<Visit> generateVisitsForPatients() {
     final String operatorUserName = "ADM";
-    Set<VisitEntity> generatedVisits = new HashSet<>();
+    Set<Visit> generatedVisits = new HashSet<>();
     if (patientsWasGenerated()) {
       genereteSomeVisitsForPatient(generatedVisits, operatorUserName);
       logger.debug("[DEMO] Created random visits. Amount: " + generatedVisits.size());
@@ -149,18 +150,20 @@ public class DemoDataGeneratorInMemory {
     return Collections.unmodifiableSet(generatedVisits);
   }
 
-  private void genereteSomeVisitsForPatient(Set<VisitEntity> visits, String userName) {
+  private void genereteSomeVisitsForPatient(Set<Visit> visits, String userName) {
     patients.forEach(
-        p -> {
+        patient -> {
+          User user = User.builder( ).login( "TEST1" ).firstName( "Jan" ).surname( "Kowalski" ).build( );
+
           int numberOfVisits = random.nextInt(5) + 1;
           while (numberOfVisits > 0) {
             visits.add(
-                VisitEntity.builder()
-                    .selectedPerformer(userName)
-                    .selectedRegistrant("ADM")
-                    .realizationDateTimeProperty(randomRealizationDateTime())
-                    .viewStartDateTimeProperty(randomViewStartDateTimeProperty())
-                    .patientId(p.getId())
+                Visit.builder()
+                    .selectedPerformer(user )
+                    .selectedRegistrant(user)
+                    .realizationDateTime(randomRealizationDateTime())
+                    .viewStartDateTime(randomViewStartDateTimeProperty())
+                    .patient( patient)
                     .build());
             numberOfVisits--;
           }
