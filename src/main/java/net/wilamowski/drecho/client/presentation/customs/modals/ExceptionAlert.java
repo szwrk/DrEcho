@@ -67,16 +67,16 @@ public class ExceptionAlert {
   private void setExpandableDetailsContent(Alert alert, String content) {
     String detailsLabelName = "Details";
     javafx.scene.control.Label stackTraceLabel = new javafx.scene.control.Label(detailsLabelName);
-    TextArea textArea = new TextArea(content);
-    textArea.setEditable(false);
-    textArea.setWrapText(true);
-    textArea.setMaxWidth(Double.MAX_VALUE);
-    textArea.setMaxHeight(Double.MAX_VALUE);
-    GridPane.setVgrow(textArea, Priority.ALWAYS);
-    GridPane.setHgrow(textArea, Priority.ALWAYS);
+    TextArea details = new TextArea(content);
+    details.setEditable(false);
+    details.setWrapText(true);
+    details.setMaxWidth(Double.MAX_VALUE);
+    details.setMaxHeight(Double.MAX_VALUE);
+    GridPane.setVgrow(details, Priority.ALWAYS);
+    GridPane.setHgrow(details, Priority.ALWAYS);
     GridPane expContent = new GridPane();
     expContent.add(stackTraceLabel, 0, 0);
-    expContent.add(textArea, 0, 1);
+    expContent.add(details, 0, 1);
 
     alert.getDialogPane().setExpandableContent(expContent);
   }
