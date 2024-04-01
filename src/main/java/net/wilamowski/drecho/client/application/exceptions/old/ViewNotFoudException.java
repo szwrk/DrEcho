@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.client.application.exceptions;
+package net.wilamowski.drecho.client.application.exceptions.old;
 
 /**
  * @author Arkadiusz Wilamowski

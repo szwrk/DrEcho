@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.client.application;
+package net.wilamowski.drecho.client.application.exceptions.old;
 
 import java.util.List;
 

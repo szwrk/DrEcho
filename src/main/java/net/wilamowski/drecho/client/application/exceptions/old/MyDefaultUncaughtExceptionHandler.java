@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.client.application.exceptions;
+package net.wilamowski.drecho.client.application.exceptions.old;
 
 import net.wilamowski.drecho.client.application.infra.util.screenshot.Screenshoter;
 import net.wilamowski.drecho.client.presentation.customs.modals.NativeAlert;

@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.client;
+package net.wilamowski.drecho.client.application.exceptions;
 
 import net.wilamowski.drecho.shared.bundle.Lang;
 
