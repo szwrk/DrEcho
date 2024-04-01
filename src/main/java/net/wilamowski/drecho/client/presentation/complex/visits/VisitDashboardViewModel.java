@@ -10,9 +10,9 @@ import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
-import net.wilamowski.drecho.connectors.model.VisitModel;
+import net.wilamowski.drecho.connectors.model.ConnectorVisit;
 import net.wilamowski.drecho.shared.dto.PatientDto;
-import net.wilamowski.drecho.shared.dto.VisitDto;
+import net.wilamowski.drecho.shared.dto.VisitDtoDetailedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,23 +26,23 @@ import org.apache.logging.log4j.Logger;
 public class VisitDashboardViewModel {
   private static final Logger logger = LogManager.getLogger(VisitDashboardViewModel.class);
 
-  private final VisitModel visitModel;
+  private final ConnectorVisit connectorVisit;
   private final ObservableList<VisitVM> visits = FXCollections.observableArrayList();
 
-  public VisitDashboardViewModel(VisitModel visitModel) {
-    this.visitModel = visitModel;
+  public VisitDashboardViewModel(ConnectorVisit connectorVisit) {
+    this.connectorVisit = connectorVisit;
   }
 
   public void searchByPatient(PatientVM patientVM , int page) {
     logger.trace("Clicked search by selected patient");
     if ( patientVM != null) {
-      PatientDto    patient  = PatientDtoVmMapper.toDto( patientVM );
-      Set<VisitDto> visitSet = visitModel.listVisitsBy(patient, page);
+      PatientDto                 patient  = PatientDtoVmMapper.toDto( patientVM );
+      Set<VisitDtoDetailedQuery> visitSet = connectorVisit.listVisitsBy(patient, page);
       loadVisitsToTable(visitSet);
     }
   }
 
-  private void loadVisitsToTable(Set<VisitDto> visitSet) {
+  private void loadVisitsToTable(Set<VisitDtoDetailedQuery> visitSet) {
     if (visitSet != null) {
       logger.debug("SERVICE - visit service returns: {} entity items", visitSet.size());
       Set<VisitVM> patientsFxBean = VisitDtoVmMapper.toListToVM(visitSet);
@@ -64,7 +64,7 @@ public class VisitDashboardViewModel {
 
   public void searchByDate(LocalDate date, int page) {
     logger.trace("Clicked search by date");
-    Set<VisitDto> visitSet = visitModel.listVisitsBy(date, page);
+    Set<VisitDtoDetailedQuery> visitSet = connectorVisit.listVisitsBy(date, page);
     loadVisitsToTable(visitSet);
   }
 

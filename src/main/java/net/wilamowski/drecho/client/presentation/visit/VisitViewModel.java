@@ -1,8 +1,6 @@
 package net.wilamowski.drecho.client.presentation.visit;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.beans.property.ListProperty;
@@ -13,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import lombok.Getter;
 import lombok.ToString;
+import net.wilamowski.drecho.client.application.exceptions.VisitVmValidationException;
 import net.wilamowski.drecho.client.application.mapper.UserDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.ListLoader;
@@ -20,12 +19,13 @@ import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
-import net.wilamowski.drecho.connectors.model.VisitModel;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
+import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
+import net.wilamowski.drecho.connectors.model.ConnectorVisit;
+import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
 import net.wilamowski.drecho.shared.auth.Session;
 import net.wilamowski.drecho.shared.dto.UserDto;
-import net.wilamowski.drecho.shared.dto.VisitDto;
+import net.wilamowski.drecho.shared.dto.VisitDtoCreate;
+import net.wilamowski.drecho.shared.dto.VisitDtoResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -36,10 +36,10 @@ import org.apache.logging.log4j.Logger;
  */
 @ToString
 @Getter
-public class VisitDetailsViewModel {
-  private static final Logger logger = LogManager.getLogger(VisitDetailsViewModel.class);
+public class VisitViewModel {
+  private static final Logger logger = LogManager.getLogger( VisitViewModel.class);
 
-  private final UserService userService;
+  private final ConnectorUser connectorUser;
   //Form values - Visit details
   private final ObjectProperty<PatientVM> selectedPatient = new SimpleObjectProperty<>();
   private final ObjectProperty<UserVM> selectedRegistrant = new SimpleObjectProperty<>();
@@ -57,13 +57,13 @@ public class VisitDetailsViewModel {
       new SimpleListProperty<>(FXCollections.observableArrayList());
 
   private final ResourceBundle bundle = null;
-  private VisitModel service = null;
-  private SimpleDictionariesService dictService = null;
-  public VisitDetailsViewModel(
-      VisitModel service, SimpleDictionariesService dictService, UserService userService) {
+  private ConnectorVisit service = null;
+  private ConnectorSimpleDictionaries dictService = null;
+  public VisitViewModel(
+          ConnectorVisit service, ConnectorSimpleDictionaries dictService, ConnectorUser connectorUser) {
     this.service = service;
     this.dictService = dictService;
-    this.userService = userService;
+    this.connectorUser = connectorUser;
     initStartDateWithNow();
     initStartTimeWithNow();
     loadDict();
@@ -108,23 +108,24 @@ public class VisitDetailsViewModel {
                   throw illegalStateException;
                 });
     registantCombBox.setValue(userPosition);
-    selectUserByLogin(userPosition.getCode());
+    UserVM registrantByDictCode = findUserByLogin( userPosition.getCode( ) );
+    chooseRegistrant( registrantByDictCode );
   }
 
-  public void selectUserByLogin(String login) {
+  public UserVM findUserByLogin(String login) {
     logger.trace("[VM] Enter selectUserByLogin: {}", login);
-    try {
-      Optional<UserDto> userByLogin = userService.getUserByLogin(login);
-      if (userByLogin.isPresent()) {
+      Optional<UserDto> userByLogin = connectorUser.findUserByLogin(login);
         UserDto userDto = userByLogin.get();
-        logger.debug("[VM] Set performer: {}", userDto.getLogin());
-        getSelectedPerformer().set(UserDtoVmMapper.toVm(userDto));
-      } else {
-        logger.debug("[VM] User not found for login: {}", login);
-      }
-    } catch (Exception e) {
-      logger.error("[VM] Error selecting user by login: {}", e.getMessage());
-    }
+        logger.debug("[VM] Set performer: {}", userDto.login());
+        return UserDtoVmMapper.toVm(userDto);
+  }
+
+public void choosePerormer(UserVM user){
+  getSelectedPerformer().set(user);
+}
+
+  public void chooseRegistrant(UserVM user){
+    getSelectedRegistrant().set(user);
   }
 
   void initPerformer(ComboBox perfomerComboBox) {
@@ -134,27 +135,44 @@ public class VisitDetailsViewModel {
             .findFirst()
             .orElseThrow();
     perfomerComboBox.setValue(userPosition);
-    selectUserByLogin(userPosition.getCode());
+    UserVM userByLogin = findUserByLogin( userPosition.getCode( ) );
+    choosePerormer( userByLogin );
   }
 
   public void setViewStartTimeProperty(LocalDateTime dateTime) {
     this.viewStartProperty.set(dateTime);
   }
 
-  public void confirmVisit() {
-    VisitVM visitVM = new VisitVMBuilder( )
+  public Optional<VisitDtoResponse> confirmVisit() throws VisitVmValidationException {
+    logger.debug("[VM] Confirming...");
+    logger.debug( "[VM] Selected patient get {}", selectedPatientVm( ).getId() );
+
+    if ( selectedPatientVm( ) == null || selectedPerformer.get()==null || selectedRegistrant.get()==null){
+      logger.error( "[VM] Patient, performer or registrant cannot be null!");
+      throw new VisitVmValidationException();
+    }
+
+    VisitVM copyOfVisit = new VisitVMBuilder()
+            .setSelectedPatient( selectedPatient )
+            .setSelectedPerformer( selectedPerformer )
+            .setSelectedRegistrant( selectedRegistrant )
             .setViewStartDateTimeProperty( viewStartProperty )
             .setRealizationDateTimeProperty( realizationDateTimeProperty )
-            .setSelectedPatient( selectedPatient )
-            .setSelectedRegistrant( selectedRegistrant )
-            .setSelectedPerformer( selectedPerformer )
-            .createVisitVM( );
+            .createVisitVM();
 
-    VisitDto dto = VisitDtoVmMapper.toDto( visitVM );
-    service.save(dto);
+    Optional<VisitDtoResponse> temp = Optional.empty();
+
+    try {
+      VisitDtoCreate dtoCreate = VisitDtoVmMapper.toDtoCreate( copyOfVisit );
+      logger.debug("[VM] Visit: {}", dtoCreate);
+      temp = service.save( dtoCreate );
+    } catch (RuntimeException e){
+      logger.error( e.getMessage(),e );
+    }
+    return temp;
   }
-  private ObjectProperty<LocalDateTime> createCombinedDateTimeProperty(
-          ObjectProperty<LocalDate> dateProperty, ObjectProperty<LocalTime> timeProperty) {
-    return new SimpleObjectProperty<>(LocalDateTime.of(dateProperty.get(), timeProperty.get()));
+
+  private PatientVM selectedPatientVm() {
+    return selectedPatient.get( );
   }
 }

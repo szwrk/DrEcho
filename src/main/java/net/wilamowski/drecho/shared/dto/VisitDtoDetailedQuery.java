@@ -10,14 +10,14 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-public class VisitDto {
+public class VisitDtoDetailedQuery {
   private UserDto selectedRegistrant;
   private UserDto selectedPerformer;
   private LocalDateTime realizationDateTime;
   private LocalDateTime viewStartDateTime;
   private PatientDto patient;
 
-  private VisitDto(
+  private VisitDtoDetailedQuery(
       UserDto selectedRegistrant,
       UserDto selectedPerformer,
       LocalDateTime realizationDateTime,

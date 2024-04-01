@@ -14,7 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TitledPane;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryConverter;
@@ -40,14 +40,11 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   @FXML private ChoiceBox<PositionFx> realizationHourChoiceBox;
   @FXML private ChoiceBox<PositionFx> realizationTimeChoiceBox;
 
-
   @FXML private DatePicker saveDatePicker;
 
   @FXML private TitledPane visitVBox;
   private ResourceBundle bundle;
-  private VisitDetailsViewModel viewModel;
-
-  public VisitController() {}
+  private VisitViewModel visitViewModel;
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -55,9 +52,9 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   }
 
   @Override
-  public void initializeViewModels(ViewModels viewModelsFactory) {
+  public void initializeViewModels(ViewModelConfiguration viewModelConfigurationFactory) {
     logger.debug("VisitController init Visit VM...");
-    this.viewModel = viewModelsFactory.visitViewModel();
+    this.visitViewModel = viewModelConfigurationFactory.visitViewModel();
   }
 
   @Override
@@ -92,7 +89,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
                             if (date!=null && realizationHourChoiceBox.getValue() != null && realizationTimeChoiceBox.getValue() != null) {
                                 LocalDateTime localDateTime = createDateTime(  );
                                 logger.debug("[CONTROLLER] Updated realization date and time: {}", localDateTime);
-                                viewModel.getRealizationDateTimeProperty().set(localDateTime);
+                                visitViewModel.getRealizationDateTimeProperty().set(localDateTime);
                             } else {
                                 logger.debug("[CONTROLLER] Failed to update realization date and time - hour and minutes choicbox is empty ");
                             }
@@ -115,7 +112,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
     private void configureHourChoiceBox() {
     DictionaryConverter converter = new DictionaryConverter();
     realizationHourChoiceBox.setConverter(converter);
-    realizationHourChoiceBox.itemsProperty().bind(viewModel.getRealizationHoursValues());
+    realizationHourChoiceBox.itemsProperty().bind( visitViewModel.getRealizationHoursValues());
     realizationHourChoiceBox
         .valueProperty()
         .addListener(
@@ -129,7 +126,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
                                     Integer.parseInt(realizationHourChoiceBox.getValue().getName()),
                                     Integer.parseInt(realizationTimeChoiceBox.getValue().getName())
                             );
-                    viewModel.setViewStartTimeProperty(newTime);
+                    visitViewModel.setViewStartTimeProperty(newTime);
               }
             });
   }
@@ -137,7 +134,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   private void configureMinutesChoiceBox() {
     DictionaryConverter converter = new DictionaryConverter();
     realizationTimeChoiceBox.setConverter(converter);
-    realizationTimeChoiceBox.itemsProperty().bind(viewModel.getRealizationMinutesValues());
+    realizationTimeChoiceBox.itemsProperty().bind( visitViewModel.getRealizationMinutesValues());
     realizationTimeChoiceBox
         .valueProperty()
         .addListener(
@@ -151,17 +148,17 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
                         Integer.parseInt(realizationHourChoiceBox.getValue().getName()),
                         Integer.parseInt(realizationTimeChoiceBox.getValue().getName())
                         );
-                viewModel.setViewStartTimeProperty(newTime);
+                visitViewModel.setViewStartTimeProperty(newTime);
               }
             });
   }
 
   private void initializePerformer() {
-    viewModel.initPerformer(performerComboBox);
+    visitViewModel.initPerformer(performerComboBox);
   }
 
   private void initializeRegistrant() {
-    viewModel.initRegistrant(registrantComboBox);
+    visitViewModel.initRegistrant(registrantComboBox);
   }
 
   private void bindPerformer() {
@@ -170,9 +167,9 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
         .valueProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
-              viewModel.selectUserByLogin(newValue.getCode());
+              visitViewModel.findUserByLogin(newValue.getCode());
             });
-    performerComboBox.itemsProperty().bind(viewModel.getPerformerValues());
+    performerComboBox.itemsProperty().bind( visitViewModel.getPerformerValues());
   }
 
   private void bindRegistrant() {
@@ -180,13 +177,13 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
     registrantComboBox
         .valueProperty()
         .addListener(
-            (observable, oldValue, newValue) -> {
-              viewModel.selectUserByLogin(newValue.getCode());
+            (observable, oldValue, newPatient) -> {
+              visitViewModel.findUserByLogin(newPatient.getCode());
             });
-    registrantComboBox.itemsProperty().bind(viewModel.getPerformerValues());
+    registrantComboBox.itemsProperty().bind( visitViewModel.getPerformerValues());
   }
 
-  public VisitDetailsViewModel getViewModel() {
-    return viewModel;
+  public VisitViewModel getVisitViewModel() {
+    return visitViewModel;
   }
 }

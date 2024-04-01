@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
@@ -164,7 +164,7 @@ public class VisitSearcherView
   }
 
   @Override
-  public void initializeViewModels(ViewModels factory) {
+  public void initializeViewModels(ViewModelConfiguration factory) {
     this.visitDashboardViewModel = factory.visitDashboardViewModel();
   }
 
