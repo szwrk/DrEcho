@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.client.application.infra;
 
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.factory.ConnectorLayer;
+import net.wilamowski.drecho.connectors.model.standalone.infra.ConnectorLayer;
 import net.wilamowski.drecho.client.presentation.complex.visits.VisitDashboardViewModel;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryViewModel;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserViewModel;
@@ -13,7 +13,7 @@ import net.wilamowski.drecho.client.presentation.patients.PatientRegisterViewMod
 import net.wilamowski.drecho.client.presentation.patients.PatientSearcherViewModel;
 import net.wilamowski.drecho.client.presentation.preferences.PreferenceViewModel;
 import net.wilamowski.drecho.client.presentation.settings.SettingsViewModel;
-import net.wilamowski.drecho.client.presentation.visit.VisitDetailsViewModel;
+import net.wilamowski.drecho.client.presentation.visit.VisitViewModel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,44 +23,44 @@ import org.apache.logging.log4j.Logger;
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
-public class ViewModels {
-  private static final Logger logger = LogManager.getLogger(ViewModels.class);
-  private final ConnectorLayer modelLayer;
+public class ViewModelConfiguration {
+  private static final Logger logger = LogManager.getLogger( ViewModelConfiguration.class);
+  private final ConnectorLayer connectors;
 
-  public ViewModels(ConnectorLayer modelLayer) {
-    this.modelLayer = modelLayer;
+  public ViewModelConfiguration(ConnectorLayer connectors) {
+    this.connectors = connectors;
   }
 
   public LoginViewModel loginViewModel() {
-    return new LoginViewModel(modelLayer.authenticatorModel());
+    return new LoginViewModel( connectors.authenticatorModel());
   }
 
   public EchoTteViewModel exhaminationTteViewModel() {
     logger.traceEntry();
-    return new EchoTteViewModel(modelLayer.echoTteModel(), modelLayer.dictionariesService());
+    return new EchoTteViewModel( connectors.echoTteModel(), connectors.dictionariesService());
   }
 
   public SettingsViewModel settingsViewModel() {
-    return new SettingsViewModel(modelLayer.settingsModel());
+    return new SettingsViewModel( connectors.settingsModel());
   }
 
   public PreferenceViewModel preferenceViewModel() {
-    return new PreferenceViewModel(modelLayer.settingsModel());
+    return new PreferenceViewModel( connectors.settingsModel());
   }
 
   public MainViewModel mainViewModel() {
     logger.traceEntry();
-    return new MainViewModel(modelLayer.mainDataModel());
+    return new MainViewModel( connectors.mainDataModel());
   }
 
   public PatientSearcherViewModel patientViewModel() {
     logger.traceEntry();
-    return new PatientSearcherViewModel(modelLayer.patientModel());
+    return new PatientSearcherViewModel( connectors.patientModel());
   }
 
   public ExaminationsChooserViewModel examinationsChooserViewModel() {
     logger.traceEntry();
-    return new ExaminationsChooserViewModel(modelLayer.examinationsModel());
+    return new ExaminationsChooserViewModel( connectors.examinationsModel());
   }
 
   public GeneralExaminatiomViewModel generalExaminatiomViewModel() {
@@ -68,21 +68,21 @@ public class ViewModels {
     return new GeneralExaminatiomViewModel();
   }
 
-  public VisitDetailsViewModel visitViewModel() {
+  public VisitViewModel visitViewModel() {
     logger.traceEntry();
-    return new VisitDetailsViewModel(
-        modelLayer.visitModel(), modelLayer.dictionariesService(), modelLayer.userFacadeModel());
+    return new VisitViewModel(
+        connectors.visitModel(), connectors.dictionariesService(), connectors.userModel());
   }
 
   public DictionaryViewModel dictionariesViewModel() {
-    return new DictionaryViewModel(modelLayer.dictionariesService());
+    return new DictionaryViewModel( connectors.dictionariesService());
   }
 
   public VisitDashboardViewModel visitDashboardViewModel() {
-    return new VisitDashboardViewModel(modelLayer.visitModel());
+    return new VisitDashboardViewModel( connectors.visitModel());
   }
 
   public PatientRegisterViewModel patientRegistrationViewModel() {
-    return new PatientRegisterViewModel(modelLayer.patientModel());
+    return new PatientRegisterViewModel( connectors.patientModel());
   }
 }

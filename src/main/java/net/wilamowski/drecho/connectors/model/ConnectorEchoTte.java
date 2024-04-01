@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteUnmodifable;
 
-public interface ModelEchoTte {
+public interface ConnectorEchoTte {
   void addExhamination(EchoTteUnmodifable echoTteBean);
 
   Optional<EchoTteUnmodifable> findById(Long id);

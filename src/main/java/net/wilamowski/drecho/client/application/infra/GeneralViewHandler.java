@@ -50,11 +50,11 @@ public class GeneralViewHandler {
   private String applicationStyle;
 
   private GeneralViewHandler(
-      String styleName, ViewModels viewModels, ApplicationRoot applicationRoot) {
+          String styleName, ViewModelConfiguration viewModelConfiguration , ApplicationRoot applicationRoot) {
     ANIMATION_CHANGE_SCANE_DURATION = ClientPropertyReader.getInt("admin.switch-scene.duration");
     this.root = applicationRoot;
     this.initGlobalStyle(styleName);
-    controllerInitializer = new ControllerInitializerImpl(viewModels);
+    controllerInitializer = new ControllerInitializerImpl( viewModelConfiguration );
   }
 
   private void initGlobalStyle(String styleName) {
@@ -97,8 +97,8 @@ public class GeneralViewHandler {
   }
 
   public static GeneralViewHandler instance(
-      String styleName, ViewModels viewModels, ApplicationRoot applicationRoot) {
-    return new GeneralViewHandler(styleName, viewModels, applicationRoot);
+          String styleName, ViewModelConfiguration viewModelConfiguration , ApplicationRoot applicationRoot) {
+    return new GeneralViewHandler(styleName, viewModelConfiguration , applicationRoot);
   }
 
   public static ControllerInitializer initializer() {

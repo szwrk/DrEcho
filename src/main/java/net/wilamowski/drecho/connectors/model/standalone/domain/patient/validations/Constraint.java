@@ -1,6 +1,6 @@
 package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations;
 
-import net.wilamowski.drecho.connectors.model.PatientService;
+import net.wilamowski.drecho.connectors.model.ConnectorPatient;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 
 public interface Constraint {
@@ -12,7 +12,7 @@ public interface Constraint {
     return new NameNotNullConstraint(patient);
   }
 
-  static Constraint patientPeselUniqueConstraint(PatientService patient, Object validatedObject) {
+  static Constraint patientPeselUniqueConstraint(ConnectorPatient patient, Object validatedObject) {
     return new PatientPeselUniqueConstraint(patient, validatedObject);
   }
 

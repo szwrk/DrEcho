@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations;
 
 import java.util.List;
-import net.wilamowski.drecho.connectors.model.PatientService;
+import net.wilamowski.drecho.connectors.model.ConnectorPatient;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
@@ -10,10 +10,10 @@ import org.apache.logging.log4j.Logger;
 class PatientPeselUniqueConstraint implements Constraint {
   private static final Logger logger = LogManager.getLogger(PatientPeselUniqueConstraint.class);
 
-  private final PatientService service;
+  private final ConnectorPatient service;
   private final Object object;
 
-  public PatientPeselUniqueConstraint(PatientService service, Object validatedObject) {
+  public PatientPeselUniqueConstraint(ConnectorPatient service, Object validatedObject) {
     this.service = service;
     this.object = validatedObject;
   }

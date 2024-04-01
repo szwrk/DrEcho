@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import net.wilamowski.drecho.client.application.mapper.SettingVmMapper;
 import net.wilamowski.drecho.client.presentation.settings.SettingPropertyFx;
 import net.wilamowski.drecho.connectors.configuration.SettingValue;
-import net.wilamowski.drecho.connectors.model.Configuration;
+import net.wilamowski.drecho.connectors.model.ConnectorConfiguration;
 
 /**
  * @author Arkadiusz Wilamowski
@@ -15,10 +15,10 @@ import net.wilamowski.drecho.connectors.model.Configuration;
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class PreferenceViewModel {
-  private final Configuration model;
+  private final ConnectorConfiguration model;
   private ObservableList<SettingPropertyFx> settingsFx = FXCollections.observableArrayList();
 
-  public PreferenceViewModel(Configuration model) {
+  public PreferenceViewModel(ConnectorConfiguration model) {
     this.model = model;
     init();
   }

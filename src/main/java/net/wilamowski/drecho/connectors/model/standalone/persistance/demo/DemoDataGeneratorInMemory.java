@@ -147,7 +147,7 @@ public class DemoDataGeneratorInMemory {
       throw new IllegalStateException(
           "No patients found. Please ensure patients are generated before attempting to generate visits.");
     }
-    return Collections.unmodifiableSet(generatedVisits);
+    return generatedVisits;
   }
 
   private void genereteSomeVisitsForPatient(Set<Visit> visits, String userName) {

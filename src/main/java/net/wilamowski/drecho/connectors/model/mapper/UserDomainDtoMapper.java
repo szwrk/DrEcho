@@ -26,14 +26,14 @@ public class UserDomainDtoMapper {
 
   public static User toDomain(UserDto userDto) {
     return User.builder()
-            .login(userDto.getLogin())
-            .password(userDto.getPassword())
-            .firstName(userDto.getFirstName())
-            .surname(userDto.getSurname())
-            .titlePrefix(userDto.getTitlePrefix())
-            .specialization(userDto.getSpecialization())
-            .licenceNumber(userDto.getLicenceNumber())
-            .isBlocked(userDto.getIsBlocked())
+            .login(userDto.login())
+            .password(userDto.password())
+            .firstName(userDto.firstName())
+            .surname(userDto.surname())
+            .titlePrefix(userDto.titlePrefix())
+            .specialization(userDto.specialization())
+            .licenceNumber(userDto.licenceNumber())
+            .isBlocked(userDto.isBlocked())
             .build();
   }
 }

@@ -9,23 +9,24 @@ import net.wilamowski.drecho.shared.dto.UserDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UserService implements UserModel {
-  private static final Logger logger = LogManager.getLogger(UserService.class);
+public class ConnectorUser implements UserModel {
+  private static final Logger logger = LogManager.getLogger( ConnectorUser.class);
   private final UserRepository userRepository;
 
-  public UserService(UserRepository repository) {
+
+  public ConnectorUser(UserRepository repository) {
     logger.debug(
         "[SERVICE] Initializing UserService {} ...", repository.getClass().getSimpleName());
     this.userRepository = repository;
   }
-
+  @Override
   public void addUser(UserDto dto) {
-    logger.debug("[SERVICE] Adding data... {}", dto.getLogin());
+    logger.debug("[SERVICE] Adding data... {}", dto.login());
     User user = UserDomainDtoMapper.toDomain( dto );
     userRepository.addUser(user);
   }
-
-  public Optional<UserDto> getUserByLogin(String login) {
+  @Override
+  public Optional<UserDto> findUserByLogin(String login) {
     logger.debug("[SERVICE] Finding user by login: {}", login);
 
     if (login == null || login.isEmpty()) {
@@ -43,5 +44,14 @@ public class UserService implements UserModel {
       logger.debug("[SERVICE] No user found for login '{}'", login);
       return Optional.empty();
     }
+  }
+
+  public Optional<User> findDomainUserByLogin(String login) {
+    logger.debug("[SERVICE] Finding user by login: {}", login);
+    if (login == null || login.isEmpty()) {
+      logger.error("[SERVICE] Login cannot be null or empty");
+      return Optional.empty();
+    }
+    return userRepository.findByLogin(login);
   }
 }

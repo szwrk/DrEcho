@@ -13,7 +13,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.DefaultStringConverter;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
@@ -65,7 +65,7 @@ public class SettingsController
   }
 
   @Override
-  public void initializeViewModels(ViewModels factory) {
+  public void initializeViewModels(ViewModelConfiguration factory) {
     this.viewModel = factory.settingsViewModel();
   }
 

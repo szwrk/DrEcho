@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
@@ -136,8 +136,8 @@ public class PatientsSearcherController
   }
 
   @Override
-  public void initializeViewModels(ViewModels viewModelsFactory) {
-    this.patientSearcherViewModel = viewModelsFactory.patientViewModel();
+  public void initializeViewModels(ViewModelConfiguration viewModelConfigurationFactory) {
+    this.patientSearcherViewModel = viewModelConfigurationFactory.patientViewModel();
   }
 
   @Override
@@ -375,7 +375,7 @@ public class PatientsSearcherController
     selectedPatientProperty.addListener(
         (obs, oldVal, newVal) -> {
           if (newVal != null) {
-            logger.debug("Selected patient: {}", newVal.getId());
+            logger.debug("[CONTROLLER] Patient info box update: {}", newVal.getId());
             nameValueLabel.textProperty().set(newVal.getName().get());
             lastNameValueLabel.textProperty().set(newVal.getLastName().get());
             peselValueLabel.textProperty().set(newVal.getPesel().get());
@@ -390,7 +390,11 @@ public class PatientsSearcherController
         .addListener(
             (observable, old, newValue) -> {
               if (newValue != null) {
-                patientSearcherViewModel.setCurrentPatient(newValue);
+                  logger.debug("[CONTROLLER] User choose patient: {}", newValue.getId());
+                  patientSearcherViewModel.setCurrentPatient(newValue);
+                  logger.debug("[CONTROLLER] Patient searcher - onSelectItemUpdateCurrentPatient {}", patientSearcherViewModel.getSelectedPatient());
+              } else {
+                  logger.debug("[CONTROLLER] User choose patient... new value is null");
               }
             });
   }

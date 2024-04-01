@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.ToString;
-import net.wilamowski.drecho.connectors.model.PatientService;
+import net.wilamowski.drecho.connectors.model.ConnectorPatient;
 import net.wilamowski.drecho.connectors.model.mapper.PatientDomainDtoMapper;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.Constraint;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.ValidationExceptions;
@@ -19,12 +19,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @ToString
-public class PatientStandaloneService implements PatientService {
-  private static final Logger logger = LogManager.getLogger(PatientStandaloneService.class);
+public class ConnectorPatientStandalone implements ConnectorPatient {
+  private static final Logger logger = LogManager.getLogger( ConnectorPatientStandalone.class);
   private final PatientRepository patientRepository;
   private final VersionedPatientRepository versionedPatientRepository;
 
-  public PatientStandaloneService(
+  public ConnectorPatientStandalone(
       PatientRepository patientRepository, VersionedPatientRepository versionedPatientRepository) {
     this.patientRepository = patientRepository;
     this.versionedPatientRepository = versionedPatientRepository;
@@ -164,5 +164,10 @@ public class PatientStandaloneService implements PatientService {
       String errorsMsg = "- " + String.join("\n - ", errorList);
       throw new ValidationExceptions(errorsMsg);
     }
+  }
+
+  @Override
+  public Optional<Patient> findById(Long patientId) {
+    return patientRepository.findById( patientId );
   }
 }

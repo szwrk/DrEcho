@@ -1,21 +1,21 @@
 package net.wilamowski.drecho.connectors.model.standalone.service.authenticator;
 
 import java.util.*;
-import net.wilamowski.drecho.connectors.model.AuthenticatorService;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
+import net.wilamowski.drecho.connectors.model.ConnectorAuthenticator;
+import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
 import net.wilamowski.drecho.shared.auth.AuthenticationResults;
 import net.wilamowski.drecho.shared.dto.UserDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class AuthenticatorServiceImpl implements AuthenticatorService {
+public class ConnectorAuthenticatorImpl implements ConnectorAuthenticator {
 
-  private static final Logger log = LogManager.getLogger(AuthenticatorServiceImpl.class);
+  private static final Logger log = LogManager.getLogger( ConnectorAuthenticatorImpl.class);
 
-  private final UserService userService;
+  private final ConnectorUser connectorUser;
 
-  public AuthenticatorServiceImpl(UserService userService) {
-    this.userService = userService;
+  public ConnectorAuthenticatorImpl(ConnectorUser connectorUser) {
+    this.connectorUser = connectorUser;
   }
 
   @Override
@@ -24,7 +24,7 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
     log.debug("[SERVICE] Perform authentication for user: {}", credential.getLogin());
     Objects.requireNonNull(credential);
     String            inputLogin        = credential.getLogin();
-    Optional<UserDto> optionalFoundUser = userService.getUserByLogin(inputLogin);
+    Optional<UserDto> optionalFoundUser = connectorUser.findUserByLogin(inputLogin);
 
     AuthenticationResults authResults;
 
@@ -46,10 +46,10 @@ public class AuthenticatorServiceImpl implements AuthenticatorService {
   private static AuthenticationResults checkUserPassword(UserDto foundUser, Credentials credentials) {
     log.trace("[SERVICE] Password checking...");
     AuthenticationResults authResults;
-    if (foundUser.getPassword().equals(credentials.getPassword())) {
+    if (foundUser.password().equals(credentials.getPassword())) {
       log.debug("[SERVICE] Password is correct");
-      authResults = AuthenticationResults.createConfirmAuthResults(foundUser.getLogin());
-      log.info("[SERVICE] Session created for user: {}", foundUser.getLogin());
+      authResults = AuthenticationResults.createConfirmAuthResults(foundUser.login());
+      log.info("[SERVICE] Session created for user: {}", foundUser.login());
     } else {
       log.trace("[SERVICE] Password isn't correct");
       authResults =

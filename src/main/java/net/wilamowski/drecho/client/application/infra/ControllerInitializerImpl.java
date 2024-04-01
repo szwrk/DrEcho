@@ -22,12 +22,12 @@ import org.apache.logging.log4j.Logger;
 public class ControllerInitializerImpl implements ControllerInitializer {
   public static final String DEBUG_CONTROLS_HOVER_TOOLTIPS = "user.debug.controls-hover-tooltips";
   private static final Logger logger = LogManager.getLogger(ControllerInitializerImpl.class);
-  private final ViewModels viewModels;
+  private final ViewModelConfiguration viewModelConfiguration;
 
-  public ControllerInitializerImpl(ViewModels viewModels) {
+  public ControllerInitializerImpl(ViewModelConfiguration viewModelConfiguration) {
     Objects.requireNonNull(Lang.getBundle(), "Bundle is null");
-    Objects.requireNonNull(viewModels, "ViewModels is null");
-    this.viewModels = viewModels;
+    Objects.requireNonNull( viewModelConfiguration , "ViewModels is null");
+    this.viewModelConfiguration = viewModelConfiguration;
   }
 
   @Override
@@ -59,7 +59,7 @@ public class ControllerInitializerImpl implements ControllerInitializer {
 
     if (controller instanceof ViewModelsInitializer viewModelsInitializer) {
       viewModelsInitializer.initializeViewModels(
-          Objects.requireNonNull(viewModels, "View Model factory is null!"));
+          Objects.requireNonNull( viewModelConfiguration , "View Model factory is null!"));
     } else {
       logger.debug(
           "Controller {} is not instance of {} ",

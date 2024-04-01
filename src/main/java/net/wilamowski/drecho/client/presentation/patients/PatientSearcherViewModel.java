@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.connectors.model.PatientService;
+import net.wilamowski.drecho.connectors.model.ConnectorPatient;
 import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +25,7 @@ public class PatientSearcherViewModel {
   private static final Logger logger = LogManager.getLogger(PatientSearcherViewModel.class);
   private final int AUTOSEARCH_NUMBER_LENGTH_TRIGGER;
   private final int AUTOSEARCH_TEXT_LENGTH_TRIGGER;
-  private final PatientService patientService;
+  private final ConnectorPatient connectorPatient;
 
   @ToString.Exclude
   private final ObservableList<PatientVM> patients = FXCollections.observableArrayList();
@@ -35,8 +35,8 @@ public class PatientSearcherViewModel {
 
   private final SimpleStringProperty searchTextProperty = new SimpleStringProperty();
 
-  public PatientSearcherViewModel(PatientService patientService) {
-    this.patientService = patientService;
+  public PatientSearcherViewModel(ConnectorPatient connectorPatient) {
+    this.connectorPatient = connectorPatient;
     AUTOSEARCH_NUMBER_LENGTH_TRIGGER =
         Integer.parseInt(
             ClientPropertyReader.getString(
@@ -98,7 +98,7 @@ public class PatientSearcherViewModel {
 
   private int handleSearchByPesel(String searchInput) {
     logger.trace("[VM] Entering handle search by pesel code");
-    List<PatientDto> fetchedPatients = patientService.findByPesel(searchInput, 0);
+    List<PatientDto> fetchedPatients = connectorPatient.findByPesel(searchInput, 0);
     if (fetchedPatients.size() == 1) {
       logger.debug("[VM] Service return values: {}", fetchedPatients.size());
       List<PatientVM> patientsFxBean = PatientDtoVmMapper.toListToFx(fetchedPatients);
@@ -122,7 +122,7 @@ public class PatientSearcherViewModel {
   private int handleSearchByFullName(String searchInput) {
     logger.trace("Entering handle search by full name...");
 //    List<Patient> fetchedPatients = patientService.findByLastName(searchInput, 0);
-    List<PatientDto> foundedPatients = patientService.findByFullName(searchInput, 0);
+    List<PatientDto> foundedPatients = connectorPatient.findByFullName(searchInput, 0);
     int           fetchedPatientNumber            = foundedPatients.size( );
     if (fetchedPatientNumber==0) {
       logger.trace("Fetched patient: 0");
@@ -181,7 +181,7 @@ public class PatientSearcherViewModel {
   public void initializeSearchValue(String text) {}
 
   public int countPatientByAnyInput(String searchInput) {
-    return patientService.counterByFullName(searchInput);
+    return connectorPatient.counterByFullName(searchInput);
   }
 
   public Property<String> searchValueProperty() {

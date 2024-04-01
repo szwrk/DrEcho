@@ -2,7 +2,7 @@ package net.wilamowski.drecho.connectors.model.standalone.persistance.impl.inmem
 
 import java.util.*;
 import lombok.ToString;
-import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
+import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
 import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
 import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.DictionaryBuilder;
 import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
@@ -10,15 +10,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @ToString
-public class SimpleDictionariesServiceInMemory implements SimpleDictionariesService {
+public class ConnectorSimpleDictionariesInMemory implements ConnectorSimpleDictionaries {
 
   private static final Logger logger =
-      LogManager.getLogger(SimpleDictionariesServiceInMemory.class);
+      LogManager.getLogger( ConnectorSimpleDictionariesInMemory.class);
   private final Set<net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary>
       repository;
   private final Map<String, String> dictionaries = new HashMap<>();
 
-  public SimpleDictionariesServiceInMemory() {
+  public ConnectorSimpleDictionariesInMemory() {
     this.repository = new HashSet<>();
     loadEchoTteDictionaries();
     laodProvidersUsers();

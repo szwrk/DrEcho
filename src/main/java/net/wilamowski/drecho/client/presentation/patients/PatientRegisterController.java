@@ -15,7 +15,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
@@ -191,7 +191,7 @@ public class PatientRegisterController
   }
 
   @Override
-  public void initializeViewModels(ViewModels factory) {
+  public void initializeViewModels(ViewModelConfiguration factory) {
     this.viewModel = factory.patientRegistrationViewModel();
   }
 

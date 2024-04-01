@@ -14,8 +14,8 @@ import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.ListLoader;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
 import net.wilamowski.drecho.client.presentation.examinations.general.GeneralExaminationController;
-import net.wilamowski.drecho.connectors.model.ModelEchoTte;
-import net.wilamowski.drecho.connectors.model.SimpleDictionariesService;
+import net.wilamowski.drecho.connectors.model.ConnectorEchoTte;
+import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +28,8 @@ public class EchoTteViewModel {
   public GeneralExaminationController generalExaminationController;
   private ResourceBundle bundle;
   private CalculatorViewModel calculator;
-  private ModelEchoTte dataModel;
-  private SimpleDictionariesService dictService;
+  private ConnectorEchoTte dataModel;
+  private ConnectorSimpleDictionaries dictService;
 
   private ObjectProperty<EchoTte> echoTteProperty;
   /* Comboboxes, list of values and current choose item*/
@@ -63,7 +63,7 @@ public class EchoTteViewModel {
 
   private EchoTteViewModel() {}
 
-  public EchoTteViewModel(ModelEchoTte dataModel, SimpleDictionariesService service) {
+  public EchoTteViewModel(ConnectorEchoTte dataModel, ConnectorSimpleDictionaries service) {
     this.dataModel = dataModel;
     this.calculator = new CalculatorViewModel();
     this.dictService = service;

@@ -8,5 +8,5 @@ package net.wilamowski.drecho.client.application.infra;
  *     associated view models used by the controller.
  */
 public interface ViewModelsInitializer {
-  void initializeViewModels(ViewModels factory);
+  void initializeViewModels(ViewModelConfiguration factory);
 }

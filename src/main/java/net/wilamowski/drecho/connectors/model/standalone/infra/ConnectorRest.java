@@ -1,9 +1,9 @@
-package net.wilamowski.drecho.client.application.factory;
+package net.wilamowski.drecho.connectors.model.standalone.infra;
 
-import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsStandaloneModel;
-import net.wilamowski.drecho.client.presentation.main.MainModel;
+import net.wilamowski.drecho.client.presentation.examinations.chooser.ConnectorExamination;
+import net.wilamowski.drecho.client.presentation.main.ConnectorMainModel;
 import net.wilamowski.drecho.connectors.model.*;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.UserService;
+import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
 import org.apache.commons.lang.NotImplementedException;
 
 /**
@@ -18,47 +18,47 @@ public class ConnectorRest extends ConnectorLayer {
   }
 
   @Override
-  public ModelEchoTte echoTteModel() {
+  public ConnectorEchoTte echoTteModel() {
     return null;
   }
 
   @Override
-  public Configuration settingsModel() {
+  public ConnectorConfiguration settingsModel() {
     return null;
   }
 
   @Override
-  public UserService userFacadeModel() {
+  public ConnectorUser userModel() {
     return null;
   }
 
   @Override
-  public AuthenticatorService authenticatorModel() {
+  public ConnectorAuthenticator authenticatorModel() {
     return null;
   }
 
   @Override
-  public MainModel mainDataModel() {
+  public ConnectorMainModel mainDataModel() {
     return null;
   }
 
   @Override
-  public PatientService patientModel() {
+  public ConnectorPatient patientModel() {
     return null;
   }
 
   @Override
-  public SimpleDictionariesService dictionariesService() {
+  public ConnectorSimpleDictionaries dictionariesService() {
     return null;
   }
 
   @Override
-  public ExaminationsStandaloneModel examinationsModel() {
+  public ConnectorExamination examinationsModel() {
     return null;
   }
 
   @Override
-  public VisitModel visitModel() {
+  public ConnectorVisit visitModel() {
     return null;
   }
 }

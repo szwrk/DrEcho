@@ -3,14 +3,14 @@ package net.wilamowski.drecho.connectors.model.standalone.domain.echotte;
 import java.util.List;
 import java.util.Optional;
 import lombok.ToString;
-import net.wilamowski.drecho.connectors.model.ModelEchoTte;
+import net.wilamowski.drecho.connectors.model.ConnectorEchoTte;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.EchoTteRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @ToString
-public class EchoTteService implements ModelEchoTte {
-  private static final Logger logger = LogManager.getLogger(EchoTteService.class);
+public class EchoTteService implements ConnectorEchoTte {
+  private static final Logger logger = LogManager.getLogger( EchoTteService.class);
 
   private final EchoTteRepository repository;
 

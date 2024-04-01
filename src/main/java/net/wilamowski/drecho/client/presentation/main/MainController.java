@@ -21,7 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
@@ -85,10 +85,10 @@ public class MainController
   }
 
   @Override
-  public void initializeViewModels(ViewModels viewModels) {
+  public void initializeViewModels(ViewModelConfiguration viewModelConfiguration) {
     logger.traceEntry();
-    this.mainViewModel = viewModels.mainViewModel();
-    this.settingsViewModel = viewModels.settingsViewModel();
+    this.mainViewModel = viewModelConfiguration.mainViewModel();
+    this.settingsViewModel = viewModelConfiguration.settingsViewModel();
     logger.traceExit();
   }
 

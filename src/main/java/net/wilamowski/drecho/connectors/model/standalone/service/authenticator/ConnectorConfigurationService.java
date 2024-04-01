@@ -2,16 +2,16 @@ package net.wilamowski.drecho.connectors.model.standalone.service.authenticator;
 
 import java.util.List;
 import net.wilamowski.drecho.connectors.configuration.SettingValue;
-import net.wilamowski.drecho.connectors.model.Configuration;
+import net.wilamowski.drecho.connectors.model.ConnectorConfiguration;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.ConfigurationRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ConfigurationService implements Configuration {
-  private static final Logger logger = LogManager.getLogger(ConfigurationService.class);
+public class ConnectorConfigurationService implements ConnectorConfiguration {
+  private static final Logger logger = LogManager.getLogger( ConnectorConfigurationService.class);
   private final ConfigurationRepository repository;
 
-  public ConfigurationService(ConfigurationRepository repository) {
+  public ConnectorConfigurationService(ConfigurationRepository repository) {
     this.repository = repository;
     logger.debug(
         "[SERVICE] Initializing ConfigurationService {} {} ...",

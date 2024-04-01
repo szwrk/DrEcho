@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
@@ -51,7 +51,7 @@ public class EchoController
   private final Converters converterFactory;
   public String finalKeyCombinationDebug;
   private EchoTteViewModel viewModel;
-  private ViewModels factory;
+  private ViewModelConfiguration factory;
   private URL location;
   @FXML private VBox aortal;
   @FXML private TextField av_acc_rate_pressure_half_time;
@@ -195,7 +195,7 @@ public class EchoController
   }
 
   @Override
-  public void initializeViewModels(ViewModels factory) {
+  public void initializeViewModels(ViewModelConfiguration factory) {
     logger.traceEntry();
     this.factory = factory;
     this.viewModel = factory.exhaminationTteViewModel();

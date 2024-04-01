@@ -4,14 +4,14 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import net.wilamowski.drecho.client.application.exceptions.MyDefaultUncaughtExceptionHandler;
-import net.wilamowski.drecho.client.application.factory.ConnectorLayer;
-import net.wilamowski.drecho.client.application.factory.DeploymentType;
-import net.wilamowski.drecho.client.application.factory.ModelLayerFactory;
+import net.wilamowski.drecho.client.application.exceptions.old.MyDefaultUncaughtExceptionHandler;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
+import net.wilamowski.drecho.connectors.model.standalone.infra.ConnectorLayer;
+import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
+import net.wilamowski.drecho.connectors.model.standalone.infra.ModelLayerFactory;
 import net.wilamowski.drecho.shared.auth.Session;
 import net.wilamowski.drecho.shared.bundle.Lang;
 import net.wilamowski.drecho.shared.bundle.ResourceBundleFactory;
@@ -108,9 +108,9 @@ public class ApplicationRoot extends Application {
 
   private void initializeViewHandler(ConnectorLayer backend) {
     log.debug("Initializing GeneralViewHandler...");
-    String globalStyleName = ClientPropertyReader.getString("user.style.set");
-    ViewModels viewModels = new ViewModels(backend);
-    generalViewHandler = GeneralViewHandler.instance(globalStyleName, viewModels, this);
+    String                 globalStyleName        = ClientPropertyReader.getString("user.style.set");
+    ViewModelConfiguration viewModelConfiguration = new ViewModelConfiguration(backend);
+    generalViewHandler = GeneralViewHandler.instance(globalStyleName, viewModelConfiguration , this);
     log.debug("Initializing GeneralViewHandler... DONE");
   }
 

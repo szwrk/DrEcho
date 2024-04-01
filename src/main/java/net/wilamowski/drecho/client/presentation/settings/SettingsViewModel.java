@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.SettingVmMapper;
 import net.wilamowski.drecho.connectors.configuration.SettingValue;
-import net.wilamowski.drecho.connectors.model.Configuration;
+import net.wilamowski.drecho.connectors.model.ConnectorConfiguration;
 
 /**
  * @author Arkadiusz Wilamowski
@@ -16,10 +16,10 @@ import net.wilamowski.drecho.connectors.model.Configuration;
  */
 @ToString
 public class SettingsViewModel {
-  private final Configuration model;
+  private final ConnectorConfiguration model;
   private ObservableList<SettingPropertyFx> settingsFx = FXCollections.observableArrayList();
 
-  public SettingsViewModel(Configuration model) {
+  public SettingsViewModel(ConnectorConfiguration model) {
     this.model = model;
     init();
   }

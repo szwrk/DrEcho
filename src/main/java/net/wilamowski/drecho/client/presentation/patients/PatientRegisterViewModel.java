@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
-import net.wilamowski.drecho.connectors.model.PatientService;
+import net.wilamowski.drecho.connectors.model.ConnectorPatient;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.validations.ValidationExceptions;
 import net.wilamowski.drecho.shared.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 @ToString
 public class PatientRegisterViewModel {
   private static final Logger logger = LogManager.getLogger(PatientRegisterViewModel.class);
-  private final PatientService patientService;
+  private final ConnectorPatient connectorPatient;
   private final BooleanProperty addPatientModeDisable = new SimpleBooleanProperty(true);
   private final BooleanProperty isEditPatientMode = new SimpleBooleanProperty(true);
   private final BooleanProperty disableCitizenCodeField = new SimpleBooleanProperty(false);
@@ -47,8 +47,8 @@ public class PatientRegisterViewModel {
   }
 
 
-  public PatientRegisterViewModel(PatientService patientService) {
-    this.patientService = patientService;
+  public PatientRegisterViewModel(ConnectorPatient connectorPatient) {
+    this.connectorPatient = connectorPatient;
     this.currentPatientVM = PatientVM.createEmptyPatientFx();
     this.dataEntryMode = PatientRegisterDataEntryMode.READONLY;
   }
@@ -57,7 +57,7 @@ public class PatientRegisterViewModel {
     logger.trace("[VM] New patient registration... START");
     PatientDto patientToRegister = PatientDtoVmMapper.toDto( currentPatientVM );
     try {
-      Optional<PatientDto> createdPatient = patientService.createPatientRecord(patientToRegister);
+      Optional<PatientDto> createdPatient = connectorPatient.createPatientRecord(patientToRegister);
       if (createdPatient.isPresent()) {
         PatientVM createdPatentVm = PatientDtoVmMapper.toVm(createdPatient.get());
         removeCurrentPatient( );
@@ -139,7 +139,7 @@ public class PatientRegisterViewModel {
     logger.trace("[VM] Updating patient...");
     PatientDto patientToRegister = PatientDtoVmMapper.toDto( currentPatientVM );
     try {
-      Optional<PatientDto> createdPatient = patientService.updatePatient(patientToRegister);
+      Optional<PatientDto> createdPatient = connectorPatient.updatePatient(patientToRegister);
       if (createdPatient.isPresent()) {
         PatientVM fx = PatientDtoVmMapper.toVm(createdPatient.get());
         return Optional.of(fx);

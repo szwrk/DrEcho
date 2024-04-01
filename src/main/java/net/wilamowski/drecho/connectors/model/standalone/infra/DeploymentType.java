@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.client.application.factory;
+package net.wilamowski.drecho.connectors.model.standalone.infra;
 
 import lombok.ToString;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;

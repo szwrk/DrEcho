@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -19,7 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
@@ -68,7 +69,7 @@ public class ExaminationsChooserController
   private GeneralViewHandler viewHandler;
 
   private ExaminationsChooserViewModel examinationsChooserViewModel;
-  private ViewModels factory;
+  private ViewModelConfiguration factory;
   private Iterator<Integer> tempIdIterator;
 
   public ExaminationsChooserController() {
@@ -217,7 +218,8 @@ public class ExaminationsChooserController
     configureSelectedEditColumn();
     configureSelectedPrintColumn();
     configureSelectedDeleteColumn();
-    initExamDictionary();
+    Platform.runLater( this::initExamDictionary );
+
   }
 
   private void configureSelectedDeleteColumn() {
@@ -304,7 +306,7 @@ public class ExaminationsChooserController
   }
 
   @Override
-  public void initializeViewModels(ViewModels factory) {
+  public void initializeViewModels(ViewModelConfiguration factory) {
     this.factory = factory;
     this.examinationsChooserViewModel = factory.examinationsChooserViewModel();
   }

@@ -7,8 +7,8 @@ import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Posit
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public interface SimpleDictionariesService {
-  Logger logger = LogManager.getLogger(SimpleDictionariesService.class);
+public interface ConnectorSimpleDictionaries {
+  Logger logger = LogManager.getLogger( ConnectorSimpleDictionaries.class);
 
   void addDictionary(Dictionary dictionary);
 

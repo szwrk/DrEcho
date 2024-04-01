@@ -17,9 +17,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import net.wilamowski.drecho.client.ApplicationRoot;
-import net.wilamowski.drecho.client.application.factory.DeploymentType;
+import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModels;
+import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
@@ -147,7 +147,7 @@ public class LoginController
   }
 
   @Override
-  public void initializeViewModels(ViewModels factory) {
+  public void initializeViewModels(ViewModelConfiguration factory) {
     loginViewModel = factory.loginViewModel();
   }
 

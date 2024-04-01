@@ -3,8 +3,8 @@ package net.wilamowski.drecho.client.presentation.main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class MainModelStandalone implements MainModel {
-  private static final Logger log = LogManager.getLogger(MainModelStandalone.class);
+public class ConnectorMainModelStandalone implements ConnectorMainModel {
+  private static final Logger log = LogManager.getLogger( ConnectorMainModelStandalone.class);
   private String fieldValue;
 
   //    private MainModelRepository repository;
