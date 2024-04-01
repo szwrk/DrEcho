@@ -115,7 +115,7 @@ public class QuickVisitController
     logger.trace("[CONTROLLER] Handling successful confirmation of visit response...");
     UserAlert alert = new UserAlert();
     alert.showInfo(
-        Lang.getString("u.004.header"), Lang.getString("u.004.msg") + "\n" + visitDto.get());
+        Lang.getString("u.004.header"), Lang.getString("u.004.msg") + "\nID: " + visitDto.get().patientId(), visitDto.get().toString());
     tabPane.getSelectionModel().select(examinationsTab);
   }
 

@@ -85,7 +85,7 @@ public class KeyDebugHandlerGui implements DebugHandler {
       handleError(e, "e.999.header", "e.999.msg");
     }
   }
-
+  
   private void handleError(Exception e, String headerKey, String contentKey) {
     logger.error("An error occurred: ", e.getMessage(), e);
     String header = Lang.getString(headerKey);

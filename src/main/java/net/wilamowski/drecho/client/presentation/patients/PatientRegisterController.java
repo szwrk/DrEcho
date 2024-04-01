@@ -87,7 +87,7 @@ public class PatientRegisterController
       if (newPatient.isPresent()){
         PatientVM patient = newPatient.get();
         UserAlert userAlert = new UserAlert();
-        userAlert.showInfo("Successfully added patient", "New patient data:\n" + addPatientInfo(patient));
+        userAlert.showInfo("Successfully", "Added patient " + patient.getLastName()+" "+patient.getName()+" " + patient.getDateBirth(), responseInfo(patient));
         clearFields();
       } else {
         UserAlert userAlert = new UserAlert();
@@ -231,11 +231,11 @@ public class PatientRegisterController
   private void handleSuccessAddNewPatient(PatientVM patient) {
     UserAlert userAlert = new UserAlert();
     userAlert.showInfo(
-            Lang.getString("u.003.header"),  Lang.getString("e.003.msg") + "\n" + addPatientInfo( patient ));
+            Lang.getString("u.003.header"),  Lang.getString("e.003.msg") + "\n" + responseInfo( patient ));
     logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patient );
   }
 
-  private static String addPatientInfo(PatientVM patientVM) {
+  private static String responseInfo(PatientVM patientVM) {
     StringBuilder infoBuilder = new StringBuilder();
     Long id = patientVM.getId().getValue();
     String name = patientVM.getName().getValue();

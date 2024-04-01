@@ -69,10 +69,20 @@ public class VisitRepositoryInMemory implements VisitRepository {
   @Override
   public Optional<Visit> save(Visit visit) {
     logger.trace( "[REPOSITORY] Entering save visit" );
-    boolean add = visits.add( visit );
+    long lastId = visits.size();
+    long nextId = lastId + 1;
+    Visit visitWithNewId = Visit.builder( )
+            .id( nextId )
+            .patient( visit.patient( ) )
+            .selectedPerformer( visit.selectedPerformer( ) )
+            .selectedRegistrant( visit.selectedRegistrant( ) )
+            .viewStartDateTime( visit.viewStartDateTime( ) )
+            .realizationDateTime( visit.realizationDateTime( ) )
+            .build( );
+    boolean add = visits.add( visitWithNewId );
     if (add){
       logger.trace( "[REPOSITORY] Exiting save visit" );
-      return Optional.of( visit );
+      return Optional.of( visitWithNewId );
     } else {
       logger.trace( "[REPOSITORY] Exiting save visit" );
       return Optional.empty();
