@@ -7,8 +7,8 @@ import net.wilamowski.drecho.client.presentation.customs.ModalController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Modal {
-  private static final Logger logger = LogManager.getLogger( Modal.class);
+public class FxmlModal {
+  private static final Logger logger = LogManager.getLogger( FxmlModal.class);
   private static final String MODAL_NAME_PATIENT_SEARCHER = "Modal";
   private final GeneralViewHandler viewHandler;
   private final Stage modal;
@@ -21,7 +21,7 @@ public class Modal {
   private Stage owner;
   private ModalController modalController;
 
-  private Modal(GeneralViewHandler handler, Parent modalRoot, String pathToSubview) {
+  private FxmlModal(GeneralViewHandler handler, Parent modalRoot, String pathToSubview) {
     this.modalRoot = modalRoot;
     this.viewHandler = handler;
     this.modal = new Stage();
@@ -48,10 +48,10 @@ public class Modal {
     this.owner = (Stage) modalRoot.getScene().getWindow();
   }
 
-  public static Modal setupPatientSearcherView(
+  public static FxmlModal setupPatientSearcherView(
       GeneralViewHandler handler, Parent windowOwner) {
     final String pathToSubview = "patient/PatientsSearcherView.fxml";
-    return new Modal(handler, windowOwner, pathToSubview);
+    return new FxmlModal(handler, windowOwner, pathToSubview);
   }
 
   public void showWithBlur() {

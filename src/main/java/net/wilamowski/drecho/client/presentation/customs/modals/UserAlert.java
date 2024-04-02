@@ -1,9 +1,13 @@
 package net.wilamowski.drecho.client.presentation.customs.modals;
 
+import java.util.*;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.stage.Stage;
 import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,87 +17,115 @@ import org.apache.logging.log4j.Logger;
  * Should contain internatiolization.
  */
 public class UserAlert {
+  public static final String INFO_TITLE = Lang.getString("ui.alert.info.title");
+  public static final String WARN_TITLE = Lang.getString("ui.alert.warn.title");
   private static final Logger log = LogManager.getLogger(UserAlert.class);
+  private final Alert alert;
 
-  public void showInfo(String header, String content) {
-    String title = Lang.getString("ui.alert.info.title");
-    Alert alert = createBaseAlert(Alert.AlertType.INFORMATION, title, header, content, "");
-    showAndWaitWithLogging(alert, header, content);
+  private UserAlert(Builder builder) {
+    this.alert = builder.alert;
+    this.alert.setTitle(builder.title);
+    this.alert.setHeaderText(builder.header);
+    this.alert.setContentText(builder.content);
+
+    if (builder.details != null && !builder.details.isEmpty()) {
+      addDetailsTextArea(builder.details);
+    }
   }
 
-  public void showInfo(String header, String content, String hiddenDetails) {
-    String title = Lang.getString("ui.alert.info.title");
-    Alert alert = createBaseAlert(Alert.AlertType.INFORMATION, title, header, content, hiddenDetails);
-    showAndWaitWithLogging(alert, header, content);
+  public static UserAlert simpleInfo(String header, String content) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    return new Builder(alert)
+            .title(INFO_TITLE)
+            .header(header)
+            .content(content)
+            .build();
   }
 
-  private void showAndWaitWithLogging(Alert alert, String header, String content) {
-    alert
-        .showAndWait()
-        .filter(buttonType -> buttonType == ButtonType.OK)
-        .ifPresent(result -> log.debug("User accepted alert: {}, {}", header, content));
+  public static UserAlert simpleInfo(String header, String content, String details) {
+    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    return new Builder(alert)
+            .title(INFO_TITLE)
+            .header(header)
+            .content(content)
+            .details(details)
+            .build();
   }
 
-  private Alert createBaseAlert(
-    Alert.AlertType alertType, String title, String header, String bodyText, String detailsText) {
+  private static EventHandler<ActionEvent> closeAlert(Alert alert) {
+    return x -> ((Stage) alert.getDialogPane( ).getScene( ).getWindow( )).close( );
+  }
 
-    Alert alert = new Alert(alertType);
-
-        Button button = new Button();
-    button.setText("OK");
-    button.setOnAction(x -> alert.getOwner().hide());
-    alert.setTitle(title);
-    alert.setHeaderText(header);
-    alert.setContentText(bodyText);
-    alert.getDialogPane().getChildren().add(button);
-
+  private void addDetailsTextArea(String detailsText) {
     String detailsLabelName = "Details";
     javafx.scene.control.Label stackTraceLabel = new javafx.scene.control.Label(detailsLabelName);
-    TextArea                   detailsTextArea        = new TextArea(detailsText);
+    TextArea detailsTextArea = new TextArea(detailsText);
+    configureDetailsTextArea(detailsTextArea);
+
+    GridPane expContent = new GridPane();
+    expContent.add(stackTraceLabel, 0, 0);
+    expContent.add(detailsTextArea, 0, 1);
+    alert.getDialogPane().setExpandableContent(expContent);
+  }
+
+  private void configureDetailsTextArea(TextArea detailsTextArea) {
     detailsTextArea.setEditable(false);
     detailsTextArea.setWrapText(true);
     detailsTextArea.setMaxWidth(Double.MAX_VALUE);
     detailsTextArea.setMaxHeight(Double.MAX_VALUE);
     GridPane.setVgrow(detailsTextArea, Priority.ALWAYS);
     GridPane.setHgrow(detailsTextArea, Priority.ALWAYS);
-    GridPane expContent = new GridPane();
-    expContent.add(stackTraceLabel, 0, 0);
-    expContent.add(detailsTextArea, 0, 1);
-    alert.getDialogPane().setExpandableContent(expContent);
-    return alert;
   }
 
-  public void showWarn(String header, String content) {
-    String title = Lang.getString("ui.alert.warn.title");
-    Alert alert = createBaseAlert(Alert.AlertType.WARNING, title, header, content, "");
-    Platform.runLater(() -> showAndWaitWithLogging(alert, header, content));
+
+  public void showAndWait() {
+    Platform.runLater(
+        () -> {
+          Optional<ButtonType> result = alert.showAndWait();
+          result.ifPresent(
+              buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                  log.debug(
+                      "User accepted alert: {}, {}", alert.getHeaderText(), alert.getContentText());
+                }
+              });
+        });
   }
 
-  public void showWarnConfirmOrLeave(
-      String header,
-      String content,
-      String confirmButton,
-      Runnable confirmAction,
-      String cancelButtonName,
-      Runnable cancelAction) {
-    String title = Lang.getString("ui.alert.warn.title");
-    Alert alert = createBaseAlert(Alert.AlertType.WARNING, title, header, content, "");
-    Platform.runLater(() -> showAndWaitWithLogging(alert, header, content));
+  public static class Builder {
+    private final Alert alert;
+    private String title;
+    private String header;
+    private String content;
+    private String details;
+    private Map<String, Runnable> buttons = new HashMap<>( );
 
-    ButtonType confirmButtonType = new ButtonType(confirmButton, ButtonBar.ButtonData.OK_DONE);
-    ButtonType leaveButtonType =
-        new ButtonType(cancelButtonName, ButtonBar.ButtonData.CANCEL_CLOSE);
-    alert.getButtonTypes().setAll(confirmButtonType, leaveButtonType);
+    public Builder(Alert alert) {
+      this.alert = alert;
+    }
 
-    alert
-        .showAndWait()
-        .ifPresent(
-            buttonType -> {
-              if (buttonType == confirmButtonType) {
-                confirmAction.run();
-              } else if (buttonType == leaveButtonType) {
-                cancelAction.run();
-              }
-            });
+    public Builder title(String title) {
+      this.title = title;
+      return this;
+    }
+
+    public Builder header(String header) {
+      this.header = header;
+      return this;
+    }
+
+    public Builder content(String content) {
+      this.content = content;
+      return this;
+    }
+
+    public Builder details(String details) {
+      this.details = details;
+      return this;
+    }
+
+    public UserAlert build() {
+      return new UserAlert(this);
+    }
   }
 }
