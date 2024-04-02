@@ -94,9 +94,7 @@ public class QuickVisitController
       ExceptionAlert alert = ExceptionAlert.create();
       alert.showError(vce, vce.getHeader(), vce.getContent());
     }
-    if (visitDtoResponseOptional.isPresent()) {
-      handleSuccessfulVisitConfirmation(visitDtoResponseOptional);
-    }
+      visitDtoResponseOptional.ifPresent( this::handleSuccessfulVisitConfirmation );
   }
 
   private VisitViewModel visitVM() {
@@ -111,7 +109,7 @@ public class QuickVisitController
         System.identityHashCode(visitController));
   }
 
-  private void handleSuccessfulVisitConfirmation(Optional<VisitDtoResponse> visitDto) {
+  private void handleSuccessfulVisitConfirmation(VisitDtoResponse visitDto) {
     logger.trace("[CONTROLLER] Handling successful confirmation of visit response...");
     UserAlert alert = new UserAlert();
     alert.showInfo(
