@@ -26,6 +26,7 @@ import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationDefinitionFx;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
+import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -250,9 +251,8 @@ public class DictionariesController
     logger.info("User clicked on the confirm button in the Dictionary view");
     logger.debug("View model {}", dictionaryViewModel.getDictionariesFx());
     dictionaryViewModel.saveChangesDictionary();
-    UserAlert userAlert = new UserAlert();
-    userAlert.showInfo(
-        resourceBundle.getString("u.002.header"), resourceBundle.getString("u.002.msg"));
+    UserAlert.simpleInfo( Lang.getString("u.002.header"), Lang.getString("u.002.msg") )
+            .showAndWait();
     dictionaryViewModel.enableDictionary();
   }
 

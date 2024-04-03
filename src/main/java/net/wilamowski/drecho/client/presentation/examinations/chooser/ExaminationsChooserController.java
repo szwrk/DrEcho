@@ -181,8 +181,7 @@ public class ExaminationsChooserController
         handleError(exception, "e.999.header", "e.999.msg");
       }
     } else {
-      UserAlert userAlert = new UserAlert();
-      userAlert.showWarn(Lang.getString("u.001.header"), Lang.getString("u.001.msg"));
+      UserAlert.simpleInfo(Lang.getString("u.001.header"),Lang.getString("u.001.msg")  ).showAndWait();
     }
   }
 

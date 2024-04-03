@@ -22,6 +22,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.PostInitial
 import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
+import net.wilamowski.drecho.client.presentation.customs.modals.UserDialog;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserController;
@@ -52,14 +53,20 @@ public class QuickVisitController
   @FXML private TitledPane root;
   @FXML private RadioButton echoTteRadio;
   @FXML private TitledPane visit;
-  /**Included Controller*/
+
+  /** Included Controller */
   @FXML private VisitController visitController;
+
   @FXML private TitledPane patient;
-  /**Included Controller*/
+
+  /** Included Controller */
   @FXML private PatientsSearcherController patientController;
+
   @FXML private VBox examination;
-  /**Included Controller*/
+
+  /** Included Controller */
   @FXML private ExaminationsChooserController examinationController;
+
   @FXML private TabPane tabPane;
   @FXML private Tab visitDetailTab;
   @FXML private Tab examinationsTab;
@@ -67,11 +74,12 @@ public class QuickVisitController
   @FXML private Button confirmButton;
   private ResourceBundle bundle;
   private ViewModelConfiguration factory;
-  private GeneralViewHandler handler;
+  private GeneralViewHandler viewHandler;
 
   @FXML
   void onActionConfirmVisitDetails(ActionEvent event) {
     logger.debug("[CONTROLLER] Clicked on confirm visit details...");
+    ;
     loggerDebugControllersMemoryAddresses();
     validateIsPatientExist();
     Optional<VisitDtoResponse> visitDtoResponseOptional = Optional.empty();
@@ -94,7 +102,7 @@ public class QuickVisitController
       ExceptionAlert alert = ExceptionAlert.create();
       alert.showError(vce, vce.getHeader(), vce.getContent());
     }
-      visitDtoResponseOptional.ifPresent( this::handleSuccessfulVisitConfirmation );
+    visitDtoResponseOptional.ifPresent(this::handleSuccessfulVisitConfirmation);
   }
 
   private VisitViewModel visitVM() {
@@ -111,18 +119,35 @@ public class QuickVisitController
 
   private void handleSuccessfulVisitConfirmation(VisitDtoResponse visitDto) {
     logger.trace("[CONTROLLER] Handling successful confirmation of visit response...");
-    UserAlert alert = new UserAlert();
-    alert.showInfo(
-        Lang.getString("u.004.header"), Lang.getString("u.004.msg") + "\nID: " + visitDto.visitId(), visitDto.toString());
-    tabPane.getSelectionModel().select(examinationsTab);
+    UserDialog dialog = null;
+    UserDialog finalDialog = dialog;
+    dialog =
+        UserDialog.builder()
+            .title("Information")
+            .header(Lang.getString("u.004.header"))
+            .content(Lang.getString("u.004.msg") + "\nID: " + visitDto.visitId())
+            .details(visitDto.toString())
+            .addButton(
+                "OK",
+                () -> {
+                  if (finalDialog != null) {
+                    finalDialog.close();
+                  }
+                })
+            .addButton(
+                "Go to Examinations", () -> tabPane.getSelectionModel().select(examinationsTab))
+                .addButton( "Add another Visit", () ->   viewHandler.switchSceneForParent( "QuickVisit"))
+            .build();
+    dialog.show();
   }
 
   private void validateIsPatientExist() {
     logger.trace("[CONTROLLER] Enter validate patient exist...");
     if (currentPatient() == null) {
-      UserAlert alert = new UserAlert();
-      alert.showWarn(
-          "Visit warning", "Patient not selected. Use the patient searcher or add a new patient.");
+      UserAlert.simpleInfo(
+              "Visit warning",
+              "Patient not selected. Use the patient searcher or add a new patient.")
+          .showAndWait();
     }
     logger.trace("[CONTROLLER] Exiting validate patient");
   }
@@ -182,7 +207,7 @@ public class QuickVisitController
       Objects.requireNonNull(
           examinationController, "Examination controller initialization failed!");
       Objects.requireNonNull(visitController, "Visit controller initialization failed!");
-      Objects.requireNonNull(handler, "General Handler initialization failed!");
+      Objects.requireNonNull( viewHandler , "General Handler initialization failed!");
     } catch (NullPointerException e) {
       logger.error("Failed to initialize Quick Visit view nested components. Application crash.");
       throw new IllegalStateException(
@@ -190,9 +215,9 @@ public class QuickVisitController
     }
     loggerDebugControllersMemoryAddresses();
     ControllerInitializer initializer = GeneralViewHandler.initializer();
-    initializer.initControllers(patientController, handler);
-    initializer.initControllers(examinationController, handler);
-    initializer.initControllers(visitController, handler);
+    initializer.initControllers(patientController, viewHandler );
+    initializer.initControllers(examinationController, viewHandler );
+    initializer.initControllers(visitController, viewHandler );
     loggerDebugControllersMemoryAddresses();
     Objects.requireNonNull(visitController.getVisitViewModel());
     Objects.requireNonNull(patientController.getPatientSearcherViewModel());
@@ -222,7 +247,7 @@ public class QuickVisitController
 
   @Override
   public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.handler = viewHandler;
+    this.viewHandler = viewHandler;
   }
 
   @Override

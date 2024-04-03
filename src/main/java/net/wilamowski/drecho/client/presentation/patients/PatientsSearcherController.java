@@ -111,19 +111,19 @@ public class PatientsSearcherController
 
   private void openNewPatientModal() {
     setupOwner();
-    Stage modal = new Stage();
+    Stage patientModal = new Stage();
 
     PatientRegisterController patientRegisterController =
         (PatientRegisterController)
-            viewHandler.switchSceneForStage("patient/PatientRegister", modal);
+            viewHandler.switchSceneForStage("patient/PatientRegister", patientModal);
 
     PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
     viewModel.turnOnAddPatientMode();
 
     patientRegisterController.setTitle("Add patient");
-    GeneralViewHandler.setupAsBlurModal(modal, owner);
-    GeneralViewHandler.setupStageTitle(modal, "New patient registration");
-    modal.showAndWait();
+    GeneralViewHandler.setupAsBlurModal(patientModal, owner);
+    GeneralViewHandler.setupStageTitle(patientModal, "New patient registration");
+    patientModal.showAndWait();
     GeneralViewHandler.disableBlur(owner);
   }
 

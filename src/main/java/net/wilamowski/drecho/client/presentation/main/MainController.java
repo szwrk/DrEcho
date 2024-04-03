@@ -219,6 +219,11 @@ public class MainController
     loadWelcomeScreen();
     setupOwner();
     setupLogoutTile();
+    passRootNode();
+  }
+
+  private void passRootNode() {
+    viewHandler.setMainView( root );
   }
 
   private void setupLogoutTile() {

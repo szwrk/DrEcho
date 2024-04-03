@@ -1,5 +1,7 @@
 package net.wilamowski.drecho.client.presentation.patients;
 
+
+
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +22,7 @@ import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
+import net.wilamowski.drecho.client.presentation.customs.modals.UserDialog;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.shared.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
@@ -71,7 +74,6 @@ public class PatientRegisterController
   private GeneralViewHandler viewHandler;
   private PatientRegisterViewModel viewModel;
 
-
   public void onActionAddNewPatient(ActionEvent event) {
     logger.debug("Click on save new patient...");
     Optional<PatientVM> newPatient = Optional.empty();
@@ -84,20 +86,50 @@ public class PatientRegisterController
       ExceptionAlert.create().showError(e, header, msg);
     }
 
-      if (newPatient.isPresent()){
-        PatientVM patient = newPatient.get();
-        UserAlert userAlert = new UserAlert();
-        userAlert.showInfo("Successfully", "Added patient " + patient.getLastName()+" "+patient.getName()+" " + patient.getDateBirth(), responseInfo(patient));
-        clearFields();
-      } else {
-        UserAlert userAlert = new UserAlert();
-        userAlert.showWarn("Failed", "Patient is empty");
-      }
+    if (newPatient.isPresent()) {
+      PatientVM patient = newPatient.get();
+      UserAlert.simpleInfo(
+              "Successfully",
+              "Added patient "
+                  + patient.getLastName()
+                  + " "
+                  + patient.getName()
+                  + " "
+                  + patient.getDateBirth())
+          // todo add details responseInfo(patient)
+          .showAndWait();
+
+      clearFields();
+    } else {
+      UserAlert.simpleInfo("Failed", "Patient is empty");
+    }
   }
 
   void clearFields() {
     viewModelReBindings();
     viewModel.clearFields();
+  }
+
+  public void viewModelReBindings() {
+    PatientVM currentPatientVM = viewModel.getCurrentPatientVM();
+
+    Bindings.bindBidirectional(
+        Objects.requireNonNull(patientIdTextField.textProperty()),
+        Objects.requireNonNull(currentPatientVM.getId()),
+        new NumberStringConverter());
+    Bindings.bindBidirectional(patientNameTextField.textProperty(), currentPatientVM.getName());
+    Bindings.bindBidirectional(
+        patientLastNameTextField.textProperty(), currentPatientVM.getLastName());
+    Bindings.bindBidirectional(patientPeselTextField.textProperty(), currentPatientVM.getPesel());
+    Bindings.bindBidirectional(
+        patientDateBirthTextField.valueProperty(), currentPatientVM.getDateBirth());
+    Bindings.bindBidirectional(
+        patientCityOfBirthTextField.textProperty(), currentPatientVM.getCodeOfCityBirth());
+    Bindings.bindBidirectional(
+        patientGeneralPatientNote.textProperty(), currentPatientVM.getGeneralPatientNote());
+    Bindings.bindBidirectional(
+        patientTelephoneNumberTextField.textProperty(),
+        currentPatientVM.getPatientTelephoneNumber());
   }
 
   public void setTitle(String text) {
@@ -155,34 +187,6 @@ public class PatientRegisterController
         patientPeselTextField.disableProperty(), viewModel.disableCitizenCodeFieldProperty());
   }
 
-  public void viewModelReBindings() {
-    PatientVM currentPatientVM = viewModel.getCurrentPatientVM( );
-
-    Bindings.bindBidirectional(
-        Objects.requireNonNull(patientIdTextField.textProperty()),
-        Objects.requireNonNull( currentPatientVM.getId()),
-        new NumberStringConverter());
-    Bindings.bindBidirectional(
-        patientNameTextField.textProperty(), currentPatientVM.getName());
-    Bindings.bindBidirectional(
-        patientLastNameTextField.textProperty(), currentPatientVM.getLastName());
-    Bindings.bindBidirectional(
-        patientPeselTextField.textProperty(), currentPatientVM.getPesel());
-    Bindings.bindBidirectional(
-        patientDateBirthTextField.valueProperty(), currentPatientVM.getDateBirth());
-    Bindings.bindBidirectional(
-        patientCityOfBirthTextField.textProperty(),
-        currentPatientVM.getCodeOfCityBirth());
-    Bindings.bindBidirectional(
-        patientGeneralPatientNote.textProperty(),
-        currentPatientVM.getGeneralPatientNote());
-    Bindings.bindBidirectional(
-        patientTelephoneNumberTextField.textProperty(),
-        currentPatientVM.getPatientTelephoneNumber());
-  }
-
-
-
   private void requestFocus() {
     Platform.runLater(
         () -> {
@@ -196,9 +200,7 @@ public class PatientRegisterController
   }
 
   @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {
-
-  }
+  public void initialize(URL url, ResourceBundle resourceBundle) {}
 
   public PatientRegisterViewModel getViewModel() {
     return viewModel;
@@ -229,10 +231,11 @@ public class PatientRegisterController
   }
 
   private void handleSuccessAddNewPatient(PatientVM patient) {
-    UserAlert userAlert = new UserAlert();
-    userAlert.showInfo(
-            Lang.getString("u.003.header"),  Lang.getString("e.003.msg") + "\n" + responseInfo( patient ));
-    logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patient );
+    UserAlert.simpleInfo(
+            Lang.getString("u.003.header"),
+            Lang.getString("e.003.msg") + "\n" + responseInfo(patient))
+        .showAndWait();
+    logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patient);
   }
 
   private static String responseInfo(PatientVM patientVM) {
@@ -298,14 +301,16 @@ public class PatientRegisterController
   }
 
   private void showUnsavedChangesAlert() {
-    UserAlert userAlert = new UserAlert();
-    userAlert.showWarnConfirmOrLeave(
-        "Unsaved Changes",
-        "You have unsaved changes.\nDo you want to stop entering data?",
-        "Continue adding",
-        () -> logger.debug("Stay here"),
-        "Abort",
-        () -> closeModal());
+    UserDialog dialog = null;
+    UserDialog finalDialog = dialog;
+    dialog = UserDialog.builder( )
+            .title( "Information" )
+            .header( "Unsaved Changes" )
+            .content( "You have unsaved changes.\nDiscard changes?" )
+            .addButton( "No, stay here" , () -> finalDialog.close())
+            .addButton( "Yes, abort all" , () -> closeModal( ) )
+            .build( );
+     dialog.show();
   }
 
   private void closeModal() {

@@ -23,7 +23,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDeb
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.ModalController;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
-import net.wilamowski.drecho.client.presentation.customs.modals.Modal;
+import net.wilamowski.drecho.client.presentation.customs.modals.FxmlModal;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
@@ -67,7 +67,7 @@ public class VisitSearcherView
   @FXML private TableColumn<VisitVM, PatientVM> patientColumn;
   private VisitDashboardViewModel visitDashboardViewModel;
   private PatientSearcherViewModel includedPatientSearcherViewModel;
-  private Modal modal;
+  private FxmlModal modal;
   private PatientsSearcherController includedPatientController;
 
   @FXML
@@ -140,7 +140,7 @@ public class VisitSearcherView
   }
 
   private void initializePatientModal() {
-    modal = Modal.setupPatientSearcherView(viewHandler, root);
+    modal = FxmlModal.setupPatientSearcherView(viewHandler, root);
     includedPatientController = getIncludedController(modal);
     includedPatientSearcherViewModel = getIncludedViewModel( includedPatientController );
   }
@@ -151,7 +151,7 @@ public class VisitSearcherView
     return includedPatientController.getPatientSearcherViewModel();
   }
 
-  private PatientsSearcherController getIncludedController(Modal modal) {
+  private PatientsSearcherController getIncludedController(FxmlModal modal) {
     ModalController rootModalController = (ModalController) modal.getModalController();
     PatientsSearcherController includedPatientController =
         (PatientsSearcherController) rootModalController.getIncludedController();

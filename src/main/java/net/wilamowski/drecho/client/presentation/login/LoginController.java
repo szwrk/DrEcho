@@ -17,13 +17,13 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import net.wilamowski.drecho.client.ApplicationRoot;
-import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
+import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
 import net.wilamowski.drecho.shared.auth.AuthenticationResults;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,8 +82,9 @@ public class LoginController
     if (emptyLogin && emptyPassword) {
       highlightInvalidInput(loginField);
       highlightInvalidInput(passwordField);
-      UserAlert userAlert = new UserAlert();
-      userAlert.showWarn("Empty Credentials", "Please provide both login and password data.");
+      UserAlert
+              .simpleInfo( "Empty Credentials","Please provide both login and password data."  )
+              .showAndWait();
     } else {
       logger.debug("Authentication failed. Please check your credentials.");
     }
