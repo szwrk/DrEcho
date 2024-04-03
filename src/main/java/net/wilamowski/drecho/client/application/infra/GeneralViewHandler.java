@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TitledPane;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -48,6 +49,7 @@ public class GeneralViewHandler {
   private static ControllerInitializer controllerInitializer;
   private final ApplicationRoot root;
   private String applicationStyle;
+  private BorderPane mainView;
 
   private GeneralViewHandler(
           String styleName, ViewModelConfiguration viewModelConfiguration , ApplicationRoot applicationRoot) {
@@ -78,6 +80,14 @@ public class GeneralViewHandler {
 
   private static boolean isBuitlInStyle(String passedStyle) {
     return passedStyle.equals("modena") || passedStyle.equals("kaspian");
+  }
+
+  public BorderPane getMainView() {
+    return mainView;
+  }
+
+  public void setMainView(BorderPane mainView) {
+    this.mainView = mainView;
   }
 
   private static void setBuiltInStyle(String javaFxStyleConstant) {
@@ -170,6 +180,26 @@ public class GeneralViewHandler {
     return loader;
   }
 
+
+  public <T extends Parent> Object switchSceneForParent(String viewToOpen) {
+    BorderPane root = getMainView( );
+    Objects.requireNonNull(root,"Main view root node is not set");
+    Objects.requireNonNull(viewToOpen);
+
+    logger.debug("Switch scene for parent, view name: {} ", viewToOpen);
+    FXMLLoader loader = new FXMLLoader();
+    Parent newNode = loadFxml(viewToOpen, loader);
+    Objects.requireNonNull(newNode, "Fxml loading error. Node is null");
+
+    Timeline timeline =
+            Animations.fadeIn(newNode, Duration.millis(ANIMATION_CHANGE_SCANE_DURATION));
+    embedNodeInContainer(root, newNode);
+    applyCurrentStyleForParent(newNode);
+    Object controller = loader.getController();
+    initializeController(controller);
+    timeline.play();
+    return controller;
+  }
   public <T extends Parent> Object switchSceneForParent(T container, String viewToOpen) {
     Objects.requireNonNull(container);
     Objects.requireNonNull(viewToOpen);
@@ -263,8 +293,11 @@ public class GeneralViewHandler {
       Platform.runLater(() -> ((BorderPane) container).setCenter(parent));
     } else if (container instanceof VBox) {
       Platform.runLater(() -> ((VBox) container).getChildren().add(parent));
+    } else if (container instanceof TitledPane ) {
+      Platform.runLater(() -> ((TitledPane) container).setContent(null));
+      Platform.runLater(() -> ((TitledPane) container).setContent(parent));
     } else {
-      throw new NotImplementedException("Unhandled parent type " + container.getClass());
+      logger.warn( "Unhandled parent type " + container.getClass() );
     }
   }
 
@@ -303,6 +336,8 @@ public class GeneralViewHandler {
       return null;
     }
   }
+
+
 
   private Object switchScene(String viewToOpenAsStage, Stage newStage) {
     Objects.requireNonNull(viewToOpenAsStage);
