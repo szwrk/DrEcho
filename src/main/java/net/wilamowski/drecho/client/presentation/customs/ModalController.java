@@ -49,7 +49,7 @@ public class ModalController implements Initializable, ViewHandlerInitializer {
     }
     includedController = loader.getController();
     ControllerInitializer initializer = GeneralViewHandler.initializer();
-    initializer.initControllers(includedController, viewHandler);
+    initializer.initController(includedController, viewHandler);
     this.root.getChildren().add(includedNode);
   }
 

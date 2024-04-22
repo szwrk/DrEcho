@@ -63,7 +63,7 @@ public class GeneralExaminationController
     includedNode = loader.load();
     includedController = loader.getController();
     ControllerInitializer initializer = GeneralViewHandler.initializer();
-    initializer.initControllers(includedController, handler);
+    initializer.initController(includedController, handler);
     this.root.setContent(includedNode);
   }
 
