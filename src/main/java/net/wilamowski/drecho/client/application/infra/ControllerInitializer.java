@@ -6,5 +6,5 @@ package net.wilamowski.drecho.client.application.infra;
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public interface ControllerInitializer {
-  void initControllers(Object controller, GeneralViewHandler viewHandler);
+  void initController(Object controller, GeneralViewHandler viewHandler);
 }

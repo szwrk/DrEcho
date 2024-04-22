@@ -31,7 +31,7 @@ public class ControllerInitializerImpl implements ControllerInitializer {
   }
 
   @Override
-  public void initControllers(Object controller, GeneralViewHandler handler) {
+  public void initController(Object controller, GeneralViewHandler handler) {
     defaultInit(controller, handler);
   }
 
