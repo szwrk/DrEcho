@@ -310,7 +310,7 @@ public class PatientRegisterController
             .addButton( "No, stay here" , () -> finalDialog.close())
             .addButton( "Yes, abort all" , () -> closeModal( ) )
             .build( );
-     dialog.show();
+     dialog.showAndWait();
   }
 
   private void closeModal() {

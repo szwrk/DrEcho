@@ -3,6 +3,7 @@ package net.wilamowski.drecho.client.presentation.patients;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,7 +54,7 @@ public class PatientSearcherViewModel {
   }
 
   public void unsetCurrentPatient() {
-    selectedPatient.set(null);
+    selectedPatient.setValue( null );
   }
 
   public int searchPatientByFullName(String param) {
@@ -121,7 +122,6 @@ public class PatientSearcherViewModel {
 
   private int handleSearchByFullName(String searchInput) {
     logger.trace("Entering handle search by full name...");
-//    List<Patient> fetchedPatients = patientService.findByLastName(searchInput, 0);
     List<PatientDto> foundedPatients = connectorPatient.findByFullName(searchInput, 0);
     int           fetchedPatientNumber            = foundedPatients.size( );
     if (fetchedPatientNumber==0) {
@@ -145,6 +145,11 @@ public class PatientSearcherViewModel {
     }
   }
 
+  public BooleanBinding isPatientNull(){
+    return selectedPatientProperty().isNull();
+  }
+  
+  
   private void chooseFirstPatientIfOnlyOneResult() {
     selectedPatientProperty().set(patients.get(0));
   }
@@ -168,10 +173,6 @@ public class PatientSearcherViewModel {
 
   public PatientVM getSelectedPatient() {
     return selectedPatient.get();
-  }
-
-  public ObjectProperty<PatientVM> getSelectedPatientAsObjectProperty() {
-    return selectedPatient;
   }
 
   public ObjectProperty<PatientVM> selectedPatientProperty() {

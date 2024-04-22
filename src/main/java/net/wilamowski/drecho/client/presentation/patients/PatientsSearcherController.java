@@ -99,6 +99,7 @@ public class PatientsSearcherController
         });
   }
 
+
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.bundle = resourceBundle;
@@ -160,7 +161,7 @@ public class PatientsSearcherController
   private void enableButtonWhenPatientIsSelected(Button button) {
     button
         .disableProperty()
-        .bind(patientSearcherViewModel.getSelectedPatientAsObjectProperty().isNull());
+        .bind(patientSearcherViewModel.isPatientNull());
     var animation = AnimationsUtil.userCallToActionAnimation(button);
 
     button
@@ -375,7 +376,7 @@ public class PatientsSearcherController
     selectedPatientProperty.addListener(
         (obs, oldVal, newVal) -> {
           if (newVal != null) {
-            logger.debug("[CONTROLLER] Patient info box update: {}", newVal.getId());
+            logger.debug("[CONTROLLER] Update patient labels. Patient id: {}", newVal.getId());
             nameValueLabel.textProperty().set(newVal.getName().get());
             lastNameValueLabel.textProperty().set(newVal.getLastName().get());
             peselValueLabel.textProperty().set(newVal.getPesel().get());
@@ -464,4 +465,24 @@ public class PatientsSearcherController
   public void initializeViewHandler(GeneralViewHandler viewHandler) {
     this.viewHandler = viewHandler;
   }
+
+
+    public void disableSearcher() {
+      searcherTextField.disableProperty().set( true );
+    }
+
+    public void animateForUserFocusWhenNoPatient() {
+      if (searcherTextField.getText() == null || searcherTextField.getText().isEmpty()){
+          var timeline = AnimationsUtil.userCallToActionAnimation(searcherTextField);
+          timeline.play();
+      } else {
+          var timeline = AnimationsUtil.userCallToActionAnimation(resultTable);
+          timeline.play();
+      }
+    }
+
+    public void animateSearcherForUserFocus() {
+        var timeline = AnimationsUtil.userCallToActionAnimation(searcherTextField);
+        timeline.play();
+    }
 }
