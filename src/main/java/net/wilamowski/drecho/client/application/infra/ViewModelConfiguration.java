@@ -1,6 +1,7 @@
 package net.wilamowski.drecho.client.application.infra;
 
 import lombok.ToString;
+import net.wilamowski.drecho.client.presentation.notes.NotesViewModel;
 import net.wilamowski.drecho.connectors.model.standalone.infra.ConnectorLayer;
 import net.wilamowski.drecho.client.presentation.complex.visits.VisitDashboardViewModel;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryViewModel;
@@ -75,14 +76,22 @@ public class ViewModelConfiguration {
   }
 
   public DictionaryViewModel dictionariesViewModel() {
+    logger.traceEntry();
     return new DictionaryViewModel( connectors.dictionariesService());
   }
 
   public VisitDashboardViewModel visitDashboardViewModel() {
+    logger.traceEntry();
     return new VisitDashboardViewModel( connectors.visitModel());
   }
 
   public PatientRegisterViewModel patientRegistrationViewModel() {
+    logger.traceEntry();
     return new PatientRegisterViewModel( connectors.patientModel());
   }
+
+    public NotesViewModel notesViewModel() {
+      logger.traceEntry();
+    return new NotesViewModel(connectors.notesModel());
+    }
 }
