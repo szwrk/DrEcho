@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="notes" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.notes.NotesController">
+   <children>
+      <Accordion maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+         <panes>
+            <TitledPane maxHeight="1.7976931348623157E308" text="%ui.visits.notes.interview-pane-name">
+               <content>
+                  <TextArea fx:id="interviewTextArea" wrapText="true" />
+               </content>
+            </TitledPane>
+            <TitledPane maxHeight="1.7976931348623157E308" text="%ui.visits.notes.recommendations-pane-name">
+               <content>
+                  <TextArea fx:id="recommTextArea" wrapText="true" />
+               </content>
+            </TitledPane>
+         </panes>
+      </Accordion>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>
