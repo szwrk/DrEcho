@@ -1,104 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<TitledPane xmlns:fx="http://javafx.com/fxml/1" fx:id="visitVBox" collapsible="false" styleClass="dense"
-            text="Dane wizyty" xmlns="http://javafx.com/javafx/21"
-            fx:controller="net.wilamowski.drecho.client.presentation.visit.VisitController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<TitledPane fx:id="visitVBox" collapsible="false" styleClass="dense" text="Dane wizyty" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.visit.VisitController">
     <content>
-        <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" minHeight="137.0" minWidth="300.0"
-              prefHeight="137.0" prefWidth="1000.0">
+        <VBox alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" minHeight="137.0" minWidth="300.0" prefHeight="137.0" prefWidth="1000.0">
             <children>
                 <VBox>
                     <children>
                         <GridPane VBox.vgrow="ALWAYS">
                             <columnConstraints>
-                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="400.0" minWidth="0.0"
-                                                   prefWidth="250.0"/>
-                                <ColumnConstraints halignment="LEFT" maxWidth="667.0" minWidth="10.0"
-                                                   prefWidth="249.0"/>
-                                <ColumnConstraints halignment="LEFT" maxWidth="667.0" minWidth="10.0"
-                                                   prefWidth="184.0"/>
-                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="648.0" minWidth="0.0"
-                                                   prefWidth="132.0"/>
-                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="648.0" minWidth="10.0"
-                                                   prefWidth="217.0"/>
+                                <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" maxWidth="400.0" minWidth="0.0" prefWidth="250.0" />
+                                <ColumnConstraints halignment="LEFT" maxWidth="667.0" minWidth="10.0" prefWidth="249.0" />
+                                <ColumnConstraints halignment="LEFT" maxWidth="667.0" minWidth="10.0" prefWidth="184.0" />
+                                <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="648.0" minWidth="0.0" prefWidth="132.0" />
+                                <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" maxWidth="648.0" minWidth="10.0" prefWidth="217.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                                <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                             <children>
-                                <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="250.0"
-                                       text="Osoba rejestrująca">
+                                <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="250.0" text="Osoba rejestrująca">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <ComboBox fx:id="registrantComboBox" prefHeight="25.0" prefWidth="250.0"
-                                          GridPane.columnIndex="1">
+                                <ComboBox fx:id="registrantComboBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </ComboBox>
-                                <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="250.0"
-                                       text="Osoba realizująca" GridPane.rowIndex="1">
+                                <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="250.0" text="Osoba realizująca" GridPane.rowIndex="1">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <ComboBox fx:id="performerComboBox" prefHeight="25.0" prefWidth="250.0"
-                                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <ComboBox fx:id="performerComboBox" prefHeight="25.0" prefWidth="250.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </ComboBox>
-                                <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="250.0"
-                                       text="Data godzina realizacji" GridPane.rowIndex="2">
+                                <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="250.0" text="Data godzina realizacji" GridPane.rowIndex="2">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <DatePicker fx:id="saveDatePicker" disable="true" editable="false" prefHeight="25.0"
-                                            prefWidth="220.0" showWeekNumbers="true" GridPane.columnIndex="4">
+                                <DatePicker fx:id="saveDatePicker" disable="true" editable="false" prefHeight="25.0" prefWidth="220.0" showWeekNumbers="true" GridPane.columnIndex="4">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </DatePicker>
-                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" disable="true" prefHeight="20.0"
-                                       prefWidth="112.0" text="Data rozpoczęcia" GridPane.columnIndex="3">
+                                <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" disable="true" prefHeight="20.0" prefWidth="112.0" text="Data rozpoczęcia" GridPane.columnIndex="3">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </Label>
-                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2"
-                                      GridPane.rowIndex="2">
+                                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
                                     <children>
-                                        <Label alignment="CENTER_RIGHT" minWidth="20.0" text="g."/>
-                                        <ChoiceBox fx:id="realizationHourChoiceBox" prefHeight="25.0" prefWidth="75.0"/>
-                                        <Label alignment="CENTER_RIGHT" minWidth="20.0" prefHeight="20.0"
-                                               prefWidth="18.0" text="m."/>
-                                        <ChoiceBox fx:id="realizationTimeChoiceBox" prefHeight="25.0" prefWidth="75.0"/>
+                                        <Label alignment="CENTER_RIGHT" minWidth="20.0" text="g." />
+                                        <ChoiceBox fx:id="realizationHourChoiceBox" prefHeight="25.0" prefWidth="75.0" />
+                                        <Label alignment="CENTER_RIGHT" minWidth="20.0" prefHeight="20.0" prefWidth="18.0" text="m." />
+                                        <ChoiceBox fx:id="realizationTimeChoiceBox" prefHeight="25.0" prefWidth="75.0" />
                                     </children>
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </HBox>
-                                <DatePicker fx:id="realizationDatePicker" prefHeight="32.0" prefWidth="250.0"
-                                            showWeekNumbers="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                <DatePicker fx:id="realizationDatePicker" prefHeight="32.0" prefWidth="250.0" showWeekNumbers="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                     <GridPane.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                     </GridPane.margin>
                                 </DatePicker>
+                        <Label fx:id="idLabel" disable="true" prefHeight="20.0" prefWidth="228.0" text="-" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label disable="true" prefHeight="20.0" prefWidth="105.0" text="Current Visit ID" textAlignment="RIGHT" GridPane.rowIndex="3" />
+                        <Label disable="true" text="Status" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin></Label>
+                        <Label fx:id="statusLabel" disable="true" text="draft" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </GridPane.margin>
+                        </Label>
                             </children>
                             <VBox.margin>
-                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                             </VBox.margin>
                         </GridPane>
                     </children>
                 </VBox>
+            <HBox prefHeight="51.0" prefWidth="207.0" />
             </children>
         </VBox>
     </content>

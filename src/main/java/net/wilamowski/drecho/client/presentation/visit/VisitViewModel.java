@@ -3,14 +3,12 @@ package net.wilamowski.drecho.client.presentation.visit;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import lombok.Getter;
 import lombok.ToString;
+import net.wilamowski.drecho.client.application.NoPatientSelected;
 import net.wilamowski.drecho.client.application.exceptions.VisitVmValidationException;
 import net.wilamowski.drecho.client.application.mapper.UserDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
@@ -40,7 +38,10 @@ public class VisitViewModel {
   private static final Logger logger = LogManager.getLogger( VisitViewModel.class);
 
   private final ConnectorUser connectorUser;
-  //Form values - Visit details
+  // Form values - Visit details
+
+  private final SimpleLongProperty visitIdProperty = new SimpleLongProperty();
+  private final SimpleStringProperty statusProperty = new SimpleStringProperty();
   private final ObjectProperty<PatientVM> selectedPatient = new SimpleObjectProperty<>();
   private final ObjectProperty<UserVM> selectedRegistrant = new SimpleObjectProperty<>();
   private final ObjectProperty<UserVM> selectedPerformer = new SimpleObjectProperty<>();
@@ -70,6 +71,7 @@ public class VisitViewModel {
     ListLoader.source(dictService).loadValuesToFxList("VST_REALIZ_HOURS", realizationHoursValues);
     ListLoader.source(dictService).loadValuesToFxList("VST_REALIZ_MIN", realizationMinutesValues);
   }
+
 
   private void initStartTimeWithNow() {
     Boolean initVisitRealizationTime =
@@ -145,13 +147,20 @@ public void choosePerormer(UserVM user){
 
   public Optional<VisitDtoResponse> confirmVisit() throws VisitVmValidationException {
     logger.debug("[VM] Confirming...");
-    logger.debug( "[VM] Selected patient get {}", selectedPatientVm( ).getId() );
-
+    if (selectedPatientVm() == null) {
+      logger.error("[VM] Patient cannot be null! Use must choose patient.");
+      throw new NoPatientSelected();
+    }
     if ( selectedPatientVm( ) == null || selectedPerformer.get()==null || selectedRegistrant.get()==null){
-      logger.error( "[VM] Patient, performer or registrant cannot be null!");
+      logger.error( "[VM] Performer or registrant cannot be null!");
+      throw new VisitVmValidationException();
+    }
+    if ( realizationDateTimeProperty.get() == null ){
+      logger.warn( "[VM] Performer or registrant cannot be null!");
       throw new VisitVmValidationException();
     }
 
+    logger.debug( "[VM] Selected patient get {}", selectedPatientVm( ).getId() );
     VisitVM copyOfVisit = new VisitVMBuilder()
             .setSelectedPatient( selectedPatient )
             .setSelectedPerformer( selectedPerformer )
@@ -159,20 +168,28 @@ public void choosePerormer(UserVM user){
             .setViewStartDateTimeProperty( viewStartProperty )
             .setRealizationDateTimeProperty( realizationDateTimeProperty )
             .createVisitVM();
-
     Optional<VisitDtoResponse> temp = Optional.empty();
 
     try {
       VisitDtoCreate dtoCreate = VisitDtoVmMapper.toDtoCreate( copyOfVisit );
       logger.debug("[VM] Visit: {}", dtoCreate);
       temp = service.save( dtoCreate );
+      Long newVisitId = temp.get( ).visitId( );
+      visitIdProperty.set( newVisitId );
     } catch (RuntimeException e){
       logger.error( e.getMessage(),e );
     }
     return temp;
   }
-
-  private PatientVM selectedPatientVm() {
+  public PatientVM selectedPatientVm() {
     return selectedPatient.get( );
   }
+
+
+
+  public void selectPatient(PatientVM selectedPatient) {
+    this.selectedPatient.set( selectedPatient );
+  }
+
+
 }

@@ -17,5 +17,4 @@ public class VisitVmValidationException extends GeneralUiException {
   public VisitVmValidationException(String customHeaderKey, String customContentKey ) {
     super( customHeaderKey , customContentKey );
   }
-
 }

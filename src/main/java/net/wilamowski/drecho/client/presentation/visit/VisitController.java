@@ -6,13 +6,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
@@ -41,6 +39,8 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   @FXML private ChoiceBox<PositionFx> realizationTimeChoiceBox;
 
   @FXML private DatePicker saveDatePicker;
+  @FXML private Label idLabel;
+  @FXML private Label statusLabel;
 
   @FXML private TitledPane visitVBox;
   private ResourceBundle bundle;
@@ -59,13 +59,12 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
 
   @Override
   public void postInitialize() {
-    realizationDatePicker.setValue( LocalDate.now() );
+    realizationDatePicker.setValue(LocalDate.now());
+    updateRealizationDateTimeListener(realizationDatePicker.valueProperty());
+    updateRealizationDateTimeListener(realizationHourChoiceBox.valueProperty());
+    updateRealizationDateTimeListener(realizationTimeChoiceBox.valueProperty());
 
-     updateRealizationDateTimeListener( realizationDatePicker.valueProperty() );
-     updateRealizationDateTimeListener( realizationHourChoiceBox.valueProperty() );
-     updateRealizationDateTimeListener( realizationTimeChoiceBox.valueProperty() );
-
-      Platform.runLater(
+    Platform.runLater(
         () -> {
           bindPerformer();
           bindRegistrant();
@@ -79,54 +78,69 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
 
     configureHourChoiceBox();
     configureMinutesChoiceBox();
+      bindVisitId( );
+      bindStatus( );
   }
 
-    private void updateRealizationDateTimeListener(ObjectProperty property) {
-        property
-                .addListener(
-                        (obs, old, newVal) -> {
-                            LocalDate date = realizationDatePicker.getValue( );
-                            if (date!=null && realizationHourChoiceBox.getValue() != null && realizationTimeChoiceBox.getValue() != null) {
-                                LocalDateTime localDateTime = createDateTime(  );
-                                logger.debug("[CONTROLLER] Updated realization date and time: {}", localDateTime);
-                                visitViewModel.getRealizationDateTimeProperty().set(localDateTime);
-                            } else {
-                                logger.debug("[CONTROLLER] Failed to update realization date and time - hour and minutes choicbox is empty ");
-                            }
-                        });
+    private void bindStatus() {
+        statusLabel.textProperty().bind(visitViewModel.getStatusProperty());
     }
 
-    private LocalDateTime createDateTime() {
-        LocalDate date = realizationDatePicker.getValue( );
-        String hh = realizationHourChoiceBox.getValue( ).getName( );
-        String mm = realizationTimeChoiceBox.getValue( ).getName( );
-        LocalDateTime localDateTime =
-          LocalDateTime.of(             date ,
-              LocalTime.of(
-                  Integer.parseInt(hh),
-                  Integer.parseInt(mm),
-                  0));
-        return localDateTime;
+    private void bindVisitId() {
+        idLabel
+            .textProperty()
+            .bind(
+                Bindings.createStringBinding(
+                    () -> String.valueOf(visitViewModel.getVisitIdProperty().get()),
+                    visitViewModel.getVisitIdProperty()));
     }
+
+    private void updateRealizationDateTimeListener(ObjectProperty property) {
+    property.addListener(
+        (obs, old, newVal) -> {
+          LocalDate date = realizationDatePicker.getValue();
+          if (date != null
+              && realizationHourChoiceBox.getValue() != null
+              && realizationTimeChoiceBox.getValue() != null) {
+            LocalDateTime localDateTime = createDateTime();
+            logger.debug("[CONTROLLER] Updated realization date and time: {}", localDateTime);
+            visitViewModel.getRealizationDateTimeProperty().set(localDateTime);
+          } else {
+            logger.debug(
+                "[CONTROLLER] Failed to update realization date and time - hour and minutes choicbox is empty ");
+          }
+        });
+  }
+
+  private LocalDateTime createDateTime() {
+    LocalDate date = realizationDatePicker.getValue();
+    String hh = realizationHourChoiceBox.getValue().getName();
+    String mm = realizationTimeChoiceBox.getValue().getName();
+    LocalDateTime localDateTime =
+        LocalDateTime.of(date, LocalTime.of(Integer.parseInt(hh), Integer.parseInt(mm), 0));
+    return localDateTime;
+  }
+
 
     private void configureHourChoiceBox() {
     DictionaryConverter converter = new DictionaryConverter();
     realizationHourChoiceBox.setConverter(converter);
-    realizationHourChoiceBox.itemsProperty().bind( visitViewModel.getRealizationHoursValues());
+    realizationHourChoiceBox.itemsProperty().bind(visitViewModel.getRealizationHoursValues());
     realizationHourChoiceBox
         .valueProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
-                if (newValue != null && realizationHourChoiceBox.getValue()!=null && realizationTimeChoiceBox.getValue()!=null) {
-                    LocalDateTime newTime =
-                            LocalDateTime.of(
-                                    realizationDatePicker.getValue().getYear(),
-                                    realizationDatePicker.getValue().getMonth(),
-                                    realizationDatePicker.getValue().getDayOfMonth(),
-                                    Integer.parseInt(realizationHourChoiceBox.getValue().getName()),
-                                    Integer.parseInt(realizationTimeChoiceBox.getValue().getName())
-                            );
-                    visitViewModel.setViewStartTimeProperty(newTime);
+              if (newValue != null
+                  && realizationHourChoiceBox.getValue() != null
+                  && realizationTimeChoiceBox.getValue() != null) {
+                LocalDateTime newTime =
+                    LocalDateTime.of(
+                        realizationDatePicker.getValue().getYear(),
+                        realizationDatePicker.getValue().getMonth(),
+                        realizationDatePicker.getValue().getDayOfMonth(),
+                        Integer.parseInt(realizationHourChoiceBox.getValue().getName()),
+                        Integer.parseInt(realizationTimeChoiceBox.getValue().getName()));
+                visitViewModel.setViewStartTimeProperty(newTime);
               }
             });
   }
@@ -134,7 +148,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   private void configureMinutesChoiceBox() {
     DictionaryConverter converter = new DictionaryConverter();
     realizationTimeChoiceBox.setConverter(converter);
-    realizationTimeChoiceBox.itemsProperty().bind( visitViewModel.getRealizationMinutesValues());
+    realizationTimeChoiceBox.itemsProperty().bind(visitViewModel.getRealizationMinutesValues());
     realizationTimeChoiceBox
         .valueProperty()
         .addListener(
@@ -142,12 +156,11 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
               if (newValue != null) {
                 LocalDateTime newTime =
                     LocalDateTime.of(
-                            realizationDatePicker.getValue().getYear(),
-                            realizationDatePicker.getValue().getMonth(),
-                            realizationDatePicker.getValue().getDayOfMonth(),
+                        realizationDatePicker.getValue().getYear(),
+                        realizationDatePicker.getValue().getMonth(),
+                        realizationDatePicker.getValue().getDayOfMonth(),
                         Integer.parseInt(realizationHourChoiceBox.getValue().getName()),
-                        Integer.parseInt(realizationTimeChoiceBox.getValue().getName())
-                        );
+                        Integer.parseInt(realizationTimeChoiceBox.getValue().getName()));
                 visitViewModel.setViewStartTimeProperty(newTime);
               }
             });
@@ -169,7 +182,7 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
             (observable, oldValue, newValue) -> {
               visitViewModel.findUserByLogin(newValue.getCode());
             });
-    performerComboBox.itemsProperty().bind( visitViewModel.getPerformerValues());
+    performerComboBox.itemsProperty().bind(visitViewModel.getPerformerValues());
   }
 
   private void bindRegistrant() {
@@ -180,10 +193,12 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
             (observable, oldValue, newPatient) -> {
               visitViewModel.findUserByLogin(newPatient.getCode());
             });
-    registrantComboBox.itemsProperty().bind( visitViewModel.getPerformerValues());
+    registrantComboBox.itemsProperty().bind(visitViewModel.getPerformerValues());
   }
 
   public VisitViewModel getVisitViewModel() {
     return visitViewModel;
   }
+
+
 }
