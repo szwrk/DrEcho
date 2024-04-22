@@ -7,6 +7,7 @@ import net.wilamowski.drecho.client.presentation.main.ConnectorMainModel;
 import net.wilamowski.drecho.client.presentation.main.ConnectorMainModelStandalone;
 import net.wilamowski.drecho.connectors.model.*;
 import net.wilamowski.drecho.connectors.model.standalone.domain.echotte.EchoTteService;
+import net.wilamowski.drecho.connectors.model.standalone.domain.notes.NotesLocalService;
 import net.wilamowski.drecho.connectors.model.standalone.domain.patient.ConnectorPatientStandalone;
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
 import net.wilamowski.drecho.connectors.model.standalone.domain.visit.VisitService;
@@ -36,6 +37,7 @@ public class ConnectorLayerLocal extends ConnectorLayer {
   private ConnectorExamination connectorExamination;
   private ConnectorVisit connectorVisit;
   private ConnectorSimpleDictionariesInMemory dictionaries;
+  private NotesLocalService notesLocalService;
 
   ConnectorLayerLocal(StandaloneRepositoryFactory repoFactory) {
     Objects.requireNonNull(repoFactory);
@@ -129,5 +131,14 @@ public class ConnectorLayerLocal extends ConnectorLayer {
       logger.trace("Visit model is not null");
     }
     return Objects.requireNonNull( connectorVisit );
+  }
+
+  @Override
+  public ConnectorNotes notesModel() {
+    logger.traceEntry();
+    if ( notesLocalService == null) {
+      notesLocalService = new NotesLocalService();
+    }
+    return Objects.requireNonNull( notesLocalService );
   }
 }

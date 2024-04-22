@@ -1,6 +1,7 @@
 package net.wilamowski.drecho.connectors.model.standalone.infra;
 import net.wilamowski.drecho.client.presentation.main.ConnectorMainModel;
 import net.wilamowski.drecho.connectors.model.*;
+
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
 import net.wilamowski.drecho.connectors.model.standalone.persistance.factory.StandaloneRepositoryFactory;
 
@@ -37,4 +38,5 @@ public abstract class ConnectorLayer {
   public abstract ConnectorExamination examinationsModel();
 
   public abstract ConnectorVisit visitModel();
+  public abstract ConnectorNotes notesModel() ;
 }

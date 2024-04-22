@@ -220,7 +220,7 @@ public class GeneralViewHandler {
   }
 
   private void initializeController(Object controller) {
-    controllerInitializer.initControllers(controller, this);
+    controllerInitializer.initController(controller, this);
   }
 
   private Parent loadFxml(String viewName, FXMLLoader loader) {

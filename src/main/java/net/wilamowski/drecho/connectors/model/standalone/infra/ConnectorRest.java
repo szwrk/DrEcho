@@ -3,6 +3,7 @@ package net.wilamowski.drecho.connectors.model.standalone.infra;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ConnectorExamination;
 import net.wilamowski.drecho.client.presentation.main.ConnectorMainModel;
 import net.wilamowski.drecho.connectors.model.*;
+
 import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
 import org.apache.commons.lang.NotImplementedException;
 
@@ -59,6 +60,11 @@ public class ConnectorRest extends ConnectorLayer {
 
   @Override
   public ConnectorVisit visitModel() {
+    return null;
+  }
+
+  @Override
+  public ConnectorNotes notesModel() {
     return null;
   }
 }
