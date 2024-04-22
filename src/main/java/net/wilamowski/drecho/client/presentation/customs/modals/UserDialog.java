@@ -44,7 +44,7 @@ public class UserDialog {
     return new Builder();
   }
 
-  public void show() {
+  public void showAndWait() {
     Optional<ButtonType> result = dialog.showAndWait();
     result.ifPresent(
         buttonType -> {

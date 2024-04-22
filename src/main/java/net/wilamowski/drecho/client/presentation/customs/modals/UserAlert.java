@@ -33,6 +33,16 @@ public class UserAlert {
     }
   }
 
+  public static UserAlert simpleWarn(String header, String content) {
+    Alert alert = new Alert(Alert.AlertType.WARNING);
+    return new Builder(alert)
+            .title(INFO_TITLE)
+            .header(header)
+            .content(content)
+            .build();
+  }
+
+
   public static UserAlert simpleInfo(String header, String content) {
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     return new Builder(alert)
@@ -76,7 +86,6 @@ public class UserAlert {
     GridPane.setVgrow(detailsTextArea, Priority.ALWAYS);
     GridPane.setHgrow(detailsTextArea, Priority.ALWAYS);
   }
-
 
   public void showAndWait() {
     Platform.runLater(
