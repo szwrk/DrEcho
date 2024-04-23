@@ -27,7 +27,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.PostInitial
 import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
 import net.wilamowski.drecho.client.presentation.customs.controls.FormContextMenu;
-import net.wilamowski.drecho.client.presentation.customs.inputfilter.Converters;
+import net.wilamowski.drecho.client.presentation.customs.inputfilter.BaseConverters;
 import net.wilamowski.drecho.client.presentation.customs.inputfilter.FormatterApllier;
 import net.wilamowski.drecho.client.presentation.customs.inputfilter.Formatters;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
@@ -48,7 +48,7 @@ public class EchoController
         ViewHandlerInitializer,
         PostInitializable {
   private static final Logger logger = LogManager.getLogger(EchoController.class);
-  private final Converters converterFactory;
+  private final BaseConverters converterFactory;
   public String finalKeyCombinationDebug;
   private EchoTteViewModel viewModel;
   private ViewModelConfiguration factory;
@@ -141,11 +141,21 @@ public class EchoController
   private Popover lvmPopover;
   private Popover rwtPopover;
   private Popover lvmiPopover;
-
+  
+  private DictionaryConverter mv_regurconverter;
+  private DictionaryConverter mv_valveconverter;
+  private DictionaryConverter av_regur_waveconverter;
+  private DictionaryConverter av_valve_descconverter;
+  private DictionaryConverter tv_regur_waveconverter;
+  private DictionaryConverter tv_valve_descconverter;
+  private DictionaryConverter pv_regurconverter;
+  private DictionaryConverter pv_valveconverter;
+  private DictionaryConverter pv_diastolicconverter;
+  private DictionaryConverter ot_contractilityConverter;
   // fxml fields end
 
   public EchoController() {
-    this.converterFactory = new Converters();
+    this.converterFactory = new BaseConverters();
   }
 
   @FXML
@@ -220,6 +230,8 @@ public class EchoController
     heartDimensionSectionBindings();
     configureDimensionsInputsFormatters();
     heartDimensionSectionInitDebugListeners();
+    //
+    initDictionariesConverters();
     // mitral
     configureMitralValveTextFields();
     // aortal
@@ -245,6 +257,19 @@ public class EchoController
 
     viewModel.autoCalculateLVMIndex();
     configLvmIndexInfoBox();
+  }
+
+  private void initDictionariesConverters() {
+    mv_regurconverter = new DictionaryConverter( getViewModel().getDictService() ,"MVREGWAV" );
+    mv_valveconverter = new DictionaryConverter( getViewModel().getDictService() ,"MVDESCTXT" );
+    av_regur_waveconverter = new DictionaryConverter( getViewModel().getDictService() , "AVREGWAV");
+    av_valve_descconverter = new DictionaryConverter( getViewModel().getDictService() , "AVDESCTXT");
+    tv_regur_waveconverter = new DictionaryConverter( getViewModel().getDictService() , "TVREGWAV");
+    tv_valve_descconverter = new DictionaryConverter( getViewModel().getDictService() ,"TVDESCTXT" );
+    pv_regurconverter = new DictionaryConverter( getViewModel().getDictService() ,"PVREGWAV" );
+    pv_valveconverter = new DictionaryConverter( getViewModel().getDictService() , "PVDESCTXT");
+    pv_diastolicconverter = new DictionaryConverter( getViewModel().getDictService() , "PVDSTFN");
+    ot_contractilityConverter = new DictionaryConverter( getViewModel().getDictService() , "OTCNTTXT");
   }
 
   private void configureDimensionsInputsFormatters() {
@@ -518,67 +543,66 @@ public class EchoController
   }
 
   private void connectComboBoxToViewModel() {
-    DictionaryConverter converter = new DictionaryConverter();
     // mv
     mv_regur_waveComboBox.itemsProperty().bind(viewModel.getMv_regur_wave_values());
     mv_regur_waveComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().mv_regur_wave_choosed());
-    mv_regur_waveComboBox.setConverter(converter);
+    mv_regur_waveComboBox.setConverter( mv_regurconverter );
 
     mv_valve_descComboBox.itemsProperty().bind(viewModel.getMv_regur_desc_values());
     mv_valve_descComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().mv_regur_desc_choosed());
-    mv_valve_descComboBox.setConverter(converter);
+    mv_valve_descComboBox.setConverter( mv_valveconverter );
     // av
     av_regur_waveComboBox.itemsProperty().bind(viewModel.getAv_regur_wave_values());
     av_regur_waveComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().av_regur_wave_choosed());
-    av_regur_waveComboBox.setConverter(converter);
+    av_regur_waveComboBox.setConverter( av_regur_waveconverter );
 
     av_valve_descComboBox.itemsProperty().bind(viewModel.getAv_regur_desc_values());
     av_valve_descComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().av_regur_desc_choosed());
-    av_valve_descComboBox.setConverter(converter);
+    av_valve_descComboBox.setConverter( av_valve_descconverter );
     // tv
     tv_regur_waveComboBox.itemsProperty().bind(viewModel.getTv_regur_wave_values());
     tv_regur_waveComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().tv_regur_wave_choosed());
-    tv_regur_waveComboBox.setConverter(converter);
+    tv_regur_waveComboBox.setConverter( tv_regur_waveconverter );
 
     tv_valve_descComboBox.itemsProperty().bind(viewModel.getTv_regur_desc_values());
     tv_valve_descComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().tv_regur_desc_choosed());
-    tv_valve_descComboBox.setConverter(converter);
+    tv_valve_descComboBox.setConverter( tv_valve_descconverter );
     // pv
     pv_regur_waveComboBox.itemsProperty().bind(viewModel.getPv_regur_wave_values());
     pv_regur_waveComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().pv_regur_wave_choosed());
-    pv_regur_waveComboBox.setConverter(converter);
+    pv_regur_waveComboBox.setConverter( pv_regurconverter );
 
     pv_valve_descCombBox.itemsProperty().bind(viewModel.getPv_regur_desc_values());
     pv_valve_descCombBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().pv_regur_desc_choosed());
-    pv_valve_descCombBox.setConverter(converter);
+    pv_valve_descCombBox.setConverter( pv_valveconverter );
 
     pv_diastolic_function.itemsProperty().bind(viewModel.getPv_diastolic_function_values());
     pv_diastolic_function
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().pv_diastolic_function_choosed());
-    pv_diastolic_function.setConverter(converter);
+    pv_diastolic_function.setConverter( pv_diastolicconverter );
     // ot
     ot_contractility_dictComboBox.itemsProperty().bind(viewModel.getOt_contratility_values());
     ot_contractility_dictComboBox
         .valueProperty()
         .bindBidirectional(viewModel.getEchoTteProperty().ot_contratility_choosed());
-    ot_contractility_dictComboBox.setConverter(converter);
+    ot_contractility_dictComboBox.setConverter( ot_contractilityConverter );
   }
 
   public void clearForm() {

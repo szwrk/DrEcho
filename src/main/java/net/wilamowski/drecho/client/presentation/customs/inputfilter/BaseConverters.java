@@ -9,7 +9,7 @@ import javafx.util.converter.IntegerStringConverter;
  *     <p></><a href="https://github.com/szwrk">GitHub</a>
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
-public class Converters {
+public class BaseConverters {
 
   public StringConverter createConverterBy(String s) {
     switch (s) {

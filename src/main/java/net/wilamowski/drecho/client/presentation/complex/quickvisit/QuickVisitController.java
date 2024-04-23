@@ -12,8 +12,8 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.NoPatientSelected;
-import net.wilamowski.drecho.client.application.exceptions.VisitVmValidationException;
+import net.wilamowski.drecho.client.application.exceptions.GeneralUiException;
+import net.wilamowski.drecho.client.application.exceptions.VisitVmNoPatientSelected;
 import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
@@ -80,6 +80,7 @@ public class QuickVisitController
   @FXML private Button confirmButton;
   private GeneralViewHandler viewHandler;
   @FXML private Label notesTabLabel;
+  private UserDialog finalDialog;
 
   @FXML
   void onActionConfirmVisitDetails(ActionEvent event) {
@@ -98,18 +99,18 @@ public class QuickVisitController
       logger.error(e.getMessage(), e);
       ExceptionAlert alert = ExceptionAlert.create();
       alert.showError(e, Lang.getString("e.000.header"), Lang.getString("e.000.msg"));
-    } catch (VisitVmValidationException vce) {
+    } catch (VisitVmNoPatientSelected ise) {
+      patientController.animateForUserFocusWhenNoPatient();
+    } catch (GeneralUiException vce) {
       logger.error("VisitVmValidationException: " + vce.getMessage(), vce);
       ExceptionAlert alert = ExceptionAlert.create();
-      alert.showError(vce, vce.getHeader(), vce.getContent());
+      alert.showError(vce, vce.getHeader(), vce.getMessage());
       logger.debug(
-          "[CONTROLLER] Visit VM state: \npatient {};\nperformer {};\nregistrant {} ",
+          "[CONTROLLER] Visit VM state: \nPatient:\n{};\nPerformer:\n{};\nRegistrant:\n{} ",
           nestedVisitVM().selectedPatientVm(),
           nestedVisitVM().getSelectedPerformer(),
           nestedVisitVM().getSelectedPerformer());
-    } catch (NoPatientSelected ise) {
-      patientController.animateForUserFocusWhenNoPatient();
-    }
+      }
     return visitDtoResponseOptional;
   }
 
@@ -331,14 +332,16 @@ public class QuickVisitController
   }
 
   private void openDialog() {
-    UserDialog dialog = null;
-    UserDialog finalDialog = dialog;
+    UserDialog dialog      = null;
+    finalDialog = dialog;
     dialog = UserDialog.builder( )
               .title( "Message" )
               .header("Successful")
               .content( "Visit was added.\nWhat would you like to do next?" )
               .details( "" )
-              .addButton( "Stay here for preview" , () -> finalDialog.close())
+              .addButton( "Stay here for preview" , () -> {
+                  finalDialog.close();
+              } )
               .addButton("Leave and add another Visit", ()-> viewHandler.switchSceneForParent( Views.QUICK_VISIT.getFxmlFileName() ) )
               .build();
     dialog.showAndWait();

@@ -8,7 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import lombok.Getter;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.NoPatientSelected;
+import net.wilamowski.drecho.client.application.exceptions.VisitVmNoPatientSelected;
 import net.wilamowski.drecho.client.application.exceptions.VisitVmValidationException;
 import net.wilamowski.drecho.client.application.mapper.UserDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
@@ -149,15 +149,15 @@ public void choosePerormer(UserVM user){
     logger.debug("[VM] Confirming...");
     if (selectedPatientVm() == null) {
       logger.error("[VM] Patient cannot be null! Use must choose patient.");
-      throw new NoPatientSelected();
+      throw new VisitVmNoPatientSelected();
     }
-    if ( selectedPatientVm( ) == null || selectedPerformer.get()==null || selectedRegistrant.get()==null){
+    if (selectedPerformer.get()==null || selectedRegistrant.get()==null){
       logger.error( "[VM] Performer or registrant cannot be null!");
-      throw new VisitVmValidationException();
+      throw new VisitVmValidationException("e.016.header","e.016.msg");
     }
     if ( realizationDateTimeProperty.get() == null ){
-      logger.warn( "[VM] Performer or registrant cannot be null!");
-      throw new VisitVmValidationException();
+      logger.warn( "[VM] Realization datetime is can not be null!");
+      throw new VisitVmValidationException("e.017.header","e.017.msg");
     }
 
     logger.debug( "[VM] Selected patient get {}", selectedPatientVm( ).getId() );
@@ -184,12 +184,8 @@ public void choosePerormer(UserVM user){
   public PatientVM selectedPatientVm() {
     return selectedPatient.get( );
   }
-
-
-
   public void selectPatient(PatientVM selectedPatient) {
     this.selectedPatient.set( selectedPatient );
   }
-
 
 }

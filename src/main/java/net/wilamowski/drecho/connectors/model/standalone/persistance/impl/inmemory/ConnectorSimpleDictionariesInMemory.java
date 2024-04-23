@@ -42,7 +42,10 @@ public class ConnectorSimpleDictionariesInMemory implements ConnectorSimpleDicti
         Position.of("18", "18", 18),
         Position.of("19", "19", 19),
         Position.of("20", "20", 20),
-        Position.of("21", "21", 21));
+        Position.of("21", "21", 21),
+            Position.of("22", "22", 22),
+            Position.of("23", "23", 23)
+    );
   }
 
   private void loadRealizationMinutes(int interval) {

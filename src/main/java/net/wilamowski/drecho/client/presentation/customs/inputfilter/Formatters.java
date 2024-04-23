@@ -11,10 +11,10 @@ public class Formatters {
   private Integer defaultInt = null;
   private Float defaultFloat = null;
   private String defaultString = null;
-  private Converters converters = null;
+  private BaseConverters baseConverters = null;
 
   private Formatters() {
-    this.converters = new Converters();
+    this.baseConverters = new BaseConverters();
     turnOnDefaultValue();
   }
 
@@ -46,13 +46,13 @@ public class Formatters {
         return new TextFormatter<Float>(new FloatStringConverter(), defaultFloat);
       case "DOUBLE":
         return new TextFormatter<Double>(
-            converters.doubleNotNullConverterInstance(), defaultDouble);
+            baseConverters.doubleNotNullConverterInstance(), defaultDouble);
       case "TEXT_UPPER":
-        return new TextFormatter<String>(converters.upperStringConverterInstance(), defaultString);
+        return new TextFormatter<String>( baseConverters.upperStringConverterInstance(), defaultString);
       case "TEXT":
-        return new TextFormatter<String>(converters.simpleStringConverterInstance(), defaultString);
+        return new TextFormatter<String>( baseConverters.simpleStringConverterInstance(), defaultString);
       case "TIME":
-        return new TextFormatter<String>(converters.simpleStringConverterInstance(), null);
+        return new TextFormatter<String>( baseConverters.simpleStringConverterInstance(), null);
       default:
         throw new IllegalStateException("Unexpected value: " + s);
     }
@@ -63,7 +63,7 @@ public class Formatters {
     UnaryOperator<TextFormatter.Change> integerFilter =
         createIntegerFilterForBlockingUserInput(regex);
     return new TextFormatter<>(
-        converters.integerStringConverterNullable(), defaultValue, integerFilter);
+        baseConverters.integerStringConverterNullable(), defaultValue, integerFilter);
     //    return new TextFormatter<>(converters.integerStringConverterNullable(), defaultValue,
     // integerFilter);
   }
