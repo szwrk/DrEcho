@@ -81,7 +81,7 @@ public class QuickVisitController
   private GeneralViewHandler viewHandler;
   @FXML private Label notesTabLabel;
   private UserDialog finalDialog;
-
+  @FXML private Label statusLabel;
   @FXML
   void onActionConfirmVisitDetails(ActionEvent event) {
     logger.debug("[CONTROLLER] Clicked on confirm visit details...");
@@ -149,8 +149,12 @@ public class QuickVisitController
                   if (finalDialog != null) {
                     finalDialog.close();
                   }
-                  confirmButton.setDisable( true );
-                  Tooltip.install(confirmButton, new Tooltip("The visit has been successfully saved. You can now add some visit context or add another new visit. If you need to edit the current visit, use the Update Visit Info button."));
+                  Tooltip.install(confirmButton, new Tooltip("Wait! The visit has been already saved. Please navigate to the 'End of Visit' tab for finalization."));
+                  nestedVisitVM().updateVisitStatus();
+                  confirmButton
+                          .setOnAction(
+                                  event -> UserAlert.simpleWarn( "Wait!", " The visit has been already saved. Please navigate to the 'End of Visit' tab for finalization." )
+                          .showAndWait() );
                   var timeline = AnimationsUtil.userCallToActionAnimation(notesTabLabel);
                   timeline.play();
                 })
@@ -328,23 +332,44 @@ public class QuickVisitController
       logger.error( npe.getMessage(),npe );
     }
     disableAllControl( );
-    openDialog( );
+    openFinishVisitDialog( );
   }
 
-  private void openDialog() {
+  private void openFinishVisitDialog() {
     UserDialog dialog      = null;
     finalDialog = dialog;
     dialog = UserDialog.builder( )
               .title( "Message" )
               .header("Successful")
-              .content( "Visit was added.\nWhat would you like to do next?" )
-              .details( "" )
+              .content( "Visit was finalized.\nWhat would you like to do next?" )
+              .details( previewVisitData() )
               .addButton( "Stay here for preview" , () -> {
                   finalDialog.close();
               } )
               .addButton("Leave and add another Visit", ()-> viewHandler.switchSceneForParent( Views.QUICK_VISIT.getFxmlFileName() ) )
               .build();
     dialog.showAndWait();
+  }
+
+  private String previewVisitData() {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("VISIT:\n")
+            .append(nestedVisitVM().getSelectedRegistrant()).append("\n")
+            .append(nestedVisitVM().getSelectedPerformer()).append("\n")
+            .append(nestedVisitVM().getRealizationDateTimeProperty()).append("\n\n");
+
+    sb.append("PATIENT:\n")
+            .append(nestedPatientVm().getSelectedPatient()).append("\n\n");
+
+    sb.append("NOTES:\n")
+            .append(nestedNotesVm().interviewProperty()).append("\n")
+            .append(nestedNotesVm().recommendationsProperty()).append("\n\n");
+
+    sb.append("EXAMINATIONS:\n")
+            .append(nestedExaminationsVM().getVisitExaminationsInstances());
+
+    return sb.toString();
   }
 
   private void disableAllControl() {
@@ -356,7 +381,7 @@ public class QuickVisitController
   private void logDebugNotes() {
     logger.debug(
         "1 {}\n2 {}\n3 {}"
-            , nestedExaminationsVM( ).getListOfVisitExamination().toString()
+            , nestedExaminationsVM( ).getVisitExaminationsInstances().toString()
             , nestedNotesVm( ).interviewProperty().get()
             , nestedNotesVm( ).recommendationsProperty().get());
   }

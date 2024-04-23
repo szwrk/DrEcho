@@ -188,4 +188,7 @@ public void choosePerormer(UserVM user){
     this.selectedPatient.set( selectedPatient );
   }
 
+  public void updateVisitStatus() {
+      statusProperty.set( "SAVED" );
+  }
 }

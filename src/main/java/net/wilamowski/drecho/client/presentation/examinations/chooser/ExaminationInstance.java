@@ -11,6 +11,8 @@ import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 public abstract class ExaminationInstance {
   protected final SimpleIntegerProperty tempId;
   protected final ExaminationDefinitionFx definition;
+
+  @ToString.Exclude
   protected final GeneralViewHandler viewHandler;
   protected final ObjectProperty<PatientVM> patient;
 

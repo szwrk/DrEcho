@@ -30,7 +30,7 @@ public class ExaminationsChooserViewModel {
     return chosenExams;
   }
 
-   public List getListOfVisitExamination(){
+   public List<ExaminationInstance> getVisitExaminationsInstances(){
      ObservableList<ExaminationInstance> chosenExamsList = chosenExams.getValue();
      return new ArrayList<>(chosenExamsList);
    }
