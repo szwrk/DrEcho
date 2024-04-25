@@ -142,7 +142,6 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
             realizationMinutesChoiceBox.getSelectionModel().select(position);
         });
     }
-
     private void bindStatus() {
         statusLabel.textProperty().bind(visitViewModel.getStatusProperty());
     }

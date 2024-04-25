@@ -149,7 +149,6 @@ public class PatientSearcherViewModel {
     return selectedPatientProperty().isNull();
   }
   
-  
   private void chooseFirstPatientIfOnlyOneResult() {
     selectedPatientProperty().set(patients.get(0));
   }

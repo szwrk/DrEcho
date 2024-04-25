@@ -60,6 +60,8 @@ public class VisitViewModel {
   private final ResourceBundle bundle = null;
   private ConnectorVisit service = null;
   private ConnectorSimpleDictionaries dictService = null;
+
+  private final BooleanProperty isVisitNotSaved = new SimpleBooleanProperty(true);
   public VisitViewModel(
           ConnectorVisit service, ConnectorSimpleDictionaries dictService, ConnectorUser connectorUser) {
     this.service = service;
@@ -176,6 +178,8 @@ public void choosePerormer(UserVM user){
       temp = service.save( dtoCreate );
       Long newVisitId = temp.get( ).visitId( );
       visitIdProperty.set( newVisitId );
+      updateVisitStatus("SAVED");
+      isVisitNotSaved.set( false );
     } catch (RuntimeException e){
       logger.error( e.getMessage(),e );
     }
@@ -188,7 +192,9 @@ public void choosePerormer(UserVM user){
     this.selectedPatient.set( selectedPatient );
   }
 
-  public void updateVisitStatus() {
+  public void updateVisitStatus(String status) {
+    if (status.equals( "SAVED" )) {
       statusProperty.set( "SAVED" );
+    }
   }
 }

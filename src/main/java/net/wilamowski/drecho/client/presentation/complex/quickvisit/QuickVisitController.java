@@ -83,6 +83,8 @@ public class QuickVisitController
   private UserDialog finalDialog;
   @FXML private Label statusLabel;
   @FXML private Button finishButton;
+
+
   @FXML
   void onActionConfirmRegistrationVisitInfo(ActionEvent event) {
     logger.debug("[CONTROLLER] Clicked on confirm visit details...");
@@ -151,7 +153,6 @@ public class QuickVisitController
                     finalDialog.close();
                   }
                   Tooltip.install(confirmButton, new Tooltip("Wait! The visit has been already saved. Please navigate to the 'End of Visit' tab for finalization."));
-                  nestedVisitVM().updateVisitStatus();
                   confirmButton
                           .setOnAction(
                                   event -> UserAlert.simpleWarn( "Wait!", " The visit has been already saved. Please navigate to the 'End of Visit' tab for finalization." )
@@ -163,6 +164,7 @@ public class QuickVisitController
             .build();
     dialog.showAndWait();
   }
+
 
   private void validateIsPatientExist() {
     logger.trace("[CONTROLLER] Enter validate patient exist...");
@@ -203,31 +205,22 @@ public class QuickVisitController
       informExaminationAboutSelectedPatient();
       requestFocusOnViewStart();
       fireConfirmButtonWhenPressKeyCombination();
-      bindExaminationTabDisableToSelectedPatient();
-      bindSummaryTabDisableToSelectedPatient();
-      bindNotesTabDisableToSelectedPatient();
-
+      bindTabsDisableToCriteria();
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
     }
   }
 
-  private void bindNotesTabDisableToSelectedPatient() {
+  private void bindTabsDisableToCriteria() {
     notesTab
             .disableProperty()
-            .bind(nestedPatientVm().isPatientNull());
-  }
-
-  private void bindSummaryTabDisableToSelectedPatient() {
+            .bind(nestedPatientVm().isPatientNull().or( nestedVisitVM().getIsVisitNotSaved() ));
     summaryTab
-        .disableProperty()
-        .bind(nestedPatientVm().isPatientNull());
-  }
-
-  private void bindExaminationTabDisableToSelectedPatient() {
+            .disableProperty()
+            .bind(nestedPatientVm().isPatientNull().or( nestedVisitVM().getIsVisitNotSaved() ));
     examinationsTab
-        .disableProperty()
-        .bind(nestedPatientVm().isPatientNull());
+            .disableProperty()
+            .bind(nestedPatientVm().isPatientNull().or( nestedVisitVM().getIsVisitNotSaved() ));
   }
 
   private void fireConfirmButtonWhenPressKeyCombination() {
