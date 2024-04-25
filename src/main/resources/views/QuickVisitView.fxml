@@ -64,7 +64,7 @@
                      <content>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionAddVisitDetailsAndFinishVisit" text="%ui.examinations.quickvisit.summary.end-visit-btn" />
+                              <Button fx:id="finishButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onActionAddVisitDetailsAndFinishVisit" text="%ui.examinations.quickvisit.summary.end-visit-btn" />
                            </children>
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

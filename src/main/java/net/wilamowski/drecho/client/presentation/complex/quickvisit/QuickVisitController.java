@@ -82,6 +82,7 @@ public class QuickVisitController
   @FXML private Label notesTabLabel;
   private UserDialog finalDialog;
   @FXML private Label statusLabel;
+  @FXML private Button finishButton;
   @FXML
   void onActionConfirmRegistrationVisitInfo(ActionEvent event) {
     logger.debug("[CONTROLLER] Clicked on confirm visit details...");
@@ -357,7 +358,7 @@ public class QuickVisitController
     sb.append("VISIT:\n")
             .append("Registrant: ").append(nestedVisitVM().getSelectedRegistrant()).append("\n")
             .append("Performer: ").append(nestedVisitVM().getSelectedPerformer()).append("\n")
-            .append("Realization date time: ").append(nestedVisitVM().getRealizationDateTimeProperty())
+            .append("Realization date time: ").append(nestedVisitVM().getRealizationDateTimeProperty()).append( "\n" )
             .append("Patient: ").append(nestedVisitVM().getSelectedPatient()).append("\n")
             .append("\n\n");
 
@@ -380,14 +381,7 @@ public class QuickVisitController
     visit.setDisable( true );
     patient.setDisable( true );
     examination.setDisable( true );
-  }
-
-  private void logDebugNotes() {
-    logger.debug(
-        "1 {}\n2 {}\n3 {}"
-            , nestedExaminationsVM( ).getVisitExaminationsInstances().toString()
-            , nestedNotesVm( ).interviewProperty().get()
-            , nestedNotesVm( ).recommendationsProperty().get());
+    finishButton.setDisable( true );
   }
 
   private NotesViewModel nestedNotesVm() {
