@@ -83,7 +83,7 @@ public class QuickVisitController
   private UserDialog finalDialog;
   @FXML private Label statusLabel;
   @FXML
-  void onActionConfirmVisitDetails(ActionEvent event) {
+  void onActionConfirmRegistrationVisitInfo(ActionEvent event) {
     logger.debug("[CONTROLLER] Clicked on confirm visit details...");
     loggerDebugControllersMemoryAddresses();
     validateIsPatientExist();
@@ -322,7 +322,7 @@ public class QuickVisitController
     return root;
   }
 
-  public void onActionFinishVisit(ActionEvent event) {
+  public void onActionAddVisitDetailsAndFinishVisit(ActionEvent event) {
     logger.trace("Clicked on finish visit");
     try{
       Objects.requireNonNull(notesController, "NotesController is null");
@@ -355,19 +355,23 @@ public class QuickVisitController
     StringBuilder sb = new StringBuilder();
 
     sb.append("VISIT:\n")
-            .append(nestedVisitVM().getSelectedRegistrant()).append("\n")
-            .append(nestedVisitVM().getSelectedPerformer()).append("\n")
-            .append(nestedVisitVM().getRealizationDateTimeProperty()).append("\n\n");
+            .append("Registrant: ").append(nestedVisitVM().getSelectedRegistrant()).append("\n")
+            .append("Performer: ").append(nestedVisitVM().getSelectedPerformer()).append("\n")
+            .append("Realization date time: ").append(nestedVisitVM().getRealizationDateTimeProperty())
+            .append("Patient: ").append(nestedVisitVM().getSelectedPatient()).append("\n")
+            .append("\n\n");
 
     sb.append("PATIENT:\n")
-            .append(nestedPatientVm().getSelectedPatient()).append("\n\n");
+            .append(nestedPatientVm().getSelectedPatient())
+            .append("\n\n");
 
     sb.append("NOTES:\n")
-            .append(nestedNotesVm().interviewProperty()).append("\n")
-            .append(nestedNotesVm().recommendationsProperty()).append("\n\n");
+            .append("Interview: ").append(nestedNotesVm().interviewProperty()).append("\n")
+            .append("Recommedation: ").append(nestedNotesVm().recommendationsProperty())
+            .append("\n\n");
 
-    sb.append("EXAMINATIONS:\n")
-            .append(nestedExaminationsVM().getVisitExaminationsInstances());
+    sb.append("EXAMINATIONS:\n");
+    nestedExaminationsVM().getVisitExaminationsInstances().forEach(e -> sb.append(e).append("\n"));
 
     return sb.toString();
   }
