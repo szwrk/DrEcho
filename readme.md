@@ -37,8 +37,19 @@ Website: [DrEcho website](https://drecho.nvl.ovh/)
 ## Docs
 Documentation for the project will be available soon.
 [Documentation (Coming soon)](#docs)
+![ss](./assets/140312.png)
+![ss](./assets/134612.png)
+![ss](./assets/135543.png)
+![ss](./assets/135551.png)
+![ss](./assets/135626.png)
+![ss](./assets/135643.png)
+![ss](./assets/135649.png)
+![ss](./assets/135811.png)
+![Structure](./assets/140000.png)
 
-### Run
+
+
+    ### Run
 ```
  mvn clean javafx:run
 ```
