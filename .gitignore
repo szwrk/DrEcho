@@ -32,4 +32,4 @@ logs/
 .idea/
 #Others
 *.iml
-.backup
+*.backup
