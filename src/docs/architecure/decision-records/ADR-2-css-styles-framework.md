@@ -1,42 +1,30 @@
-# Use AtlantaFx for styling
+---
+id: 2
+layout: "adr.njk"
+tags: ["adr"]
+title: "Use AtlantaFx for styling"
+status: "Accepted"
+date: 2024-01-01
+context: "Deciding between MaterialFx and AtlantaFx (GH Primer implementation) for styling."
+decision: "Choosing AtlantaFx, because it works fine, looks good, and doesn't add dependency like MaterialFx."
+pros: 
+  - "Provides visually appealing UI elements."
+  - "Enhances user experience."
+  - "Does not introduce additional dependencies."
+cons: 
+  - "Smaller community compared to MaterialFx."
+examples: |
+  ### MVVM - Layer dependencies
 
-## Status
+  #### View
 
-- Accepted->**In use**
+  - View can use ViewModel classes
+  - Bindings of nodes and controls
 
-## Context
+  #### ViewModel
 
-Deciding between MaterialFx and AtlantaFx (GH Primer implemenation) for styling.
-
-## Decision
-
-Choosing AtlantaFx, because works fine and look good and it do not add dependancy like MaterialFx.
-
-## Consequences
-
-**Pros:**
-
-- provides visually appealing UI elements and is user-friendly.
-- enhances user experience through design aesthetics and animations.
-- does not introduce additional dependencies and simplifying switching or disabling of styles
-
-**Cons:**
-
-- may have a smaller community compared to MaterialFx
-
-## Examples
-
-### MVVM - Layer dependencies
-
-#### View
-
-- View can use ViewModel classes
-- bindinds of node and controls
-
-#### ViewModel
-
-- view state
-- invoking logic
-- input singleValidation
-
-
+  - View state
+  - Invoking logic
+  - Input single validation
+consequences: "Easier integration with frontend technologies, but smaller community support."
+---

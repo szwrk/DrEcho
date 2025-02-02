@@ -1,23 +1,23 @@
-# Clean architecture
+---
+id: 5
+layout: "adr.njk"
+tags: ["adr"]
+title: "Clean architecture"
+status: "Accepted -> In use"
+date: 2024-01-01
+context: |
+  - The app is growing.
+  - Prevents tight coupling between layers for easier maintenance and testing.
+  - Helps clean up layers.
 
-## Status
+decision: "Use ArchUnit to enforce clean architecture."
 
-- Accepted->**In use**
+pros: 
+  - Easier maintenance and testing.
+  - Decoupling of layers.
 
-## Context
+cons: 
+  - None
 
-App is growin.
-Prevents tight coupling between layers for easier maintance and testing.
-Clean up layers.
-
-## Decision
-
-Use ArchUnit.
-
-## Consequences
-
-**Pros:**
--
-
-**Cons:**
--
+consequences: "Promotes scalable architecture by keeping layers clean and decoupled."
+---

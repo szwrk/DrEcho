@@ -1,29 +1,19 @@
-# Standardizing the Use of Mappers Between Layers
+---
+id: 8
+layout: "adr.njk"
+tags: ["adr"]
+title: "Standardizing the Use of Mappers Between Layers"
+status: "Accepted -> In use"
+date: 2024-01-01
+context: "Need to standardize business object mapping."
+decision: "Use three types of mappers: Client Side, Backend side for ServiceLayer <-> Domain, and Domain <-> PersistenceLayer."
+pros: 
+  - "Separation of concerns."
+  - "Promotes long-term flexibility."
+cons: 
+  - None
+---
 
-## Status
-
-- Accepted->**In use**
-
-## Context
-Need standardize buissness object mapping.
-
-## Decision
-Use three types of mappers:
-- Client Side, ViewModel <-> ConnectorLayer Mapper (only VM layer known about mapper)
-- Backend side, ServiceLayer <-> Domain Mapper
-- Backend side, Domain <-> PersistenceLayer Mapper,
-
-## Consequences
-
-**Pros:**
-- Separate of concerns
-- promises greater long-term flexibility
-
-**Cons:**
--
-
-## Others options
-- 
 
 ## UML
 ### Client - ViewModel <-> ConnectorLayer 

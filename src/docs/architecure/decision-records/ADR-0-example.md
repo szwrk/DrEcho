@@ -1,3 +1,16 @@
+---
+id: 0
+layout: "adr.njk"
+tags: ["adr"]
+title: "Decision record template by Michael Nygard"
+status: "Accepted"
+date: 2024-01-01
+context: "What is the issue that we're seeing that is motivating this decision or change?"
+decision: "What is the change that we're proposing and/or doing?"
+pros: []
+cons: []
+---
+
 # Decision record template by Michael Nygard
 
 This is the template
@@ -23,8 +36,8 @@ What is the change that we're proposing and/or doing?
 
 What becomes easier or more difficult to do because of this change?
 
---- 
-Copy paste:
+``` md
+# COPYPASTE
 
 # Title
 
@@ -40,7 +53,8 @@ Copy paste:
 ## Consequences
 
 **Pros:**
--
+- 
 
 **Cons:**
--
+- 
+```
