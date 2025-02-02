@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.SettingVmMapper;
 import net.wilamowski.drecho.app.configuration.SettingValue;
-import net.wilamowski.drecho.gateway.SettingsService;
+import net.wilamowski.drecho.gateway.ports.SettingsService;
 
 /**
  * @author Arkadiusz Wilamowski

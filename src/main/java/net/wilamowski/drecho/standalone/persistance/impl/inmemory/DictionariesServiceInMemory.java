@@ -2,7 +2,7 @@ package net.wilamowski.drecho.standalone.persistance.impl.inmemory;
 
 import java.util.*;
 import lombok.ToString;
-import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.gateway.ports.DictionariesService;
 import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
 import net.wilamowski.drecho.standalone.domain.dictionary.DictionaryBuilder;
 import net.wilamowski.drecho.standalone.domain.dictionary.Position;

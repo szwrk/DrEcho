@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.gateway;
+package net.wilamowski.drecho.gateway.ports;
 
 import java.util.List;
 import net.wilamowski.drecho.app.configuration.SettingValue;

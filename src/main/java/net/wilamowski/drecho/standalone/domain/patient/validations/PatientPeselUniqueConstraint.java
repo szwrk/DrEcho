@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.standalone.domain.patient.validations;
 
 import java.util.List;
-import net.wilamowski.drecho.gateway.PatientService;
+import net.wilamowski.drecho.gateway.ports.PatientService;
 import net.wilamowski.drecho.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;

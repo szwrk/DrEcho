@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.gateway.infra;
+package net.wilamowski.drecho.gateway.configuration;
 
 import lombok.ToString;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
@@ -14,24 +14,24 @@ import org.apache.logging.log4j.Logger;
  *     mode, the repository is a server dependency.
  */
 @ToString
-public enum DeploymentType {
+public enum BackendType {
   STANDALONE_INMEMORY("Demo", "Demo application with in-memory database"),
   STANDALONE_LOCALDB("Standalone", "Standalone application with local file-based database"),
   STANDALONE_REMOTEDB("Network (RDBMS)", "Standalone application with remote database"),
   CLIENTSERVER("Network (REST Server)", "Standalone application for REST server");
-  private static final Logger logger = LogManager.getLogger(DeploymentType.class);
+  private static final Logger logger = LogManager.getLogger( BackendType.class);
   private final String label;
   private final String description;
 
-  DeploymentType(String label, String description) {
+  BackendType(String label, String description) {
     this.label = label;
     this.description = description;
   }
 
-  public static DeploymentType of(String enumName) {
-    DeploymentType deploymentType = null;
+  public static BackendType of(String enumName) {
+    BackendType backendType = null;
     try {
-      deploymentType = valueOf(enumName);
+      backendType = valueOf(enumName);
     } catch (IllegalArgumentException e) {
       logger.error("An error occurred:", e.getMessage(), e);
       String header = Lang.getString("e.008.header");
@@ -43,7 +43,7 @@ public enum DeploymentType {
       String msg = Lang.getString("e.009.msg");
       ExceptionAlert.create().showError(e, header, String.format(msg, enumName));
     }
-    return deploymentType;
+    return backendType;
   }
 
   public String getLabel() {

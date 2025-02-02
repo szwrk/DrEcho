@@ -1,9 +1,9 @@
 package net.wilamowski.drecho.client.presentation.login;
 
 import javafx.beans.property.*;
-import net.wilamowski.drecho.gateway.infra.DeploymentType;
+import net.wilamowski.drecho.gateway.configuration.BackendType;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.gateway.AuthenticatorService;
+import net.wilamowski.drecho.gateway.ports.AuthenticatorService;
 import net.wilamowski.drecho.standalone.service.authenticator.Credentials;
 import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import net.wilamowski.drecho.app.bundle.Lang;
@@ -14,7 +14,7 @@ public class LoginViewModel {
   public static final String PROPERTY_BACKEND_CONNECT_MODE = "admin.backend-connect-mode";
   private static final Logger logger = LogManager.getLogger(LoginViewModel.class);
 
-  private final ObjectProperty<DeploymentType> deployMode;
+  private final ObjectProperty<BackendType> deployMode;
   private final StringProperty styleMode;
   private final StringProperty login;
   private final StringProperty password;
@@ -36,13 +36,13 @@ public class LoginViewModel {
   }
 
   private void initBackendMode() {
-    DeploymentType backendConnectModeInitValue = null;
+    BackendType backendConnectModeInitValue = null;
     backendConnectModeInitValue =
-        DeploymentType.of(ClientPropertyReader.getString(PROPERTY_BACKEND_CONNECT_MODE));
+        BackendType.of(ClientPropertyReader.getString(PROPERTY_BACKEND_CONNECT_MODE));
     deployModeProperty().set(backendConnectModeInitValue);
   }
 
-  public ObjectProperty<DeploymentType> deployModeProperty() {
+  public ObjectProperty<BackendType> deployModeProperty() {
     return deployMode;
   }
 

@@ -14,8 +14,8 @@ import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.ListLoader;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
 import net.wilamowski.drecho.client.presentation.examinations.general.GeneralExaminationController;
-import net.wilamowski.drecho.gateway.EchoTteExaminationService;
-import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.gateway.ports.EchoTteExaminationService;
+import net.wilamowski.drecho.gateway.ports.DictionariesService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

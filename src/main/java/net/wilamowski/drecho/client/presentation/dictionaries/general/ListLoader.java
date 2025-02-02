@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
 import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
-import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.gateway.ports.DictionariesService;
 import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
 
 public class ListLoader {

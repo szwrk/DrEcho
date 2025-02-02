@@ -5,7 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.ToString;
-import net.wilamowski.drecho.gateway.PatientService;
+import net.wilamowski.drecho.gateway.ports.PatientService;
+import net.wilamowski.drecho.gateway.ports.VisitService;
 import net.wilamowski.drecho.infra.connectors.mappers.VisitDomainDtoMapper;
 import net.wilamowski.drecho.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.standalone.domain.user.UserService;
@@ -19,7 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @ToString
-public class VisitServiceService implements net.wilamowski.drecho.gateway.VisitService {
+public class VisitServiceService implements VisitService {
   private static final Logger logger = LogManager.getLogger( VisitServiceService.class);
   private final VisitRepository visitRepository;
   private final UserService userService;

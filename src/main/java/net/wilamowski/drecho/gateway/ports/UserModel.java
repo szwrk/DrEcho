@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.gateway;
+package net.wilamowski.drecho.gateway.ports;
 
 import java.util.Optional;
 import net.wilamowski.drecho.app.dto.UserDto;

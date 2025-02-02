@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.standalone.domain.user;
 
 import java.util.Optional;
-import net.wilamowski.drecho.gateway.UserModel;
+import net.wilamowski.drecho.gateway.ports.UserModel;
 import net.wilamowski.drecho.infra.connectors.mappers.UserDomainDtoMapper;
 import net.wilamowski.drecho.standalone.domain.user.account.User;
 import net.wilamowski.drecho.standalone.persistance.UserRepository;

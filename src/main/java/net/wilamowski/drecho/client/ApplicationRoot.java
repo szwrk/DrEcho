@@ -12,9 +12,8 @@ import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.gateway.infra.BackendConfigurationFactory;
-import net.wilamowski.drecho.gateway.infra.DeploymentType;
-import net.wilamowski.drecho.gateway.infra.ModelLayerFactory;
+import net.wilamowski.drecho.gateway.configuration.BackendConfigurationFactory;
+import net.wilamowski.drecho.gateway.configuration.BackendType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +28,7 @@ public class ApplicationRoot extends Application {
   private static final Logger log = LogManager.getLogger(ApplicationRoot.class);
   private static final Session currentSession = Session.instance();
   private GeneralViewHandler generalViewHandler;
-  private DeploymentType deployMode;
+  private BackendType backend;
 
   @Override
   public void init() {
@@ -42,7 +41,7 @@ public class ApplicationRoot extends Application {
   private void loadDeployMode() {
     log.info("Loading deploy mode...");
     String string = ClientPropertyReader.getString("admin.backend-connect-mode");
-    deployMode = DeploymentType.of(string);
+    backend = BackendType.of(string);
   }
 
   @Override
@@ -64,32 +63,15 @@ public class ApplicationRoot extends Application {
 
   private BackendConfigurationFactory createModelLayer() {
     BackendConfigurationFactory backend           = null;
-    ModelLayerFactory           modelLayerFactory = new ModelLayerFactory();
     try {
-      backend = modelLayerFactory.createModelLayerByType(deployMode);
+      backend = BackendConfigurationFactory.getBackendByName( this.backend );
     } catch (IllegalArgumentException e) {
-      handleException(e, "e.002.header", "e.002.msg", deployMode.toString());
+      handleException(e, "e.002.header", "e.002.msg", this.backend.toString());
     } catch (Exception e) {
       handleException(e, "e.999.header", "e.999.msg");
     }
     return backend;
   }
-
-  //  public void startContext(String deployModel) {
-  //    log.info("Creating new instance of MedNoteApp. Deploy mode: {}", deployModel);
-  //    try{
-  //    this.deployMode = "";
-  //    try {
-  //      this.deployMode = Objects.requireNonNull(deployModel);
-  //    } catch (NullPointerException npe) {
-  //      handleException(npe, "e.004.header", "e.004.msg", "'tryb backendu'");
-  //    }
-  //
-  //  } catch (Exception e) {
-  //    log.error(e.getMessage(), e);
-  //    throw new RuntimeException(e);
-  //  }
-  //  }
 
   private void handleException(
       Exception e, String headerKey, String msgKey, String stringFormatParameter) {

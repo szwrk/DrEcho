@@ -3,7 +3,7 @@ package net.wilamowski.drecho.standalone.domain.echo;
 import java.util.List;
 import java.util.Optional;
 import lombok.ToString;
-import net.wilamowski.drecho.gateway.EchoTteExaminationService;
+import net.wilamowski.drecho.gateway.ports.EchoTteExaminationService;
 import net.wilamowski.drecho.standalone.persistance.EchoTteRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

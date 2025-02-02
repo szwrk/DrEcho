@@ -23,7 +23,7 @@ import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.gateway.infra.DeploymentType;
+import net.wilamowski.drecho.gateway.configuration.BackendType;
 import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -125,19 +125,19 @@ public class LoginController
     logger.debug("Open settings");
     //        List<String> backendValues =
     // EnumUtils.getEnumList(BackendType.class).stream().map(BackendType::name).collect(Collectors.toList());
-    List<DeploymentType> deploymentTypes = Arrays.asList(DeploymentType.values());
-    ChoiceBox<DeploymentType> backendTypeChoiceBox = new ChoiceBox<>();
-    backendTypeChoiceBox.getItems().addAll(deploymentTypes);
+    List<BackendType>      backendTypes         = Arrays.asList( BackendType.values());
+    ChoiceBox<BackendType> backendTypeChoiceBox = new ChoiceBox<>();
+    backendTypeChoiceBox.getItems().addAll( backendTypes );
     backendTypeChoiceBox.setConverter(
-        new StringConverter<DeploymentType>() {
+        new StringConverter<BackendType>() {
           @Override
-          public String toString(DeploymentType deploymentType) {
-            return deploymentType.getLabel() + " (" + deploymentType.getDescription() + ")";
+          public String toString(BackendType backendType) {
+            return backendType.getLabel() + " (" + backendType.getDescription() + ")";
           }
 
           @Override
-          public DeploymentType fromString(String s) {
-            return DeploymentType.valueOf(s);
+          public BackendType fromString(String s) {
+            return BackendType.valueOf(s);
           }
         });
   }

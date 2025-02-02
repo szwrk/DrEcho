@@ -17,8 +17,8 @@ import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.gateway.DictionariesService;
-import net.wilamowski.drecho.gateway.VisitService;
+import net.wilamowski.drecho.gateway.ports.DictionariesService;
+import net.wilamowski.drecho.gateway.ports.VisitService;
 import net.wilamowski.drecho.standalone.domain.user.UserService;
 import net.wilamowski.drecho.app.auth.Session;
 import net.wilamowski.drecho.app.dto.UserDto;

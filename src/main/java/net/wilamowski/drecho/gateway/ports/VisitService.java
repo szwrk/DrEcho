@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.gateway;
+package net.wilamowski.drecho.gateway.ports;
 
 import java.time.LocalDate;
 import java.util.Optional;

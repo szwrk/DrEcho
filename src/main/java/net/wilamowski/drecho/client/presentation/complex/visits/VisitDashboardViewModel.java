@@ -10,7 +10,7 @@ import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
-import net.wilamowski.drecho.gateway.VisitService;
+import net.wilamowski.drecho.gateway.ports.VisitService;
 import net.wilamowski.drecho.app.dto.PatientDto;
 import net.wilamowski.drecho.app.dto.VisitDtoDetailedQuery;
 import org.apache.logging.log4j.LogManager;

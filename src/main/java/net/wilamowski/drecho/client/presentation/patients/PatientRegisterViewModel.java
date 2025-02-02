@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
-import net.wilamowski.drecho.gateway.PatientService;
+import net.wilamowski.drecho.gateway.ports.PatientService;
 import net.wilamowski.drecho.standalone.domain.patient.validations.ValidationExceptions;
 import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;

@@ -2,7 +2,7 @@ package net.wilamowski.drecho.standalone.service.authenticator;
 
 import java.util.List;
 import net.wilamowski.drecho.app.configuration.SettingValue;
-import net.wilamowski.drecho.gateway.SettingsService;
+import net.wilamowski.drecho.gateway.ports.SettingsService;
 import net.wilamowski.drecho.standalone.persistance.ConfigurationRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
