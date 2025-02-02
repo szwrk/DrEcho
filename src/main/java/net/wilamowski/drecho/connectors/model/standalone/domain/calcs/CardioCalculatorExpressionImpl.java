@@ -4,7 +4,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
-import net.wilamowski.drecho.connectors.properties.BackendPropertyReader;
+import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +22,7 @@ public class CardioCalculatorExpressionImpl implements CardioCalculator {
       double heightInCm,
       double weightInKg) {
 
-    String expreesion = BackendPropertyReader.getString("examination.echotte.lvmi.expression");
+    String expreesion = ClientPropertyReader.getString("examination.echotte.lvmi.expression");
 
     Expression expression =
         new ExpressionBuilder(expreesion)
@@ -68,7 +68,7 @@ public class CardioCalculatorExpressionImpl implements CardioCalculator {
   @Override
   public double calcBodySurfaceArea(double heightInCm, double weightInKg)
       throws IllegalArgumentException {
-    String expreesion = BackendPropertyReader.getString("examination.echotte.bsa.expression");
+    String expreesion = ClientPropertyReader.getString("examination.echotte.bsa.expression");
     Expression expression =
         new ExpressionBuilder(expreesion)
             .variables("heightInCm", "weightInKg", "factor")
@@ -96,7 +96,7 @@ public class CardioCalculatorExpressionImpl implements CardioCalculator {
       Integer posteriorWallDuringDiastoleThickness,
       Integer leftVentricleDuringDiastoleInternalDiameter)
       throws IllegalArgumentException {
-    String expreesion = BackendPropertyReader.getString("examination.echotte.rwt.expression");
+    String expreesion = ClientPropertyReader.getString("examination.echotte.rwt.expression");
     Expression expression =
         new ExpressionBuilder(expreesion)
             .variables("pwtd", "lvedd")
