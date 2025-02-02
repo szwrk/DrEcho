@@ -33,3 +33,4 @@ logs/
 #Others
 *.iml
 *.backup
+screensh*
