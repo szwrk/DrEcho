@@ -2,14 +2,14 @@ package net.wilamowski.drecho.standalone.persistance;
 
 import java.util.List;
 import java.util.Optional;
-import net.wilamowski.drecho.standalone.domain.echo.EchoTteUnmodifable;
+import net.wilamowski.drecho.standalone.domain.echo.EchoTieUnmodifiable;
 
 public interface EchoTteRepository {
-  void save(EchoTteUnmodifable object);
+  void save(EchoTieUnmodifiable object);
 
-  Optional<EchoTteUnmodifable> getById(Long id);
+  Optional<EchoTieUnmodifiable> getById(Long id);
 
-  void addExhamination(EchoTteUnmodifable echoTteBean);
+  void addExhamination(EchoTieUnmodifiable echoTteBean);
 
-  List<EchoTteUnmodifable> getAll(); // todo partitioning
+  List<EchoTieUnmodifiable> getAll(); // todo partitioning
 }

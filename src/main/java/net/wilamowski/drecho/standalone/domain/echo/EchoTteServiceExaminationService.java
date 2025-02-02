@@ -3,7 +3,7 @@ package net.wilamowski.drecho.standalone.domain.echo;
 import java.util.List;
 import java.util.Optional;
 import lombok.ToString;
-import net.wilamowski.drecho.gateway.ports.EchoTteExaminationService;
+import net.wilamowski.drecho.configuration.backend_ports.EchoTteExaminationService;
 import net.wilamowski.drecho.standalone.persistance.EchoTteRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,19 +21,19 @@ public class EchoTteServiceExaminationService implements EchoTteExaminationServi
   }
 
   @Override
-  public void addExhamination(EchoTteUnmodifable echoTteBean) {
+  public void addExhamination(EchoTieUnmodifiable echoTteBean) {
     logger.debug("[SERVICE] Saving data...");
     repository.addExhamination(echoTteBean);
   }
 
   @Override
-  public Optional<EchoTteUnmodifable> findById(Long id) {
+  public Optional<EchoTieUnmodifiable> findById(Long id) {
     logger.debug("[SERVICE] Finding data by ID...");
     return repository.getById(id);
   }
 
   @Override
-  public List<EchoTteUnmodifable> findAll() { // todo partitioning
+  public List<EchoTieUnmodifiable> findAll() { // todo partitioning
     logger.debug("[SERVICE] Finding all...");
     return repository.getAll();
   }

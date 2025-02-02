@@ -1,6 +1,6 @@
 package net.wilamowski.drecho.standalone.domain.patient.validations;
 
-import net.wilamowski.drecho.gateway.ports.PatientService;
+import net.wilamowski.drecho.configuration.backend_ports.PatientService;
 import net.wilamowski.drecho.standalone.domain.patient.Patient;
 
 public interface Constraint {

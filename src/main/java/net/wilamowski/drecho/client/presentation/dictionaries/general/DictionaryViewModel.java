@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
-import net.wilamowski.drecho.gateway.ports.DictionariesService;
+import net.wilamowski.drecho.configuration.backend_ports.DictionariesService;
 import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
 import net.wilamowski.drecho.standalone.domain.dictionary.Position;
 import org.apache.logging.log4j.LogManager;

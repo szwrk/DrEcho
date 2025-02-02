@@ -2,7 +2,7 @@ package net.wilamowski.drecho.client.application.infra;
 
 import lombok.ToString;
 import net.wilamowski.drecho.client.presentation.notes.NotesViewModel;
-import net.wilamowski.drecho.gateway.configuration.BackendConfigurationFactory;
+import net.wilamowski.drecho.configuration.BackendConfigurationFactory;
 import net.wilamowski.drecho.client.presentation.complex.visits.VisitDashboardViewModel;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryViewModel;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserViewModel;

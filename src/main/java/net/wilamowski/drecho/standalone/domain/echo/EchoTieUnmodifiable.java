@@ -5,7 +5,7 @@ import lombok.ToString;
 
 @ToString
 @Getter
-public class EchoTteUnmodifable {
+public class EchoTieUnmodifiable {
   /* Dimensions */
   int dm_name;
   int dm_left_ventricle;
@@ -102,7 +102,7 @@ public class EchoTteUnmodifable {
 
   ///////////////////////////////////////////////////////////////////////
 
-  EchoTteUnmodifable(
+  EchoTieUnmodifiable(
       int dm_name,
       int dm_left_ventricle,
       int dm_left_ventricle_systole,

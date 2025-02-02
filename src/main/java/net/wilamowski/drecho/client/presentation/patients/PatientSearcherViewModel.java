@@ -10,7 +10,7 @@ import javafx.collections.ObservableList;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.gateway.ports.PatientService;
+import net.wilamowski.drecho.configuration.backend_ports.PatientService;
 import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;

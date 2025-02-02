@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import javafx.util.StringConverter;
 import net.wilamowski.drecho.client.application.mapper.PositionVmMapper;
-import net.wilamowski.drecho.gateway.ports.DictionariesService;
+import net.wilamowski.drecho.configuration.backend_ports.DictionariesService;
 import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
 import net.wilamowski.drecho.standalone.domain.dictionary.Position;
 import org.apache.logging.log4j.LogManager;

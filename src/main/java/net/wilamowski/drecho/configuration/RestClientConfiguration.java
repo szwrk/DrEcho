@@ -1,8 +1,10 @@
-package net.wilamowski.drecho.gateway.configuration;
+package net.wilamowski.drecho.configuration;
 
+import net.wilamowski.drecho.backend_ports.*;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationModel;
 import net.wilamowski.drecho.client.presentation.main.MainService;
-import net.wilamowski.drecho.gateway.ports.*;
+import net.wilamowski.drecho.backend.ports.*;
+import net.wilamowski.drecho.configuration.backend_ports.*;
 import net.wilamowski.drecho.standalone.domain.user.UserService;
 import org.apache.commons.lang.NotImplementedException;
 

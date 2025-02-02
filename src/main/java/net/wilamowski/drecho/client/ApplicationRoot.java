@@ -12,8 +12,8 @@ import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.gateway.configuration.BackendConfigurationFactory;
-import net.wilamowski.drecho.gateway.configuration.BackendType;
+import net.wilamowski.drecho.configuration.BackendConfigurationFactory;
+import net.wilamowski.drecho.configuration.BackendType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

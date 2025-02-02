@@ -1,11 +1,11 @@
-package net.wilamowski.drecho.gateway.configuration;
+package net.wilamowski.drecho.configuration;
 
 import java.util.Objects;
 import lombok.ToString;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationModel;
 import net.wilamowski.drecho.client.presentation.main.ConnectorMainModelStandalone;
 import net.wilamowski.drecho.client.presentation.main.MainService;
-import net.wilamowski.drecho.gateway.ports.*;
+import net.wilamowski.drecho.configuration.backend_ports.*;
 import net.wilamowski.drecho.standalone.domain.echo.EchoTteServiceExaminationService;
 import net.wilamowski.drecho.standalone.domain.notes.NotesLocalServiceService;
 import net.wilamowski.drecho.standalone.domain.patient.PatientServiceStandalone;

@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.client.presentation.notes;
 
 import javafx.beans.property.SimpleStringProperty;
-import net.wilamowski.drecho.gateway.ports.NotesService;
+import net.wilamowski.drecho.configuration.backend_ports.NotesService;
 public class NotesViewModel {
    private SimpleStringProperty interviewProperty;
    private SimpleStringProperty recommendationsProperty;

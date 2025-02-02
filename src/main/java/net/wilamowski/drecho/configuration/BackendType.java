@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.gateway.configuration;
+package net.wilamowski.drecho.configuration;
 
 import lombok.ToString;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;

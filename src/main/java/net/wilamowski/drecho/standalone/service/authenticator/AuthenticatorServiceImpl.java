@@ -3,7 +3,7 @@ package net.wilamowski.drecho.standalone.service.authenticator;
 import java.util.*;
 import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import net.wilamowski.drecho.app.dto.UserDto;
-import net.wilamowski.drecho.gateway.ports.AuthenticatorService;
+import net.wilamowski.drecho.configuration.backend_ports.AuthenticatorService;
 import net.wilamowski.drecho.standalone.domain.user.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

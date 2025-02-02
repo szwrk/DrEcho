@@ -16,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
+import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import net.wilamowski.drecho.client.ApplicationRoot;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
@@ -23,8 +24,7 @@ import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.gateway.configuration.BackendType;
-import net.wilamowski.drecho.app.auth.AuthenticationResults;
+import net.wilamowski.drecho.configuration.BackendType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,8 +50,9 @@ public class LoginController
     logger.debug("New LoginController");
   }
 
+
   @FXML
-  void setOnActionLogin(ActionEvent event) {
+  public void setOnActionLogin(ActionEvent event) {
     logger.debug("[CONTROLLER] Clicked on login button...");
     Platform.runLater(
         () -> {

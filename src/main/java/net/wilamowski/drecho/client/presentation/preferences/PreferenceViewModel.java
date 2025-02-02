@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import net.wilamowski.drecho.client.application.mapper.SettingVmMapper;
 import net.wilamowski.drecho.client.presentation.settings.SettingPropertyFx;
 import net.wilamowski.drecho.app.configuration.SettingValue;
-import net.wilamowski.drecho.gateway.ports.SettingsService;
+import net.wilamowski.drecho.configuration.backend_ports.SettingsService;
 
 /**
  * @author Arkadiusz Wilamowski

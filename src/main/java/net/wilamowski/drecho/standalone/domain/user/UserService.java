@@ -1,11 +1,11 @@
 package net.wilamowski.drecho.standalone.domain.user;
 
 import java.util.Optional;
-import net.wilamowski.drecho.gateway.ports.UserModel;
+import net.wilamowski.drecho.app.dto.UserDto;
+import net.wilamowski.drecho.configuration.backend_ports.UserModel;
 import net.wilamowski.drecho.infra.connectors.mappers.UserDomainDtoMapper;
 import net.wilamowski.drecho.standalone.domain.user.account.User;
 import net.wilamowski.drecho.standalone.persistance.UserRepository;
-import net.wilamowski.drecho.app.dto.UserDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

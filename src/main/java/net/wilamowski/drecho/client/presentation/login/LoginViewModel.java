@@ -1,9 +1,9 @@
 package net.wilamowski.drecho.client.presentation.login;
 
 import javafx.beans.property.*;
-import net.wilamowski.drecho.gateway.configuration.BackendType;
+import net.wilamowski.drecho.configuration.BackendType;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.gateway.ports.AuthenticatorService;
+import net.wilamowski.drecho.configuration.backend_ports.AuthenticatorService;
 import net.wilamowski.drecho.standalone.service.authenticator.Credentials;
 import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import net.wilamowski.drecho.app.bundle.Lang;

@@ -1,4 +1,4 @@
-package net.wilamowski.drecho.gateway.ports;
+package net.wilamowski.drecho.configuration.backend_ports;
 
 import java.util.List;
 import java.util.Optional;
