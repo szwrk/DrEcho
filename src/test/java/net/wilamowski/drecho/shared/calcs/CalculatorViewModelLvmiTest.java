@@ -1,13 +1,13 @@
 package net.wilamowski.drecho.shared.calcs;
 
-import net.wilamowski.drecho.connectors.model.standalone.domain.calcs.CardioCalculator;
-import net.wilamowski.drecho.connectors.model.standalone.domain.calcs.CardioCalculatorExpressionImpl;
+import net.wilamowski.drecho.standalone.domain.echo.EchoCardioCalculator;
+import net.wilamowski.drecho.standalone.domain.echo.EchoCardioCalculatorExpressionImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class CardioCalculatorTest {
+class EchoCardioCalculatorTest {
 
-  private final CardioCalculator calculator = new CardioCalculatorExpressionImpl();
+  private final EchoCardioCalculator calculator = new EchoCardioCalculatorExpressionImpl();
 
   @Test
   void calculateBodySurfaceArea_ValidInput_ExpectedResult() {

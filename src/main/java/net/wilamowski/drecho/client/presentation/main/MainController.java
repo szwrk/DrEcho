@@ -31,7 +31,7 @@ import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.settings.SettingsViewModel;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.shared.auth.Session;
+import net.wilamowski.drecho.app.auth.Session;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

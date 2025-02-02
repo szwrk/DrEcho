@@ -3,7 +3,7 @@ package net.wilamowski.drecho.client.application.mapper;
 import java.util.List;
 import java.util.stream.Collectors;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
+import net.wilamowski.drecho.standalone.domain.dictionary.Position;
 
 /**
  * @author Arkadiusz Wilamowski

@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.text.Text;
-import net.wilamowski.drecho.shared.auth.Session;
+import net.wilamowski.drecho.app.auth.Session;
 
 public class WelcomeController implements Initializable {
 

@@ -29,7 +29,7 @@ import net.wilamowski.drecho.client.presentation.examinations.echo.EchoExaminati
 import net.wilamowski.drecho.client.presentation.examinations.echo.EchoTteExaminationInstance;
 import net.wilamowski.drecho.client.presentation.examinations.pacemaker.PacemakerExaminationDefinitionFx;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.shared.bundle.Lang;
+import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

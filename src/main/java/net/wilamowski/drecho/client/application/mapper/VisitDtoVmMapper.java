@@ -9,10 +9,10 @@ import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVMBuilder;
-import net.wilamowski.drecho.shared.dto.PatientDto;
-import net.wilamowski.drecho.shared.dto.UserDto;
-import net.wilamowski.drecho.shared.dto.VisitDtoCreate;
-import net.wilamowski.drecho.shared.dto.VisitDtoDetailedQuery;
+import net.wilamowski.drecho.app.dto.PatientDto;
+import net.wilamowski.drecho.app.dto.UserDto;
+import net.wilamowski.drecho.app.dto.VisitDtoCreate;
+import net.wilamowski.drecho.app.dto.VisitDtoDetailedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

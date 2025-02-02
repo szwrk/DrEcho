@@ -1,16 +1,16 @@
 package net.wilamowski.drecho.client.presentation.notes;
 
 import javafx.beans.property.SimpleStringProperty;
-import net.wilamowski.drecho.connectors.model.ConnectorNotes;
+import net.wilamowski.drecho.gateway.NotesService;
 public class NotesViewModel {
    private SimpleStringProperty interviewProperty;
    private SimpleStringProperty recommendationsProperty;
-  private final ConnectorNotes notesService;
+  private final NotesService notesService;
 
-    public NotesViewModel(ConnectorNotes connectorNotes) {
+    public NotesViewModel(NotesService notesService) {
         interviewProperty =  new SimpleStringProperty(  );
         recommendationsProperty =  new SimpleStringProperty(  );
-        this.notesService = connectorNotes;
+        this.notesService = notesService;
     }
     public SimpleStringProperty interviewProperty() {
         return interviewProperty;

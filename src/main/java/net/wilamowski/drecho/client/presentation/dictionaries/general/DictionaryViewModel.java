@@ -12,9 +12,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
-import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
+import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
+import net.wilamowski.drecho.standalone.domain.dictionary.Position;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
 @Getter(AccessLevel.PACKAGE)
 public class DictionaryViewModel {
   private static final Logger logger = LogManager.getLogger(DictionaryViewModel.class);
-  private final ConnectorSimpleDictionaries service;
+  private final DictionariesService service;
   private final ListProperty<DictionaryFx> dictionariesFx =
       new SimpleListProperty<>(FXCollections.observableArrayList());
   private final ObjectProperty<DictionaryFx> selectedDictionary = new SimpleObjectProperty<>();
@@ -31,8 +31,8 @@ public class DictionaryViewModel {
   private ChangeListener<String> positionNameListener;
   private ChangeListener<Boolean> positionActiveListener;
 
-  public DictionaryViewModel(ConnectorSimpleDictionaries connectorSimpleDictionaries) {
-    this.service = connectorSimpleDictionaries;
+  public DictionaryViewModel(DictionariesService dictionariesService) {
+    this.service = dictionariesService;
     initDictionary();
     createListeners();
   }

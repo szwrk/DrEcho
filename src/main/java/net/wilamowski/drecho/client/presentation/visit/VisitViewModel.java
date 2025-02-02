@@ -17,13 +17,13 @@ import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
-import net.wilamowski.drecho.connectors.model.ConnectorVisit;
-import net.wilamowski.drecho.connectors.model.standalone.domain.user.ConnectorUser;
-import net.wilamowski.drecho.shared.auth.Session;
-import net.wilamowski.drecho.shared.dto.UserDto;
-import net.wilamowski.drecho.shared.dto.VisitDtoCreate;
-import net.wilamowski.drecho.shared.dto.VisitDtoResponse;
+import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.gateway.VisitService;
+import net.wilamowski.drecho.standalone.domain.user.UserService;
+import net.wilamowski.drecho.app.auth.Session;
+import net.wilamowski.drecho.app.dto.UserDto;
+import net.wilamowski.drecho.app.dto.VisitDtoCreate;
+import net.wilamowski.drecho.app.dto.VisitDtoResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +37,7 @@ import org.apache.logging.log4j.Logger;
 public class VisitViewModel {
   private static final Logger logger = LogManager.getLogger( VisitViewModel.class);
 
-  private final ConnectorUser connectorUser;
+  private final UserService userService;
   // Form values - Visit details
 
   private final SimpleLongProperty visitIdProperty = new SimpleLongProperty();
@@ -58,15 +58,15 @@ public class VisitViewModel {
       new SimpleListProperty<>(FXCollections.observableArrayList());
 
   private final ResourceBundle bundle = null;
-  private ConnectorVisit service = null;
-  private ConnectorSimpleDictionaries dictService = null;
+  private VisitService service = null;
+  private DictionariesService dictService = null;
 
   private final BooleanProperty isVisitNotSaved = new SimpleBooleanProperty(true);
   public VisitViewModel(
-          ConnectorVisit service, ConnectorSimpleDictionaries dictService, ConnectorUser connectorUser) {
+          VisitService service, DictionariesService dictService, UserService userService) {
     this.service = service;
     this.dictService = dictService;
-    this.connectorUser = connectorUser;
+    this.userService = userService;
     initStartDateWithNow();
     initStartTimeWithNow();
     loadDict();
@@ -118,7 +118,7 @@ public class VisitViewModel {
 
   public UserVM findUserByLogin(String login) {
     logger.trace("[VM] Enter selectUserByLogin: {}", login);
-      Optional<UserDto> userByLogin = connectorUser.findUserByLogin(login);
+      Optional<UserDto> userByLogin = userService.findUserByLogin(login);
         UserDto userDto = userByLogin.get();
         logger.debug("[VM] Set performer: {}", userDto.login());
         return UserDtoVmMapper.toVm(userDto);

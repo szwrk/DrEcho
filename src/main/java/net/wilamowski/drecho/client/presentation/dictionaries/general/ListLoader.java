@@ -4,17 +4,17 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javafx.beans.property.ListProperty;
 import net.wilamowski.drecho.client.application.mapper.DictionaryVmMapper;
-import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
+import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
 
 public class ListLoader {
-  private final ConnectorSimpleDictionaries service;
+  private final DictionariesService service;
 
-  private ListLoader(ConnectorSimpleDictionaries service) {
+  private ListLoader(DictionariesService service) {
     this.service = service;
   }
 
-  public static ListLoader source(ConnectorSimpleDictionaries service) {
+  public static ListLoader source(DictionariesService service) {
     return new ListLoader(service);
   }
 

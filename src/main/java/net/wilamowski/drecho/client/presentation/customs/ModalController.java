@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.shared.bundle.Lang;
+import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

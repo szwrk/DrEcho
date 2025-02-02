@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.client.application.mapper;
 
 import net.wilamowski.drecho.client.presentation.settings.SettingPropertyFx;
-import net.wilamowski.drecho.connectors.configuration.SettingValue;
+import net.wilamowski.drecho.app.configuration.SettingValue;
 
 /**
  * @author Arkadiusz Wilamowski

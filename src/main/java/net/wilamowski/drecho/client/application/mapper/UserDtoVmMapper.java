@@ -3,7 +3,7 @@ package net.wilamowski.drecho.client.application.mapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
-import net.wilamowski.drecho.shared.dto.UserDto;
+import net.wilamowski.drecho.app.dto.UserDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -23,8 +23,8 @@ import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
-import net.wilamowski.drecho.shared.auth.AuthenticationResults;
+import net.wilamowski.drecho.gateway.infra.DeploymentType;
+import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

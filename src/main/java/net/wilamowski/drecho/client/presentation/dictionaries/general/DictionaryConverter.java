@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.Optional;
 import javafx.util.StringConverter;
 import net.wilamowski.drecho.client.application.mapper.PositionVmMapper;
-import net.wilamowski.drecho.connectors.model.ConnectorSimpleDictionaries;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
+import net.wilamowski.drecho.gateway.DictionariesService;
+import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
+import net.wilamowski.drecho.standalone.domain.dictionary.Position;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class DictionaryConverter extends StringConverter<PositionFx> {
   private static final Logger logger = LogManager.getLogger(DictionaryConverter.class);
-  private final ConnectorSimpleDictionaries service;
+  private final DictionariesService service;
   private final String dictName;
 
-  public DictionaryConverter(ConnectorSimpleDictionaries service, String dictName) {
+  public DictionaryConverter(DictionariesService service, String dictName) {
     this.service = service;
     this.dictName = dictName;
   }

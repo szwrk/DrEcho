@@ -4,17 +4,17 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import net.wilamowski.drecho.app.auth.Session;
+import net.wilamowski.drecho.app.bundle.Lang;
+import net.wilamowski.drecho.app.bundle.ResourceBundleFactory;
 import net.wilamowski.drecho.client.application.exceptions.old.MyDefaultUncaughtExceptionHandler;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.connectors.model.standalone.infra.ConnectorLayer;
-import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
-import net.wilamowski.drecho.connectors.model.standalone.infra.ModelLayerFactory;
-import net.wilamowski.drecho.shared.auth.Session;
-import net.wilamowski.drecho.shared.bundle.Lang;
-import net.wilamowski.drecho.shared.bundle.ResourceBundleFactory;
+import net.wilamowski.drecho.gateway.infra.BackendConfigurationFactory;
+import net.wilamowski.drecho.gateway.infra.DeploymentType;
+import net.wilamowski.drecho.gateway.infra.ModelLayerFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class ApplicationRoot extends Application {
   public void start(Stage primaryStage) throws Exception {
     log.info("Application starting...");
     initializeLanguage();
-    ConnectorLayer model = Objects.requireNonNull(createModelLayer());
+    BackendConfigurationFactory model = Objects.requireNonNull(createModelLayer());
     initializeViewHandler(model);
     Objects.requireNonNull(generalViewHandler);
 
@@ -62,9 +62,9 @@ public class ApplicationRoot extends Application {
     Lang.initializeSingleton(Objects.requireNonNull(mainAppBundle));
   }
 
-  private ConnectorLayer createModelLayer() {
-    ConnectorLayer backend = null;
-    ModelLayerFactory modelLayerFactory = new ModelLayerFactory();
+  private BackendConfigurationFactory createModelLayer() {
+    BackendConfigurationFactory backend           = null;
+    ModelLayerFactory           modelLayerFactory = new ModelLayerFactory();
     try {
       backend = modelLayerFactory.createModelLayerByType(deployMode);
     } catch (IllegalArgumentException e) {
@@ -106,7 +106,7 @@ public class ApplicationRoot extends Application {
     ExceptionAlert.create().showError(e, header, msg);
   }
 
-  private void initializeViewHandler(ConnectorLayer backend) {
+  private void initializeViewHandler(BackendConfigurationFactory backend) {
     log.debug("Initializing GeneralViewHandler...");
     String                 globalStyleName        = ClientPropertyReader.getString("user.style.set");
     ViewModelConfiguration viewModelConfiguration = new ViewModelConfiguration(backend);

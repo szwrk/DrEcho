@@ -1,7 +1,7 @@
 package net.wilamowski.drecho.client.application.exceptions;
 
 
-import net.wilamowski.drecho.shared.bundle.Lang;
+import net.wilamowski.drecho.app.bundle.Lang;
 
 public class GeneralUiException extends RuntimeException {
   private final String header;

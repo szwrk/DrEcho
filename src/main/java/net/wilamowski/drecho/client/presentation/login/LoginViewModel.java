@@ -1,12 +1,12 @@
 package net.wilamowski.drecho.client.presentation.login;
 
 import javafx.beans.property.*;
-import net.wilamowski.drecho.connectors.model.standalone.infra.DeploymentType;
+import net.wilamowski.drecho.gateway.infra.DeploymentType;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.connectors.model.ConnectorAuthenticator;
-import net.wilamowski.drecho.connectors.model.standalone.service.authenticator.Credentials;
-import net.wilamowski.drecho.shared.auth.AuthenticationResults;
-import net.wilamowski.drecho.shared.bundle.Lang;
+import net.wilamowski.drecho.gateway.AuthenticatorService;
+import net.wilamowski.drecho.standalone.service.authenticator.Credentials;
+import net.wilamowski.drecho.app.auth.AuthenticationResults;
+import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,9 +21,9 @@ public class LoginViewModel {
   private final StringProperty loginMsg;
   private final StringProperty passwordMsg;
   private final BooleanProperty isCapsLockOn;
-  private final ConnectorAuthenticator authenticationService;
+  private final AuthenticatorService authenticationService;
 
-  public LoginViewModel(ConnectorAuthenticator service) {
+  public LoginViewModel(AuthenticatorService service) {
     this.authenticationService = service;
     this.styleMode = new SimpleStringProperty("");
     this.login = new SimpleStringProperty("");

@@ -10,7 +10,7 @@ import net.wilamowski.drecho.client.presentation.examinations.chooser.Examinatio
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationInstance;
 import net.wilamowski.drecho.client.presentation.examinations.general.GeneralExaminationController;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
-import net.wilamowski.drecho.shared.bundle.Lang;
+import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

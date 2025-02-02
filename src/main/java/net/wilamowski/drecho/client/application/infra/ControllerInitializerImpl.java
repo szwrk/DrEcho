@@ -10,7 +10,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.client.presentation.tooltiper.AutoTooltiper;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.shared.bundle.Lang;
+import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

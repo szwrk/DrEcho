@@ -1,8 +1,8 @@
 package net.wilamowski.drecho.client.presentation.calculators;
 
 import javafx.beans.property.IntegerProperty;
-import net.wilamowski.drecho.connectors.model.standalone.domain.calcs.CardioCalculator;
-import net.wilamowski.drecho.connectors.model.standalone.domain.calcs.CardioCalculatorExpressionImpl;
+import net.wilamowski.drecho.standalone.domain.echo.EchoCardioCalculator;
+import net.wilamowski.drecho.standalone.domain.echo.EchoCardioCalculatorExpressionImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,10 +15,10 @@ public class CalculatorViewModel {
   public static final int HEIGHT_IN_CM = 190; // todo hardcoded value!
   public static final int WEIGHT_IN_KG = 83; // todo hardcoded value!
   private static final Logger logger = LogManager.getLogger(CalculatorViewModel.class);
-  private final CardioCalculator calculator;
+  private final EchoCardioCalculator calculator;
 
   public CalculatorViewModel() {
-    this.calculator = new CardioCalculatorExpressionImpl();
+    this.calculator = new EchoCardioCalculatorExpressionImpl();
   }
 
   public Double calcLvm(

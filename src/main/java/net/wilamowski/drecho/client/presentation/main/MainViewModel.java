@@ -5,13 +5,13 @@ import net.wilamowski.drecho.client.application.infra.controler_init.ViewModelOn
 
 @ToString
 public class MainViewModel implements ViewModelOnly {
-  private final ConnectorMainModel dataModel;
+  private final MainService dataModel;
 
-  public MainViewModel(ConnectorMainModel dataModel) {
+  public MainViewModel(MainService dataModel) {
     this.dataModel = dataModel;
   }
 
-  public ConnectorMainModel getDataModel() {
+  public MainService getDataModel() {
     return dataModel;
   }
 }

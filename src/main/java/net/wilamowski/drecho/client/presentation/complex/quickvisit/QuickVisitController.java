@@ -36,8 +36,8 @@ import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.visit.VisitController;
 import net.wilamowski.drecho.client.presentation.visit.VisitViewModel;
-import net.wilamowski.drecho.shared.bundle.Lang;
-import net.wilamowski.drecho.shared.dto.VisitDtoResponse;
+import net.wilamowski.drecho.app.bundle.Lang;
+import net.wilamowski.drecho.app.dto.VisitDtoResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

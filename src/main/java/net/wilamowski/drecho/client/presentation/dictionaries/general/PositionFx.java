@@ -3,7 +3,7 @@ package net.wilamowski.drecho.client.presentation.dictionaries.general;
 import java.util.Objects;
 import javafx.beans.property.*;
 import lombok.ToString;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Position;
+import net.wilamowski.drecho.standalone.domain.dictionary.Position;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

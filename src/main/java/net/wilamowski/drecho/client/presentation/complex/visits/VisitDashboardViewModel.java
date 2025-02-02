@@ -10,9 +10,9 @@ import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
-import net.wilamowski.drecho.connectors.model.ConnectorVisit;
-import net.wilamowski.drecho.shared.dto.PatientDto;
-import net.wilamowski.drecho.shared.dto.VisitDtoDetailedQuery;
+import net.wilamowski.drecho.gateway.VisitService;
+import net.wilamowski.drecho.app.dto.PatientDto;
+import net.wilamowski.drecho.app.dto.VisitDtoDetailedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,18 +26,18 @@ import org.apache.logging.log4j.Logger;
 public class VisitDashboardViewModel {
   private static final Logger logger = LogManager.getLogger(VisitDashboardViewModel.class);
 
-  private final ConnectorVisit connectorVisit;
+  private final VisitService visitService;
   private final ObservableList<VisitVM> visits = FXCollections.observableArrayList();
 
-  public VisitDashboardViewModel(ConnectorVisit connectorVisit) {
-    this.connectorVisit = connectorVisit;
+  public VisitDashboardViewModel(VisitService visitService) {
+    this.visitService = visitService;
   }
 
   public void searchByPatient(PatientVM patientVM , int page) {
     logger.trace("Clicked search by selected patient");
     if ( patientVM != null) {
       PatientDto                 patient  = PatientDtoVmMapper.toDto( patientVM );
-      Set<VisitDtoDetailedQuery> visitSet = connectorVisit.listVisitsBy(patient, page);
+      Set<VisitDtoDetailedQuery> visitSet = visitService.listVisitsBy(patient, page);
       loadVisitsToTable(visitSet);
     }
   }
@@ -64,7 +64,7 @@ public class VisitDashboardViewModel {
 
   public void searchByDate(LocalDate date, int page) {
     logger.trace("Clicked search by date");
-    Set<VisitDtoDetailedQuery> visitSet = connectorVisit.listVisitsBy(date, page);
+    Set<VisitDtoDetailedQuery> visitSet = visitService.listVisitsBy(date, page);
     loadVisitsToTable(visitSet);
   }
 

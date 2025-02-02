@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
-import net.wilamowski.drecho.shared.dto.PatientDto;
+import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

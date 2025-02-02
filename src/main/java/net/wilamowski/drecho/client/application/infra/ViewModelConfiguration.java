@@ -2,7 +2,7 @@ package net.wilamowski.drecho.client.application.infra;
 
 import lombok.ToString;
 import net.wilamowski.drecho.client.presentation.notes.NotesViewModel;
-import net.wilamowski.drecho.connectors.model.standalone.infra.ConnectorLayer;
+import net.wilamowski.drecho.gateway.infra.BackendConfigurationFactory;
 import net.wilamowski.drecho.client.presentation.complex.visits.VisitDashboardViewModel;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryViewModel;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserViewModel;
@@ -26,9 +26,9 @@ import org.apache.logging.log4j.Logger;
 @ToString
 public class ViewModelConfiguration {
   private static final Logger logger = LogManager.getLogger( ViewModelConfiguration.class);
-  private final ConnectorLayer connectors;
+  private final BackendConfigurationFactory connectors;
 
-  public ViewModelConfiguration(ConnectorLayer connectors) {
+  public ViewModelConfiguration(BackendConfigurationFactory connectors) {
     this.connectors = connectors;
   }
 

@@ -10,8 +10,8 @@ import javafx.collections.ObservableList;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryFx;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryFxBuilder;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.Dictionary;
-import net.wilamowski.drecho.connectors.model.standalone.domain.dictionary.DictionaryBuilder;
+import net.wilamowski.drecho.standalone.domain.dictionary.Dictionary;
+import net.wilamowski.drecho.standalone.domain.dictionary.DictionaryBuilder;
 
 /**
  * @author Arkadiusz Wilamowski
