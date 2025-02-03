@@ -463,12 +463,13 @@ public class EchoController
 
   private void configLvmInfoBox() {
     final String expression = ClientPropertyReader.getString("examination.echotte.lvm.expression");
+    final String expressionLabelName = ClientPropertyReader.getString("examination.echotte.lvm.expression.label");
     final String referenceValues =
         ClientPropertyReader.getString("examination.echotte.lvm.reference");
     lvmPopover =
         PopoverFactory.createActionPopover(
             "LVM - Left ventricular mass",
-            String.format("Wyrażenie: %s\n%s", expression, referenceValues),
+            String.format("%s: %s\n%s", expressionLabelName, expression, referenceValues),
             "Highlight calculated fields",
             "Tip: After clicking, the interface will perform an animation indicating the fields required for this calculation",
             event ->
@@ -511,7 +512,7 @@ public class EchoController
     rwtPopover =
         PopoverFactory.createActionPopover(
             "RWT - Relative Wall Thickness",
-            "Wyrażenie: " + expression,
+            "Expression: " + expression,
             "Highlight calculated fields",
             "Tip: After clicking, the interface will perform an animation indicating the fields required for this calculation",
             event ->
