@@ -27,11 +27,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import lombok.ToString;
+import net.wilamowski.drecho.app.bundle.Lang;
 import net.wilamowski.drecho.client.ApplicationRoot;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -308,7 +308,7 @@ public class GeneralViewHandler {
   public void openLogin() {
     logger.info("Login window lauching...");
     try {
-      Stage newStage = new Stage();
+      Stage           newStage   = new Stage();
       LoginController controller = (LoginController) switchSceneForStage("Login", newStage);
       newStage.show();
     } catch (IllegalStateException e) {

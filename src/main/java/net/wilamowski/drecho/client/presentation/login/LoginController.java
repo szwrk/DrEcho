@@ -30,7 +30,7 @@ import org.apache.logging.log4j.Logger;
 
 public class LoginController
     implements Initializable, ViewHandlerInitializer, ViewModelsInitializer, PostInitializable {
-  private static final Logger logger = LogManager.getLogger(LoginController.class);
+  private static final Logger logger = LogManager.getLogger( LoginController.class);
   private final Tooltip loginTooltip =
       new Tooltip("Znaki zostaly automatycznie powiekszone. Login wpisujemy wielkimi literami!");
   private final List<Scene> scenes = new ArrayList<>();

@@ -1,16 +1,13 @@
 package net.wilamowski.drecho.configuration;
-import net.wilamowski.drecho.backend_ports.*;
+import java.util.Arrays;
+import java.util.Objects;
 import net.wilamowski.drecho.client.presentation.main.MainService;
-import net.wilamowski.drecho.backend.ports.*;
 import net.wilamowski.drecho.configuration.backend_ports.*;
 import net.wilamowski.drecho.standalone.domain.user.UserService;
 import net.wilamowski.drecho.standalone.persistance.factory.InMemoryRepositoryFactory;
 import net.wilamowski.drecho.standalone.persistance.factory.StandaloneRepositoryFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * @author Arkadiusz Wilamowski

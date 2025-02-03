@@ -108,7 +108,6 @@ public class LoginViewModel {
       return authenticationResults;
     } catch (Exception e) {
       logger.error("[VM-LOGIN] Authentication failed: {}", e.getMessage());
-      // You might want to throw a more specific exception or return a specific error indication
       throw new RuntimeException("Authentication failed", e);
     }
   }
