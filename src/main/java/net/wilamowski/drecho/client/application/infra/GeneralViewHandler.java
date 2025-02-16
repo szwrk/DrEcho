@@ -48,15 +48,17 @@ public class GeneralViewHandler {
   public static int ANIMATION_CHANGE_SCANE_DURATION = 200;
   private static ControllerInitializer controllerInitializer;
   private final ApplicationRoot root;
+  private final ViewModelConfiguration viewModelConfiguration;
+
   private String applicationStyle;
   private BorderPane mainView;
-
   private GeneralViewHandler(
           String styleName, ViewModelConfiguration viewModelConfiguration , ApplicationRoot applicationRoot) {
     ANIMATION_CHANGE_SCANE_DURATION = ClientPropertyReader.getInt("admin.switch-scene.duration");
     this.root = applicationRoot;
     this.initGlobalStyle(styleName);
     controllerInitializer = new ControllerInitializerImpl( viewModelConfiguration );
+    this.viewModelConfiguration = viewModelConfiguration;
   }
 
   private void initGlobalStyle(String styleName) {
@@ -80,14 +82,6 @@ public class GeneralViewHandler {
 
   private static boolean isBuitlInStyle(String passedStyle) {
     return passedStyle.equals("modena") || passedStyle.equals("kaspian");
-  }
-
-  public BorderPane getMainView() {
-    return mainView;
-  }
-
-  public void setMainView(BorderPane mainView) {
-    this.mainView = mainView;
   }
 
   private static void setBuiltInStyle(String javaFxStyleConstant) {
@@ -134,7 +128,7 @@ public class GeneralViewHandler {
     modalStage.initStyle(StageStyle.UNDECORATED);
     modalStage.setMaximized(false);
   }
-
+  
   /**
    * Sets up the provided Stage as a blur modal window. Blur modals are used for popups, modal
    * dialogs, and business logic with a blurred background effect.
@@ -180,14 +174,13 @@ public class GeneralViewHandler {
     return loader;
   }
 
-
   public <T extends Parent> Object switchSceneForParent(String viewToOpen) {
     BorderPane root = getMainView( );
     Objects.requireNonNull(root,"Main view root node is not set");
     Objects.requireNonNull(viewToOpen);
 
     logger.debug("Switch scene for parent, view name: {} ", viewToOpen);
-    FXMLLoader loader = new FXMLLoader();
+    FXMLLoader loader = createFxmlLoader( );
     Parent newNode = loadFxml(viewToOpen, loader);
     Objects.requireNonNull(newNode, "Fxml loading error. Node is null");
 
@@ -200,23 +193,20 @@ public class GeneralViewHandler {
     timeline.play();
     return controller;
   }
-  public <T extends Parent> Object switchSceneForParent(T container, String viewToOpen) {
-    Objects.requireNonNull(container);
-    Objects.requireNonNull(viewToOpen);
 
-    logger.debug("Switch scene for parent, view name: {} ", viewToOpen);
-    FXMLLoader loader = new FXMLLoader();
-    Parent newNode = loadFxml(viewToOpen, loader);
-    Objects.requireNonNull(newNode, "Fxml loading error. Node is null");
+  public BorderPane getMainView() {
+    return mainView;
+  }
 
-    Timeline timeline =
-        Animations.fadeIn(newNode, Duration.millis(ANIMATION_CHANGE_SCANE_DURATION));
-    embedNodeInContainer(container, newNode);
-    applyCurrentStyleForParent(newNode);
-    Object controller = loader.getController();
-    initializeController(controller);
-    timeline.play();
-    return controller;
+  public void setMainView(BorderPane mainView) {
+    this.mainView = mainView;
+  }
+
+  private FXMLLoader createFxmlLoader() {
+    FXMLLoader loader = new FXMLLoader( );
+    loader.setControllerFactory(new ControllerFactory(viewModelConfiguration, this ));
+
+    return loader;
   }
 
   private void initializeController(Object controller) {
@@ -261,7 +251,11 @@ public class GeneralViewHandler {
     } catch (Exception unexceptedException) {
       handleError(unexceptedException, "e.999.header", "e.999.msg");
     }
-    Objects.requireNonNull(parent, "View loading failed! Check fxml with name: " + viewName);
+    try {
+      Objects.requireNonNull(parent);
+    } catch (NullPointerException npe){
+      logger.error("View loading failed! Check fxml with name: " + viewName + ". Is empty contructor exists?" );
+    }
     return parent;
   }
 
@@ -301,6 +295,25 @@ public class GeneralViewHandler {
     }
   }
 
+  public <T extends Parent> Object switchSceneForParent(T container, String viewToOpen) {
+    Objects.requireNonNull(container);
+    Objects.requireNonNull(viewToOpen);
+
+    logger.debug("Switch scene for parent, view name: {} ", viewToOpen);
+    FXMLLoader loader = createFxmlLoader( );
+    Parent newNode = loadFxml(viewToOpen, loader);
+    Objects.requireNonNull(newNode, "Fxml loading error. Node is null");
+
+    Timeline timeline =
+        Animations.fadeIn(newNode, Duration.millis(ANIMATION_CHANGE_SCANE_DURATION));
+    embedNodeInContainer(container, newNode);
+    applyCurrentStyleForParent(newNode);
+    Object controller = loader.getController();
+    initializeController(controller);
+    timeline.play();
+    return controller;
+  }
+
   public ApplicationRoot getRoot() {
     return root;
   }
@@ -310,6 +323,7 @@ public class GeneralViewHandler {
     try {
       Stage           newStage   = new Stage();
       LoginController controller = (LoginController) switchSceneForStage("Login", newStage);
+
       newStage.show();
     } catch (IllegalStateException e) {
       handleError(e, "e.001.header", "e.001.msg");
@@ -344,7 +358,7 @@ public class GeneralViewHandler {
     Objects.requireNonNull(newStage);
     logger.debug("Switch scene for stage, view name: {} ", viewToOpenAsStage);
 
-    FXMLLoader loader = new FXMLLoader();
+    FXMLLoader loader = createFxmlLoader( );
     Parent parent = loadFxml(viewToOpenAsStage, loader);
 
     if (parent == null) {

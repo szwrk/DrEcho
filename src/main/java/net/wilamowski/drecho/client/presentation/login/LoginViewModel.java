@@ -1,12 +1,11 @@
 package net.wilamowski.drecho.client.presentation.login;
 
 import javafx.beans.property.*;
-import net.wilamowski.drecho.configuration.BackendType;
+import net.wilamowski.drecho.app.auth.AuthenticationResults;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
+import net.wilamowski.drecho.configuration.BackendType;
 import net.wilamowski.drecho.configuration.backend_ports.AuthenticatorService;
 import net.wilamowski.drecho.standalone.service.authenticator.Credentials;
-import net.wilamowski.drecho.app.auth.AuthenticationResults;
-import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,21 +49,8 @@ public class LoginViewModel {
     return isCapsLockOn;
   }
 
-  boolean validateLoginInput() {
-    setLoginNotify(null);
-    setPasswordNotify(null);
-
-    String login = getLogin();
-    String password = getPassword();
-
-    if (login == null || login.isBlank()) {
-      setLoginNotify(Lang.getString("ui.login.validation.empty-login"));
-    }
-
-    if (password == null || password.isBlank()) {
-      setPasswordNotify(Lang.getString("ui.login.validation.empty-password"));
-    }
-    return isLoginAndPasswordNotBlank();
+  public AuthenticatorService getAuthenticationService() {
+    return authenticationService;
   }
 
   private boolean isLoginAndPasswordNotBlank() {
