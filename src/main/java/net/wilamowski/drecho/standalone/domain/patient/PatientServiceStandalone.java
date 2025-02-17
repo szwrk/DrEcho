@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.ToString;
+import net.wilamowski.drecho.app.dto.PatientDto;
 import net.wilamowski.drecho.configuration.backend_ports.PatientService;
 import net.wilamowski.drecho.infra.connectors.mappers.PatientDomainDtoMapper;
 import net.wilamowski.drecho.standalone.domain.patient.validations.Constraint;
@@ -12,7 +13,6 @@ import net.wilamowski.drecho.standalone.domain.patient.validations.ValidationExc
 import net.wilamowski.drecho.standalone.domain.patient.validations.Validator;
 import net.wilamowski.drecho.standalone.persistance.PatientRepository;
 import net.wilamowski.drecho.standalone.persistance.VersionedPatientRepository;
-import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -169,5 +169,16 @@ public class PatientServiceStandalone implements PatientService {
   @Override
   public Optional<Patient> findById(Long patientId) {
     return patientRepository.findById( patientId );
+  }
+
+  @Override
+  public List<PatientDto> findRecentlyPatients() {
+    int page = 1;
+    logger.trace("[SERVICE] Entering findByFullName...");
+    logger.debug("[SERVICE] Parameter  is alpha. Returning all patient by last name");
+    List<Patient> byLastName = patientRepository.findRecent(page);
+    logger.debug("[SERVICE] Founded patients number: {}", byLastName.size());
+    return byLastName.stream().map( PatientDomainDtoMapper::toDto ).collect( Collectors.toList());
+
   }
 }
