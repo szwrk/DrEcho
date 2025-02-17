@@ -32,6 +32,9 @@ import net.wilamowski.drecho.client.ApplicationRoot;
 import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.login.LoginController;
+import net.wilamowski.drecho.client.presentation.patients.PatientRegisterController;
+import net.wilamowski.drecho.client.presentation.patients.PatientRegisterViewModel;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
@@ -383,8 +386,56 @@ public class GeneralViewHandler {
     }
   }
 
+public void openNewPatientView(Stage owner){
+  Stage patientModal = new Stage();
 
+  PatientRegisterController patientRegisterController = //todo factory methods
+          (PatientRegisterController)
+                  this.switchSceneForStage("patient/PatientRegister", patientModal);
 
+  PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
+  patientRegisterController.bindControlsWithCurrentPatient();
+  viewModel.enableWriteMode();
+  patientRegisterController.setTitle("Add patient");
+  GeneralViewHandler.setupAsBlurModal(patientModal, owner);
+  GeneralViewHandler.setupStageTitle(patientModal, "New patient registration");
+  patientModal.showAndWait();
+
+}
+
+  public void openPatientReadOnlyView(Stage owner , PatientVM selectedPatient) {
+    Stage patientModal = new Stage();
+
+    PatientRegisterController patientRegisterController = //todo factory methods
+            (PatientRegisterController)
+                    this.switchSceneForStage("patient/PatientRegister", patientModal);
+    PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
+    viewModel.selectPatientForEdit(selectedPatient);
+    patientRegisterController.bindControlsWithCurrentPatient();
+    patientRegisterController.blockFields();
+    patientRegisterController.setTitle("Preview patient details");
+    this.setupAsBlurModal(patientModal, owner);
+    this.setupStageTitle(patientModal, "Preview patient details");
+    patientModal.showAndWait();
+    GeneralViewHandler.disableBlur(owner);
+  }
+
+  public void openPatientEditView(Stage owner , PatientVM selectedPatient) {
+    Stage modal = new Stage();
+
+    PatientRegisterController patientRegisterController =
+            (PatientRegisterController)
+                    this.switchSceneForStage("patient/PatientRegister", modal);
+    PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
+    viewModel.selectPatientForEdit(selectedPatient);
+    viewModel.turnOnEditingPatientMode();
+    patientRegisterController.bindControlsWithCurrentPatient();
+    patientRegisterController.setTitle("Edit patient");
+    this.setupAsBlurModal(modal, owner);
+    this.setupStageTitle(modal, "Edit patient");
+    modal.showAndWait();
+    GeneralViewHandler.disableBlur(owner);
+  }
   private Object switchScene(String viewToOpenAsStage, Stage newStage) {
     Objects.requireNonNull(viewToOpenAsStage);
     Objects.requireNonNull(newStage);
@@ -440,4 +491,7 @@ public class GeneralViewHandler {
     double taskbarHeight = bounds.getHeight() - screen.getBounds().getHeight();
     return bounds.getHeight() - taskbarHeight;
   }
+
+
+
 }
