@@ -173,6 +173,11 @@ public class PatientRepositoryInMemory implements PatientRepository {
     return patients;
   }
 
+  @Override
+  public List<Patient> findRecent(int page) {
+    return patients.subList(0, 10);
+  }
+
   private List<Patient> filterByFullName(String param) {
     logger.trace("[REPOSITORY] Entering filterByFullName");
     if (param == null) {
