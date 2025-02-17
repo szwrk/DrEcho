@@ -11,7 +11,7 @@ class NameNotNullConstraint implements Constraint {
 
   @Override
   public boolean validate() {
-    return !patient.getName().isEmpty();
+    return patient.getName()!=null;
   }
 
   @Override

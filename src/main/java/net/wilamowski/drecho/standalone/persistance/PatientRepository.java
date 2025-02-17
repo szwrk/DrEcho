@@ -19,5 +19,6 @@ public interface PatientRepository {
 
   List<Patient> findAll();
 
-  //  List<Patient> getByPage(int pageNumber , int pageSize);
+  List<Patient> findRecent(int page);
+
 }

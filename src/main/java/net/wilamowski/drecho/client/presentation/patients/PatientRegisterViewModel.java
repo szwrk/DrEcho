@@ -5,10 +5,10 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import lombok.ToString;
+import net.wilamowski.drecho.app.dto.PatientDto;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.configuration.backend_ports.PatientService;
 import net.wilamowski.drecho.standalone.domain.patient.validations.ValidationExceptions;
-import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,6 +46,9 @@ public class PatientRegisterViewModel {
     }
   }
 
+  public void enableWriteMode() {
+     addPatientModeDisable.set( false );
+  }
 
   public PatientRegisterViewModel(PatientService patientService) {
     this.patientService = patientService;
@@ -53,7 +56,7 @@ public class PatientRegisterViewModel {
     this.dataEntryMode = PatientRegisterDataEntryMode.READONLY;
   }
 
-  Optional<PatientVM> registerCurrentPatient() throws ValidationExceptions {
+  Optional<PatientVM> registerNewPatient() throws ValidationExceptions {
     logger.trace("[VM] New patient registration... START");
     PatientDto patientToRegister = PatientDtoVmMapper.toDto( currentPatientVM );
     try {
@@ -86,11 +89,7 @@ public class PatientRegisterViewModel {
     this.currentPatientVM = patientVM;
   }
 
-  public void initializePeselTextField(String peselCode) {
-    this.currentPatientVM.getPesel().set(peselCode);
-  }
-
-  BooleanProperty addPatientModeDisableProperty() {
+   BooleanProperty addPatientModeDisableProperty() {
     return addPatientModeDisable;
   }
 
@@ -98,11 +97,7 @@ public class PatientRegisterViewModel {
     return isEditPatientMode;
   }
 
-  void turnOnAddPatientMode() {
-    this.dataEntryMode = PatientRegisterDataEntryMode.ADD;
-    this.addPatientModeDisable.set(false);
-    turnOnListenersForPreventingUnsavedChanges();
-  }
+
 
   public void turnOnListenersForPreventingUnsavedChanges() {
     currentPatientVM
@@ -113,7 +108,7 @@ public class PatientRegisterViewModel {
         .addListener(lastNameListener);
   }
 
-  void turnOnEditingPatientMode() {
+  public void turnOnEditingPatientMode() {
     this.dataEntryMode = PatientRegisterDataEntryMode.EDIT;
     this.isEditPatientMode.set(false);
     this.disableCitizenCodeField.set( true );

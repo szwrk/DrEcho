@@ -8,10 +8,10 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.ToString;
+import net.wilamowski.drecho.app.dto.PatientDto;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import net.wilamowski.drecho.configuration.backend_ports.PatientService;
-import net.wilamowski.drecho.app.dto.PatientDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,6 +35,7 @@ public class PatientSearcherViewModel {
   private final ObjectProperty<PatientVM> selectedPatient = new SimpleObjectProperty<>();
 
   private final SimpleStringProperty searchTextProperty = new SimpleStringProperty();
+  private BooleanProperty isAutosearch = new SimpleBooleanProperty(false);
 
   public PatientSearcherViewModel(PatientService patientService) {
     this.patientService = patientService;
@@ -48,7 +49,11 @@ public class PatientSearcherViewModel {
                 "admin.patient.searcher.autosearch-text-length-trigger"));
   }
 
-  public void setCurrentPatient(PatientVM patient) {
+    public BooleanProperty isAutosearchProperty() {
+        return isAutosearch;
+    }
+
+    public void setCurrentPatient(PatientVM patient) {
     Objects.requireNonNull(patient, "Selected patient is null");
     selectedPatient.set(patient);
   }
@@ -120,6 +125,15 @@ public class PatientSearcherViewModel {
     }
   }
 
+  public int findRecentPatients(){
+    List<PatientDto> fetchedPatients = patientService.findRecentlyPatients();
+    logger.debug("[VM] Service return values: {}", fetchedPatients.size());
+    List<PatientVM> retrievedPatientsFx = PatientDtoVmMapper.toListToFx(fetchedPatients);
+    updatePatientsTable(retrievedPatientsFx);
+    unsetCurrentPatient();
+    return fetchedPatients.size();
+  }
+
   private int handleSearchByFullName(String searchInput) {
     logger.trace("Entering handle search by full name...");
     List<PatientDto> foundedPatients = patientService.findByFullName(searchInput, 0);
@@ -187,4 +201,5 @@ public class PatientSearcherViewModel {
   public Property<String> searchValueProperty() {
     return searchTextProperty;
   }
+
 }
