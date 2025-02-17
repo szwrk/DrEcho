@@ -52,6 +52,8 @@ public class GeneralViewHandler {
 
   private String applicationStyle;
   private BorderPane mainView;
+  private ControllerFactory controllerFactory;
+  private static ControllerFactory staticControllerFactory;
   private GeneralViewHandler(
           String styleName, ViewModelConfiguration viewModelConfiguration , ApplicationRoot applicationRoot) {
     ANIMATION_CHANGE_SCANE_DURATION = ClientPropertyReader.getInt("admin.switch-scene.duration");
@@ -59,6 +61,8 @@ public class GeneralViewHandler {
     this.initGlobalStyle(styleName);
     controllerInitializer = new ControllerInitializerImpl( viewModelConfiguration );
     this.viewModelConfiguration = viewModelConfiguration;
+    this.controllerFactory = new ControllerFactory( viewModelConfiguration , this );
+    staticControllerFactory = controllerFactory;
   }
 
   private void initGlobalStyle(String styleName) {
@@ -170,7 +174,9 @@ public class GeneralViewHandler {
 
   public static FXMLLoader createFxmlLoader(String subView) {
     FXMLLoader loader = new FXMLLoader(GeneralViewHandler.class.getResource(subView));
+    loader.setControllerFactory( staticControllerFactory );
     loader.setResources(Lang.getBundle());
+
     return loader;
   }
 
@@ -204,8 +210,7 @@ public class GeneralViewHandler {
 
   private FXMLLoader createFxmlLoader() {
     FXMLLoader loader = new FXMLLoader( );
-    loader.setControllerFactory(new ControllerFactory(viewModelConfiguration, this ));
-
+    loader.setControllerFactory(controllerFactory);
     return loader;
   }
 

@@ -57,7 +57,7 @@ public class GeneralExaminationController
     }
   }
 
-  public void loadNestedExamByFxmlPath(String subView) throws IOException {
+  public void loadNestedExamByFxmlPath(String subView) throws IOException { //todo refactor
     logger.debug("Loading nested examination. Param: {}", subView);
     FXMLLoader loader = GeneralViewHandler.createFxmlLoader(subView);
     includedNode = loader.load();

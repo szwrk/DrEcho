@@ -20,28 +20,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import lombok.ToString;
+import net.wilamowski.drecho.app.auth.Session;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.ImageViewUtil;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.settings.SettingsViewModel;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
-import net.wilamowski.drecho.app.auth.Session;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @ToString
 public class MainController
     implements Initializable,
-        ViewModelsInitializer,
-        KeyEventDebugInitializer,
-        ViewHandlerInitializer,
-        PostInitializable {
+        KeyEventDebugInitializer         {
   private static final Logger logger = LogManager.getLogger(MainController.class);
   private final String loggedInUser;
   private final String sessionStartDateTime;
@@ -65,7 +60,10 @@ public class MainController
   @FXML private Button quickVisitButton;
   private Stage owner;
 
-  public MainController() {
+  public MainController(ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
+    this.viewHandler = viewHandler;
+    this.mainViewModel = viewModelConfiguration.mainViewModel();
+    this.settingsViewModel = viewModelConfiguration.settingsViewModel();
     Session instance = Session.instance();
     loggedInUser = instance.getUserLogin();
     LocalDateTime sessionStartAt = instance.sessionStartAt();
@@ -78,20 +76,16 @@ public class MainController
   @Override
   public void initialize(URL url, java.util.ResourceBundle resourceBundle) {
     logger.traceEntry();
-    progressIndicator.setVisible(false);
+    loadWelcomeScreen();
+    passGlobalRootNode();
+    setupOwner();
+    setupLogoutTile();
+
     this.bundle = resourceBundle;
     quickVisitButton.requestFocus();
     logger.traceExit();
   }
-
-  @Override
-  public void initializeViewModels(ViewModelConfiguration viewModelConfiguration) {
-    logger.traceEntry();
-    this.mainViewModel = viewModelConfiguration.mainViewModel();
-    this.settingsViewModel = viewModelConfiguration.settingsViewModel();
-    logger.traceExit();
-  }
-
+  
   @FXML
   public void onActionOpenPatientsView(ActionEvent actionEvent) {
     logger.debug("Clicked on Patients...");
@@ -209,19 +203,6 @@ public class MainController
     logger.traceExit();
   }
 
-  @Override
-  public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.viewHandler = viewHandler;
-  }
-
-  @Override
-  public void postInitialize() {
-    loadWelcomeScreen();
-    setupOwner();
-    setupLogoutTile();
-    passGlobalRootNode();
-  }
-
   private void passGlobalRootNode() {
     viewHandler.setMainView( root );
   }
@@ -265,6 +246,9 @@ public class MainController
   }
 
   private void setupOwner() {
-    owner = (Stage) root.getScene().getWindow();
+    Platform.runLater(() -> {
+      owner = (Stage) root.getScene().getWindow();
+    });
   }
+
 }

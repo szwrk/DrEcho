@@ -13,10 +13,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.DefaultStringConverter;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
@@ -32,9 +29,11 @@ import org.apache.logging.log4j.Logger;
 public class SettingsController
     implements Initializable,
         KeyEventDebugInitializer,
-        Tooltipable,
-        ViewModelsInitializer,
-        PostInitializable {
+        Tooltipable
+//        ,
+//        ViewModelsInitializer,
+//        PostInitializable 
+{
   private static final Logger logger = LogManager.getLogger(SettingsController.class);
   @FXML private TableView<SettingPropertyFx> table;
 
@@ -48,6 +47,22 @@ public class SettingsController
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.bundle = resourceBundle;
+
+    keyColumn = new TableColumn<>("Key");
+    keyColumn.setCellValueFactory(cellData -> cellData.getValue().keyProperty());
+    keyColumn.setMinWidth(275);
+
+    valueColumn = new TableColumn<>("Value");
+    valueColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
+    valueColumn.setMinWidth(275);
+    setupEditOfValue();
+
+    table.getColumns().addAll(keyColumn, valueColumn);
+    table.setItems(viewModel.getSettingsFx());
+  }
+
+  public SettingsController(SettingsViewModel viewModel) {
+    this.viewModel = viewModel;
   }
 
   @Override
@@ -64,25 +79,7 @@ public class SettingsController
     return root;
   }
 
-  @Override
-  public void initializeViewModels(ViewModelConfiguration factory) {
-    this.viewModel = factory.settingsViewModel();
-  }
 
-  @Override
-  public void postInitialize() {
-    keyColumn = new TableColumn<>("Key");
-    keyColumn.setCellValueFactory(cellData -> cellData.getValue().keyProperty());
-    keyColumn.setMinWidth(275);
-
-    valueColumn = new TableColumn<>("Value");
-    valueColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
-    valueColumn.setMinWidth(275);
-    setupEditOfValue();
-
-    table.getColumns().addAll(keyColumn, valueColumn);
-    table.setItems(viewModel.getSettingsFx());
-  }
 
   private void setupEditOfValue() {
     valueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DefaultStringConverter()));
