@@ -7,6 +7,7 @@ import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.presentation.main.MainController;
 import net.wilamowski.drecho.client.presentation.main.WelcomeController;
 import net.wilamowski.drecho.client.presentation.notes.NotesController;
+import net.wilamowski.drecho.client.presentation.patients.PatientRegisterController;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.settings.SettingsController;
 import net.wilamowski.drecho.client.presentation.visit.VisitController;
@@ -50,6 +51,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
                 new ExaminationsChooserController(),
                 new NotesController()));
     controllerSuppliers.put( PatientsSearcherController.class, ()-> patientsSearcherController);
+    controllerSuppliers.put( PatientRegisterController.class, ()-> new PatientRegisterController(viewHandler, viewModelConfiguration.patientRegistrationViewModel() ));
   }
 
   @Override

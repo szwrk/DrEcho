@@ -16,15 +16,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
+import net.wilamowski.drecho.app.bundle.Lang;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserAlert;
 import net.wilamowski.drecho.client.presentation.customs.modals.UserDialog;
-import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -34,7 +30,7 @@ import org.apache.logging.log4j.Logger;
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 public class PatientRegisterController
-    implements ViewModelsInitializer, ViewHandlerInitializer, PostInitializable, Initializable {
+    implements Initializable {
   private static final Logger logger = LogManager.getLogger(PatientRegisterController.class);
 
   @FXML private TextField caregiverNoteTextField;
@@ -74,11 +70,16 @@ public class PatientRegisterController
   private GeneralViewHandler viewHandler;
   private PatientRegisterViewModel viewModel;
 
+  public PatientRegisterController(GeneralViewHandler viewHandler , PatientRegisterViewModel viewModel) {
+    this.viewHandler = viewHandler;
+    this.viewModel = viewModel;
+  }
+
   public void onActionAddNewPatient(ActionEvent event) {
     logger.debug("Click on save new patient...");
     Optional<PatientVM> newPatient = Optional.empty();
     try {
-      newPatient = viewModel.registerCurrentPatient();
+      newPatient = viewModel.registerNewPatient();
     } catch (RuntimeException e) {
       logger.error("[CONTROLLER-PATIENT] An error occurred: {}\n{}", e.getMessage(), e);
       String header = Lang.getString("e.012.header");
@@ -99,44 +100,16 @@ public class PatientRegisterController
           // todo add details responseInfo(patient)
           .showAndWait();
 
-      clearFields();
     } else {
       UserAlert.simpleInfo("Failed", "Patient is empty");
     }
-  }
-
-  void clearFields() {
-    viewModelReBindings();
-    viewModel.clearFields();
-  }
-
-  public void viewModelReBindings() {
-    PatientVM currentPatientVM = viewModel.getCurrentPatientVM();
-
-    Bindings.bindBidirectional(
-        Objects.requireNonNull(patientIdTextField.textProperty()),
-        Objects.requireNonNull(currentPatientVM.getId()),
-        new NumberStringConverter());
-    Bindings.bindBidirectional(patientNameTextField.textProperty(), currentPatientVM.getName());
-    Bindings.bindBidirectional(
-        patientLastNameTextField.textProperty(), currentPatientVM.getLastName());
-    Bindings.bindBidirectional(patientPeselTextField.textProperty(), currentPatientVM.getPesel());
-    Bindings.bindBidirectional(
-        patientDateBirthTextField.valueProperty(), currentPatientVM.getDateBirth());
-    Bindings.bindBidirectional(
-        patientCityOfBirthTextField.textProperty(), currentPatientVM.getCodeOfCityBirth());
-    Bindings.bindBidirectional(
-        patientGeneralPatientNote.textProperty(), currentPatientVM.getGeneralPatientNote());
-    Bindings.bindBidirectional(
-        patientTelephoneNumberTextField.textProperty(),
-        currentPatientVM.getPatientTelephoneNumber());
   }
 
   public void setTitle(String text) {
     this.rootTitledPane.setText(text);
   }
 
-  void blockFields() {
+  public void blockFields() {
     caregiverNoteTextField.setDisable(true);
     caregiverTelephoneTextField.setDisable(true);
     caregiverTelephoneTextField1.setDisable(true);
@@ -170,23 +143,6 @@ public class PatientRegisterController
     patientCityOfBirthTextField.setDisable(false);
   }
 
-  @Override
-  public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.viewHandler = viewHandler;
-  }
-
-  @Override
-  public void postInitialize() {
-    viewModelReBindings();
-    requestFocus();
-    Bindings.bindBidirectional(
-        savePatientButton.disableProperty(), viewModel.addPatientModeDisableProperty());
-    Bindings.bindBidirectional(
-        updatePatientButton.disableProperty(), viewModel.isEditPatientModeProperty());
-    Bindings.bindBidirectional(
-        patientPeselTextField.disableProperty(), viewModel.disableCitizenCodeFieldProperty());
-  }
-
   private void requestFocus() {
     Platform.runLater(
         () -> {
@@ -194,17 +150,44 @@ public class PatientRegisterController
         });
   }
 
-  @Override
-  public void initializeViewModels(ViewModelConfiguration factory) {
-    this.viewModel = factory.patientRegistrationViewModel();
-  }
+
 
   @Override
-  public void initialize(URL url, ResourceBundle resourceBundle) {}
+  public void initialize(URL url, ResourceBundle resourceBundle) {
+    PatientVM currentPatientVM = viewModel.getCurrentPatientVM();
+
+    Bindings.bindBidirectional(
+            Objects.requireNonNull(patientIdTextField.textProperty()),
+            Objects.requireNonNull(currentPatientVM.getId()),
+            new NumberStringConverter());
+    Bindings.bindBidirectional(patientNameTextField.textProperty(), currentPatientVM.getName());
+    Bindings.bindBidirectional(
+            patientLastNameTextField.textProperty(), currentPatientVM.getLastName());
+    Bindings.bindBidirectional(patientPeselTextField.textProperty(), currentPatientVM.getPesel());
+    Bindings.bindBidirectional(
+            patientDateBirthTextField.valueProperty(), currentPatientVM.getDateBirth());
+    Bindings.bindBidirectional(
+            patientCityOfBirthTextField.textProperty(), currentPatientVM.getCodeOfCityBirth());
+    Bindings.bindBidirectional(
+            patientGeneralPatientNote.textProperty(), currentPatientVM.getGeneralPatientNote());
+    Bindings.bindBidirectional(
+            patientTelephoneNumberTextField.textProperty(),
+            currentPatientVM.getPatientTelephoneNumber());
+    //
+    requestFocus();
+    Bindings.bindBidirectional(
+            savePatientButton.disableProperty(), viewModel.addPatientModeDisableProperty());
+    Bindings.bindBidirectional(
+            updatePatientButton.disableProperty(), viewModel.isEditPatientModeProperty());
+    Bindings.bindBidirectional(
+            patientPeselTextField.disableProperty(), viewModel.disableCitizenCodeFieldProperty());
+  }
 
   public PatientRegisterViewModel getViewModel() {
     return viewModel;
   }
+
+
 
   public void onActionEditPatient(ActionEvent event) {
     logger.debug("Clicked on the Edit button...");
@@ -232,8 +215,8 @@ public class PatientRegisterController
 
   private void handleSuccessAddNewPatient(PatientVM patient) {
     UserAlert.simpleInfo(
-            Lang.getString("u.003.header"),
-            Lang.getString("e.003.msg") + "\n" + responseInfo(patient))
+                   "Added patient:",
+           "\n" + responseInfo(patient)) //todo vm? imho persistance layer user!
         .showAndWait();
     logger.debug("[CONTROLLER-PATIENT] Added new patient: {}", patient);
   }
@@ -315,6 +298,33 @@ public class PatientRegisterController
 
   private void closeModal() {
     Stage stage = (Stage) rootTitledPane.getScene().getWindow();
+    Stage ownerStage = (Stage) stage.getOwner();
+    if (ownerStage != null) {
+      GeneralViewHandler.disableBlur(ownerStage);
+    }
     stage.close();
+  }
+
+
+  public void bindControlsWithCurrentPatient() { //todo
+    PatientVM currentPatientVM = viewModel.getCurrentPatientVM();
+
+    Bindings.bindBidirectional(
+            Objects.requireNonNull(patientIdTextField.textProperty()),
+            Objects.requireNonNull(currentPatientVM.getId()),
+            new NumberStringConverter());
+    Bindings.bindBidirectional(patientNameTextField.textProperty(), currentPatientVM.getName());
+    Bindings.bindBidirectional(
+            patientLastNameTextField.textProperty(), currentPatientVM.getLastName());
+    Bindings.bindBidirectional(patientPeselTextField.textProperty(), currentPatientVM.getPesel());
+    Bindings.bindBidirectional(
+            patientDateBirthTextField.valueProperty(), currentPatientVM.getDateBirth());
+    Bindings.bindBidirectional(
+            patientCityOfBirthTextField.textProperty(), currentPatientVM.getCodeOfCityBirth());
+    Bindings.bindBidirectional(
+            patientGeneralPatientNote.textProperty(), currentPatientVM.getGeneralPatientNote());
+    Bindings.bindBidirectional(
+            patientTelephoneNumberTextField.textProperty(),
+            currentPatientVM.getPatientTelephoneNumber());
   }
 }
