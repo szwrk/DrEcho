@@ -1,10 +1,15 @@
 package net.wilamowski.drecho.client.application.infra;
 
 import javafx.util.Callback;
+import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
+import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserController;
 import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.presentation.main.MainController;
 import net.wilamowski.drecho.client.presentation.main.WelcomeController;
+import net.wilamowski.drecho.client.presentation.notes.NotesController;
+import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.settings.SettingsController;
+import net.wilamowski.drecho.client.presentation.visit.VisitController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,14 +27,29 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
 
   public ControllerFactory(
       ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
+
+    PatientsSearcherController patientsSearcherController =
+        new PatientsSearcherController(viewModelConfiguration, viewHandler);
+    //
     controllerSuppliers.put(
         LoginController.class,
         () -> new LoginController(viewModelConfiguration.loginViewModel(), viewHandler));
     controllerSuppliers.put(
         MainController.class, () -> new MainController(viewModelConfiguration, viewHandler));
-    controllerSuppliers.put( WelcomeController.class, ()-> new WelcomeController() );
-
-    controllerSuppliers.put( SettingsController.class, ()->new SettingsController( viewModelConfiguration.settingsViewModel() ) );
+    controllerSuppliers.put(WelcomeController.class, () -> new WelcomeController());
+    controllerSuppliers.put(
+        SettingsController.class,
+        () -> new SettingsController(viewModelConfiguration.settingsViewModel()));
+    controllerSuppliers.put(
+        QuickVisitController.class,
+        () ->
+            new QuickVisitController(
+                viewHandler,
+                new VisitController(),
+                patientsSearcherController,
+                new ExaminationsChooserController(),
+                new NotesController()));
+    controllerSuppliers.put( PatientsSearcherController.class, ()-> patientsSearcherController);
   }
 
   @Override

@@ -23,12 +23,9 @@ import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
 import net.wilamowski.drecho.client.presentation.customs.animations.AnimationsUtil;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
-import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +37,7 @@ import org.apache.logging.log4j.Logger;
  */
 @ToString
 public class PatientsSearcherController
-    implements Initializable, ViewModelsInitializer, PostInitializable, ViewHandlerInitializer {
+    implements Initializable {
   public static final String SEARCH_TEXTFIELD_TOGGLE_TIP =
       "Wpisz pierwsze znaki nazwiska LUB numeru pesel pacjenta";
   public static final String AUTOSEARCHER_TOGGLE_TIP =
@@ -84,7 +81,10 @@ public class PatientsSearcherController
   private GeneralViewHandler viewHandler;
   private int paginationPageRowNumber;
 
-  public PatientsSearcherController() {}
+  public PatientsSearcherController(ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
+      this.patientSearcherViewModel = viewModelConfiguration.patientViewModel();
+      this.viewHandler = viewHandler;
+  }
 
   @FXML
   void onActionSearch(ActionEvent event) {
@@ -103,6 +103,19 @@ public class PatientsSearcherController
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.bundle = resourceBundle;
+      setupSearchResultsTable();
+      onSelectItemUpdateCurrentPatient();
+      bindTableWithViewModel();
+      updateCurrentPatientLabel();
+      initAutoSearch();
+      focusOnRootWhenPressEscape();
+      focusResultTableWhenPressDownOnSearchField();
+      setupPlayAnimationOnNewPatient();
+      initializePatientPagination();
+      bindSearchTextFieldWithViewModel();
+      playAnimationFocusUserOnSearchFieldAndMoveCaret();
+      enableButtonWhenPatientIsSelected(editPatientButton);
+      enableButtonWhenPatientIsSelected(previewPatientButton);
   }
 
   @FXML
@@ -135,29 +148,7 @@ public class PatientsSearcherController
   public PatientSearcherViewModel getPatientSearcherViewModel() {
     return patientSearcherViewModel;
   }
-
-  @Override
-  public void initializeViewModels(ViewModelConfiguration viewModelConfigurationFactory) {
-    this.patientSearcherViewModel = viewModelConfigurationFactory.patientViewModel();
-  }
-
-  @Override
-  public void postInitialize() {
-    setupSearchResultsTable();
-    onSelectItemUpdateCurrentPatient();
-    bindTableWithViewModel();
-    updateCurrentPatientLabel();
-    initAutoSearch();
-    focusOnRootWhenPressEscape();
-    focusResultTableWhenPressDownOnSearchField();
-    setupPlayAnimationOnNewPatient();
-    initializePatientPagination();
-    bindSearchTextFieldWithViewModel();
-    playAnimationFocusUserOnSearchFieldAndMoveCaret();
-    enableButtonWhenPatientIsSelected(editPatientButton);
-    enableButtonWhenPatientIsSelected(previewPatientButton);
-  }
-
+  
   private void enableButtonWhenPatientIsSelected(Button button) {
     button
         .disableProperty()
@@ -460,14 +451,7 @@ public class PatientsSearcherController
   }
 
 
-
-  @Override
-  public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.viewHandler = viewHandler;
-  }
-
-
-    public void disableSearcher() {
+  public void disableSearcher() {
       searcherTextField.disableProperty().set( true );
     }
 

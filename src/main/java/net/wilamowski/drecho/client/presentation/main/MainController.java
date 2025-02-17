@@ -188,7 +188,8 @@ public class MainController
         new Task<>() {
           @Override
           protected Void call() throws Exception {
-            viewHandler.switchSceneForParent(root, "QuickVisit");
+//            viewHandler.switchSceneForParent(root, "QuickVisit");
+            viewHandler.switchSceneForQuickVisit( root );
             return null;
           }
         });

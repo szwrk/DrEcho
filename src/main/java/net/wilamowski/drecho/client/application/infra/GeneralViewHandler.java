@@ -29,6 +29,7 @@ import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.app.bundle.Lang;
 import net.wilamowski.drecho.client.ApplicationRoot;
+import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
 import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
@@ -47,13 +48,12 @@ public class GeneralViewHandler {
   private static final int WIDTH = 1920;
   public static int ANIMATION_CHANGE_SCANE_DURATION = 200;
   private static ControllerInitializer controllerInitializer;
+  private static ControllerFactory staticControllerFactory;
   private final ApplicationRoot root;
   private final ViewModelConfiguration viewModelConfiguration;
-
   private String applicationStyle;
   private BorderPane mainView;
   private ControllerFactory controllerFactory;
-  private static ControllerFactory staticControllerFactory;
   private GeneralViewHandler(
           String styleName, ViewModelConfiguration viewModelConfiguration , ApplicationRoot applicationRoot) {
     ANIMATION_CHANGE_SCANE_DURATION = ClientPropertyReader.getInt("admin.switch-scene.duration");
@@ -318,7 +318,34 @@ public class GeneralViewHandler {
     timeline.play();
     return controller;
   }
+  public <T extends  Parent> Object switchSceneForQuickVisit(T container) {
+    Objects.requireNonNull(container, "Container cannot be null");
 
+    logger.debug("Switch scene for QuickVisit view");
+
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("QuickVisit.fxml"));
+    loader.setControllerFactory(controllerFactory);
+
+    Parent newNode;
+    try {
+      newNode = loader.load();
+    } catch (IOException e) {
+      logger.error("Failed to load QuickVisit.fxml", e);
+      throw new RuntimeException("Failed to load QuickVisit.fxml", e);
+    }
+
+    QuickVisitController quickVisitController = loader.getController();
+
+    loader.getNamespace().put("visitController", quickVisitController.getVisitController());
+    loader.getNamespace().put("patientController", quickVisitController.getPatientController());
+    loader.getNamespace().put("examinationController", quickVisitController.getExaminationController());
+    loader.getNamespace().put("notesController", quickVisitController.getNotesController());
+
+    embedNodeInContainer(container, newNode);
+    applyCurrentStyleForParent(newNode);
+
+    return quickVisitController;
+  }
   public ApplicationRoot getRoot() {
     return root;
   }

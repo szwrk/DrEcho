@@ -1,10 +1,13 @@
 package net.wilamowski.drecho.client.presentation.complex.quickvisit;
 
+import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -12,12 +15,13 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.VBox;
 import lombok.ToString;
+import net.wilamowski.drecho.app.bundle.Lang;
+import net.wilamowski.drecho.app.dto.VisitDtoResponse;
 import net.wilamowski.drecho.client.application.exceptions.GeneralUiException;
 import net.wilamowski.drecho.client.application.exceptions.VisitVmNoPatientSelected;
 import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable;
 import net.wilamowski.drecho.client.presentation.Views;
 import net.wilamowski.drecho.client.presentation.customs.animations.AnimationsUtil;
@@ -28,7 +32,6 @@ import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserController;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserViewModel;
-import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
 import net.wilamowski.drecho.client.presentation.notes.NotesController;
 import net.wilamowski.drecho.client.presentation.notes.NotesViewModel;
 import net.wilamowski.drecho.client.presentation.patients.PatientSearcherViewModel;
@@ -36,8 +39,6 @@ import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.visit.VisitController;
 import net.wilamowski.drecho.client.presentation.visit.VisitViewModel;
-import net.wilamowski.drecho.app.bundle.Lang;
-import net.wilamowski.drecho.app.dto.VisitDtoResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -48,29 +49,20 @@ import org.apache.logging.log4j.Logger;
  */
 @ToString
 public class QuickVisitController
-    implements KeyEventDebugInitializer, ViewHandlerInitializer, PostInitializable, Tooltipable {
+    implements KeyEventDebugInitializer, Tooltipable, Initializable {
   public static final String SAVED = "SAVED";
   private static final Logger logger = LogManager.getLogger(QuickVisitController.class);
+  private final NotesController notesController;
+  private final VisitController visitController;
+  private final PatientsSearcherController patientController;
+  private final ExaminationsChooserController examinationController;
   @FXML private RadioButton controlRadio;
   @FXML private TitledPane root;
   @FXML private RadioButton echoTteRadio;
   @FXML private TitledPane visit;
-
-  /** Included Controller */
-  @FXML private VisitController visitController;
   @FXML private TitledPane patient;
-
-  /** Included Controller */
-  @FXML private PatientsSearcherController patientController;
   @FXML private VBox examination;
-
-  /** Included Controller */
-  @FXML private ExaminationsChooserController examinationController;
-
-  /** Included Controller */
-  @FXML private NotesController notesController;
   @FXML private VBox notes;
-
   @FXML private TabPane tabPane;
   @FXML private Tab visitDetailTab;
   @FXML private Tab examinationsTab;
@@ -84,6 +76,17 @@ public class QuickVisitController
   @FXML private Label statusLabel;
   @FXML private Button finishButton;
 
+  public QuickVisitController(GeneralViewHandler viewHandler,
+                              VisitController visitController,
+                              PatientsSearcherController patientController,
+                              ExaminationsChooserController examinationController,
+                              NotesController notesController) {
+   this.viewHandler = viewHandler;
+   this.visitController = visitController;
+   this.patientController = patientController;
+   this.examinationController = examinationController;
+   this.notesController = notesController;
+  }
 
   @FXML
   void onActionConfirmRegistrationVisitInfo(ActionEvent event) {
@@ -196,20 +199,6 @@ public class QuickVisitController
     debugHandler.watch(this);
   }
 
-  @Override
-  public void postInitialize() {
-    logger.trace("QuickVisitController postInitialize...");
-    try {
-      setupNestedViewControllers();
-      updateVisitAboutSelectPatient();
-      informExaminationAboutSelectedPatient();
-      requestFocusOnViewStart();
-      fireConfirmButtonWhenPressKeyCombination();
-      bindTabsDisableToCriteria();
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-    }
-  }
 
   private void bindTabsDisableToCriteria() {
     notesTab
@@ -305,11 +294,7 @@ public class QuickVisitController
         .getSelectedPatient()
         .bind(nestedPatientVm().selectedPatientProperty());
   }
-
-  @Override
-  public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.viewHandler = viewHandler;
-  }
+  
 
   @Override
   public Node getRootUiNode() {
@@ -379,5 +364,35 @@ public class QuickVisitController
 
   private NotesViewModel nestedNotesVm() {
     return notesController.getViewModel( );
+  }
+
+  @Override
+  public void initialize(URL url , ResourceBundle resourceBundle) {
+    try {
+      setupNestedViewControllers();
+      updateVisitAboutSelectPatient();
+      informExaminationAboutSelectedPatient();
+      requestFocusOnViewStart();
+      fireConfirmButtonWhenPressKeyCombination();
+      bindTabsDisableToCriteria();
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+    }
+  }
+
+  public NotesController getNotesController() {
+    return notesController;
+  }
+
+  public VisitController getVisitController() {
+    return visitController;
+  }
+
+  public PatientsSearcherController getPatientController() {
+    return patientController;
+  }
+
+  public ExaminationsChooserController getExaminationController() {
+    return examinationController;
   }
 }
