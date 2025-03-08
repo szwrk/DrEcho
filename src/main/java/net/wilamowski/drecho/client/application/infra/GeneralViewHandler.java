@@ -11,6 +11,7 @@ import java.util.Objects;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.LoadException;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,7 +32,6 @@ import net.wilamowski.drecho.app.bundle.Lang;
 import net.wilamowski.drecho.client.ApplicationRoot;
 import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
-import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.presentation.patients.PatientRegisterController;
 import net.wilamowski.drecho.client.presentation.patients.PatientRegisterViewModel;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
@@ -136,45 +136,6 @@ public class GeneralViewHandler {
     modalStage.setMaximized(false);
   }
   
-  /**
-   * Sets up the provided Stage as a blur modal window. Blur modals are used for popups, modal
-   * dialogs, and business logic with a blurred background effect.
-   *
-   * @param modalStage The Stage to be set up as a blur modal window.
-   * @param ownerStage The owner Stage of the modal, used for blurring the background.
-   */
-  public static void setupAsBlurModal(Stage modalStage, Stage ownerStage) {
-    modalStage.addEventFilter(
-        KeyEvent.KEY_PRESSED,
-        event -> {
-          if (event.getCode() == KeyCode.ESCAPE) {
-            modalStage.close();
-            GeneralViewHandler.disableBlur(ownerStage);
-          }
-        });
-
-    modalStage.setOnCloseRequest(
-        e -> {
-          ownerStage.getScene().getRoot().setEffect(null);
-        });
-    modalStage.setFullScreenExitKeyCombination(new KeyCodeCombination(KeyCode.ESCAPE));
-    modalStage.initModality(Modality.APPLICATION_MODAL);
-    modalStage.initStyle(StageStyle.UNDECORATED);
-    modalStage.setMaximized(false);
-    modalStage.initOwner(ownerStage);
-
-    BoxBlur blur = new BoxBlur(10, 10, 3);
-    ownerStage.getScene().getRoot().setEffect(blur);
-  }
-
-  public static void disableBlur(Stage ownerStage) {
-    ownerStage.getScene().getRoot().setEffect(null);
-  }
-
-  public static void setupStageTitle(Stage stage, String name) {
-    stage.setTitle(name);
-  }
-
   public static FXMLLoader createFxmlLoader(String subView) {
     FXMLLoader loader = new FXMLLoader(GeneralViewHandler.class.getResource(subView));
     loader.setControllerFactory( staticControllerFactory );
@@ -237,38 +198,22 @@ public class GeneralViewHandler {
 
     try {
       parent = loader.load();
-    } catch (IOException ioException) {
-      logger.error("View with that name does not exist: {}", path);
-      logger.error("An error occurred:", ioException.getMessage(), ioException);
-      String header = Lang.getString("e.001.header");
-      String msg = Lang.getString("e.001.msg");
-      ExceptionAlert.create().showError(ioException, header, String.format(msg, path));
-    } catch (IllegalArgumentException illegalArgumentException) {
-      logger.error("View with that name does not exist: {}", path);
-      logger.error(
-          "An error occurred:", illegalArgumentException.getMessage(), illegalArgumentException);
-      String header = Lang.getString("e.010.header");
-      String msg = Lang.getString("e.010.msg");
-      ExceptionAlert.create().showError(illegalArgumentException, header, msg);
-    } catch (IllegalStateException illegalStateException) {
-      logger.error("An error occurred:", illegalStateException.getMessage(), illegalStateException);
-      String header = Lang.getString("e.007.header");
-      String msg = Lang.getString("e.007.msg");
-      ExceptionAlert.create().showError(illegalStateException, header, String.format(msg, path));
-      throw new RuntimeException(illegalStateException);
-    } catch (Exception unexceptedException) {
-      handleError(unexceptedException, "e.999.header", "e.999.msg");
-    }
-    try {
-      Objects.requireNonNull(parent);
-    } catch (NullPointerException npe){
-      logger.error("View loading failed! Check fxml with name: " + viewName + ". Is empty contructor exists?" );
+    } catch (LoadException e) {
+      showLocalizedError(e, "e.018.header", "e.018.msg", path);
+    } catch (IOException e) {
+      showLocalizedError(e, "e.001.header", "e.001.msg", path);
+    } catch (IllegalArgumentException e) {
+      showLocalizedError(e, "e.010.header", "e.010.msg", path);
+    } catch (IllegalStateException e) {
+      throw new RuntimeException(e);
+    } catch (Exception e) {
+      showLocalizedError(e, "e.999.header", "e.999.msg", path);
     }
     return parent;
   }
 
-  private void handleError(Exception e, String headerKey, String contentKey) {
-    logger.error("An error occurred: ", e.getMessage(), e);
+  private void showLocalizedError(Exception e, String headerKey, String contentKey, String path) {
+    logger.error("An error occurred while loading FXML view '{}': {}", path, e.getMessage(), e);
     String header = Lang.getString(headerKey);
     String msg = Lang.getString(contentKey);
     ExceptionAlert.create().showError(e, header, msg);
@@ -321,6 +266,7 @@ public class GeneralViewHandler {
     timeline.play();
     return controller;
   }
+
   public <T extends  Parent> Object switchSceneForQuickVisit(T container) {
     Objects.requireNonNull(container, "Container cannot be null");
 
@@ -349,6 +295,7 @@ public class GeneralViewHandler {
 
     return quickVisitController;
   }
+
   public ApplicationRoot getRoot() {
     return root;
   }
@@ -357,32 +304,13 @@ public class GeneralViewHandler {
     logger.info("Login window lauching...");
     try {
       Stage           newStage   = new Stage();
-      LoginController controller = (LoginController) switchSceneForStage("Login", newStage);
+//      LoginController controller = (LoginController) switchSceneForStage("Login", newStage);
 
       newStage.show();
     } catch (IllegalStateException e) {
-      handleError(e, "e.001.header", "e.001.msg");
+      showLocalizedError(e, "e.001.header", "e.001.msg","-");
     } catch (Exception e) {
-      handleError(e, "e.999.header", "e.999.msg");
-    }
-  }
-
-  public Object switchSceneForStage(String viewToOpenAsStage, Stage stage) {
-    try {
-      return switchScene(viewToOpenAsStage, stage);
-    } catch (IllegalStateException stateException) {
-      logger.error("An error occurred:", stateException.getMessage(), stateException);
-      String header = Lang.getString("e.011.header");
-      String msg = Lang.getString("e.011.msg");
-      ExceptionAlert.create()
-          .showError(stateException, header, String.format(msg, viewToOpenAsStage));
-      return null;
-    } catch (IllegalArgumentException illegalArgumentException) {
-      handleError(illegalArgumentException, "e.999.header", "e.999.msg");
-      return null;
-    } catch (Exception unexceptedException) {
-      handleError(unexceptedException, "e.999.header", "e.999.msg");
-      return null;
+      showLocalizedError(e, "e.999.header", "e.999.msg","-");
     }
   }
 
@@ -402,6 +330,85 @@ public void openNewPatientView(Stage owner){
   patientModal.showAndWait();
 
 }
+
+  /**
+   * Sets up the provided Stage as a blur modal window. Blur modals are used for popups, modal
+   * dialogs, and business logic with a blurred background effect.
+   *
+   * @param modalStage The Stage to be set up as a blur modal window.
+   * @param ownerStage The owner Stage of the modal, used for blurring the background.
+   */
+  public static void setupAsBlurModal(Stage modalStage, Stage ownerStage) {
+    modalStage.addEventFilter(
+        KeyEvent.KEY_PRESSED,
+        event -> {
+          if (event.getCode() == KeyCode.ESCAPE) {
+            modalStage.close();
+            GeneralViewHandler.disableBlur(ownerStage);
+          }
+        });
+
+    modalStage.setOnCloseRequest(
+        e -> {
+          ownerStage.getScene().getRoot().setEffect(null);
+        });
+    modalStage.setFullScreenExitKeyCombination(new KeyCodeCombination(KeyCode.ESCAPE));
+    modalStage.initModality(Modality.APPLICATION_MODAL);
+    modalStage.initStyle(StageStyle.UNDECORATED);
+    modalStage.setMaximized(false);
+    modalStage.initOwner(ownerStage);
+
+    BoxBlur blur = new BoxBlur(10, 10, 3);
+    ownerStage.getScene().getRoot().setEffect(blur);
+  }
+
+  public static void disableBlur(Stage ownerStage) {
+    ownerStage.getScene().getRoot().setEffect(null);
+  }
+
+  public static void setupStageTitle(Stage stage, String name) {
+    stage.setTitle(name);
+  }
+
+  public Object switchSceneForStage(String viewToOpenAsStage, Stage stage) {
+    try {
+      return switchScene(viewToOpenAsStage, stage);
+    } catch (IllegalStateException stateException) {
+      showLocalizedError(stateException, "e.011.header","e.011.msg", viewToOpenAsStage);
+      return null;
+    } catch (IllegalArgumentException illegalArgumentException) {
+      showLocalizedError(illegalArgumentException, "e.999.header", "e.999.msg",viewToOpenAsStage);
+      return null;
+    } catch (Exception unexceptedException) {
+      showLocalizedError(unexceptedException, "e.999.header", "e.999.msg",viewToOpenAsStage);
+      return null;
+    }
+  }
+
+  private Object switchScene(String viewToOpenAsStage, Stage newStage) {
+    Objects.requireNonNull(viewToOpenAsStage);
+    Objects.requireNonNull(newStage);
+    logger.debug("Switch scene for stage, view name: {} ", viewToOpenAsStage);
+
+    FXMLLoader loader = createFxmlLoader( );
+    Parent parent = loadFxml(viewToOpenAsStage, loader);
+
+    if (parent == null) {
+      showLocalizedError(
+              new IllegalStateException("Failed to load FXML"), "e.001.header", "e.001.msg", viewToOpenAsStage);
+      return null;
+    }
+    Scene scene = new Scene(parent);
+
+    newStage.setTitle(viewToOpenAsStage);
+    newStage.setScene(scene);
+    applyCurrentStyleForParent(parent);
+
+    Object controller = loader.getController();
+    Objects.requireNonNull(controller);
+    initializeController(controller);
+    return controller;
+  }
 
   public void openPatientReadOnlyView(Stage owner , PatientVM selectedPatient) {
     Stage patientModal = new Stage();
@@ -436,32 +443,6 @@ public void openNewPatientView(Stage owner){
     modal.showAndWait();
     GeneralViewHandler.disableBlur(owner);
   }
-  private Object switchScene(String viewToOpenAsStage, Stage newStage) {
-    Objects.requireNonNull(viewToOpenAsStage);
-    Objects.requireNonNull(newStage);
-    logger.debug("Switch scene for stage, view name: {} ", viewToOpenAsStage);
-
-    FXMLLoader loader = createFxmlLoader( );
-    Parent parent = loadFxml(viewToOpenAsStage, loader);
-
-    if (parent == null) {
-      String errorMsg =
-          "Failed to load FXML. Please check if the view file name is correct: "
-              + viewToOpenAsStage;
-      logger.error(errorMsg);
-      throw new IllegalStateException(errorMsg);
-    }
-    Scene scene = new Scene(parent);
-
-    newStage.setTitle(viewToOpenAsStage);
-    newStage.setScene(scene);
-    applyCurrentStyleForParent(parent);
-
-    Object controller = loader.getController();
-    Objects.requireNonNull(controller);
-    initializeController(controller);
-    return controller;
-  }
 
   public void openMain() {
     try {
@@ -470,9 +451,9 @@ public void openNewPatientView(Stage owner){
       GeneralViewHandler.setupAsFullScreenModal(newStage);
       newStage.show();
     } catch (IllegalStateException e) {
-      handleError(e, "e.001.header", "e.001.msg");
+      showLocalizedError(e, "e.001.header", "e.001.msg","-");
     } catch (Exception e) {
-      handleError(e, "e.999.header", "e.999.msg");
+      showLocalizedError(e, "e.999.header", "e.999.msg","-");
     }
   }
 
@@ -491,7 +472,5 @@ public void openNewPatientView(Stage owner){
     double taskbarHeight = bounds.getHeight() - screen.getBounds().getHeight();
     return bounds.getHeight() - taskbarHeight;
   }
-
-
 
 }
