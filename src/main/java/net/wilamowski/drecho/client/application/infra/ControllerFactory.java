@@ -26,6 +26,10 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
   private static final Logger logger = LogManager.getLogger(MainController.class);
   private final Map<Class<?>, Supplier<Object>> controllerSuppliers = new HashMap<>();
 
+
+  /**
+   * Class implements lazy loading using Supplier<Object>, ensuring that controllers are instantiated only when needed.
+   * */
   public ControllerFactory(
       ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
 
