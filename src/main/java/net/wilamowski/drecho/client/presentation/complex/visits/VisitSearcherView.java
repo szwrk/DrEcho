@@ -17,18 +17,14 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
 import net.wilamowski.drecho.client.application.infra.controler_init.KeyEventDebugInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.customs.ModalController;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
 import net.wilamowski.drecho.client.presentation.customs.modals.FxmlModal;
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
-import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
-import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.patients.PatientSearcherViewModel;
+import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController;
 import net.wilamowski.drecho.client.presentation.user.UserVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
@@ -42,11 +38,9 @@ import org.apache.logging.log4j.Logger;
  */
 @ToString
 public class VisitSearcherView
-    implements ViewHandlerInitializer,
+    implements
         Initializable,
-        ViewModelsInitializer,
-        KeyEventDebugInitializer,
-        PostInitializable {
+        KeyEventDebugInitializer{
   private static final Logger logger = LogManager.getLogger(VisitSearcherView.class);
   private final ObservableList<VisitVM> visits = FXCollections.observableArrayList();
   private final DateTimeFormatter dataTimeFormatter =
@@ -69,6 +63,11 @@ public class VisitSearcherView
   private PatientSearcherViewModel includedPatientSearcherViewModel;
   private FxmlModal modal;
   private PatientsSearcherController includedPatientController;
+
+  public VisitSearcherView(GeneralViewHandler viewHandler, VisitDashboardViewModel visitDashboardViewModel ) {
+    this.viewHandler = viewHandler;
+    this.visitDashboardViewModel = visitDashboardViewModel;
+  }
 
   @FXML
   void onActionSearchByDate(ActionEvent event) {
@@ -157,20 +156,13 @@ public class VisitSearcherView
         (PatientsSearcherController) rootModalController.getIncludedController();
     return includedPatientController;
   }
-
-  @Override
-  public void initializeViewHandler(GeneralViewHandler viewHandler) {
-    this.viewHandler = viewHandler;
-  }
-
-  @Override
-  public void initializeViewModels(ViewModelConfiguration factory) {
-    this.visitDashboardViewModel = factory.visitDashboardViewModel();
-  }
-
+  
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.bundle = resourceBundle;
+    bindTableViewModel();
+    configColumnValues();
+    configColumnDisplay();
   }
 
   @Override
@@ -180,13 +172,6 @@ public class VisitSearcherView
     debugHandler.watch(this);
   }
 
-  @Override
-  public void postInitialize() {
-    logger.traceEntry("VisitDashboardControler postinitialize()...");
-    bindTableViewModel();
-    configColumnValues();
-    configColumnDisplay();
-  }
 
   private void configColumnDisplay() {
     realizationDateTimeColumn.setCellFactory(

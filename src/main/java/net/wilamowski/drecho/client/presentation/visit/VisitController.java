@@ -12,9 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
-import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
-import net.wilamowski.drecho.client.application.infra.controler_init.PostInitializable;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.DictionaryConverter;
 import net.wilamowski.drecho.client.presentation.dictionaries.general.PositionFx;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +23,7 @@ import org.apache.logging.log4j.Logger;
  *     <p>For questions or inquiries, at contact arek@wilamowski.net
  */
 @ToString
-public class VisitController implements Initializable, ViewModelsInitializer, PostInitializable {
+public class VisitController implements Initializable {
   private static final Logger logger = LogManager.getLogger(VisitController.class);
 
   @FXML private ComboBox<PositionFx> performerComboBox;
@@ -50,44 +47,45 @@ public class VisitController implements Initializable, ViewModelsInitializer, Po
   private DictionaryConverter registrantConverter;
   private DictionaryConverter performerConverter;
 
-  @Override
+    public VisitController(VisitViewModel visitViewModel) {
+        this.visitViewModel = visitViewModel;
+    }
+
+    @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     this.bundle = resourceBundle;
-  }
-
-  @Override
-  public void initializeViewModels(ViewModelConfiguration viewModelConfigurationFactory) {
-    logger.debug("VisitController init Visit VM...");
-    this.visitViewModel = viewModelConfigurationFactory.visitViewModel();
-    this.realizationHoursConverter = new DictionaryConverter(visitViewModel.getDictService(), "VST_REALIZ_HOURS");
-    this.realizationMinutesConverter = new DictionaryConverter(visitViewModel.getDictService(), "VST_REALIZ_MIN");
+      logger.debug("VisitController init Visit VM...");
+      this.realizationHoursConverter = new DictionaryConverter(visitViewModel.getDictService(), "VST_REALIZ_HOURS");
+      this.realizationMinutesConverter = new DictionaryConverter(visitViewModel.getDictService(), "VST_REALIZ_MIN");
       this.registrantConverter = new DictionaryConverter( visitViewModel.getDictService() , "PRSREGI");
       this.performerConverter = new DictionaryConverter( visitViewModel.getDictService() ,"PRSPERF" );
+
+
+      updateRealizationDateTimeListener(realizationDatePicker.valueProperty());
+      updateRealizationDateTimeListener(realizationHourChoiceBox.valueProperty());
+      updateRealizationDateTimeListener( realizationMinutesChoiceBox.valueProperty());
+      Platform.runLater(
+              () -> {
+                  bindPerformer();
+                  bindRegistrant();
+              });
+
+      Platform.runLater(
+              () -> {
+                  initializeRegistrant();
+                  initializePerformer();
+              });
+
+      configureHourChoiceBox();
+      configureMinutesChoiceBox();
+      bindVisitId( );
+      bindStatus( );
+      selectRealizationDateTime(LocalDateTime.now( ));
   }
 
-  @Override
-  public void postInitialize() {
-    updateRealizationDateTimeListener(realizationDatePicker.valueProperty());
-    updateRealizationDateTimeListener(realizationHourChoiceBox.valueProperty());
-    updateRealizationDateTimeListener( realizationMinutesChoiceBox.valueProperty());
-    Platform.runLater(
-        () -> {
-          bindPerformer();
-          bindRegistrant();
-        });
 
-    Platform.runLater(
-        () -> {
-          initializeRegistrant();
-          initializePerformer();
-        });
 
-    configureHourChoiceBox();
-    configureMinutesChoiceBox();
-    bindVisitId( );
-    bindStatus( );
-    selectRealizationDateTime(LocalDateTime.now( ));
-  }
+
 
     private void selectRealizationDateTime(LocalDateTime localDateTime) {
         logger.traceEntry();

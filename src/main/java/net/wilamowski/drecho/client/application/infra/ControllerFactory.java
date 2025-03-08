@@ -2,6 +2,7 @@ package net.wilamowski.drecho.client.application.infra;
 
 import javafx.util.Callback;
 import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
+import net.wilamowski.drecho.client.presentation.complex.visits.VisitSearcherView;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserController;
 import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.presentation.main.MainController;
@@ -26,10 +27,10 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
   private static final Logger logger = LogManager.getLogger(MainController.class);
   private final Map<Class<?>, Supplier<Object>> controllerSuppliers = new HashMap<>();
 
-
   /**
-   * Class implements lazy loading using Supplier<Object>, ensuring that controllers are instantiated only when needed.
-   * */
+   * Class implements lazy loading using Supplier<Object>, ensuring that controllers are
+   * instantiated only when needed.
+   */
   public ControllerFactory(
       ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
 
@@ -50,12 +51,21 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
         () ->
             new QuickVisitController(
                 viewHandler,
-                new VisitController(),
+                new VisitController(viewModelConfiguration.visitViewModel()),
                 patientsSearcherController,
                 new ExaminationsChooserController(),
                 new NotesController()));
-    controllerSuppliers.put( PatientsSearcherController.class, ()-> patientsSearcherController);
-    controllerSuppliers.put( PatientRegisterController.class, ()-> new PatientRegisterController(viewHandler, viewModelConfiguration.patientRegistrationViewModel() ));
+    controllerSuppliers.put(PatientsSearcherController.class, () -> patientsSearcherController);
+    controllerSuppliers.put(
+        PatientRegisterController.class,
+        () ->
+            new PatientRegisterController(
+                viewHandler, viewModelConfiguration.patientRegistrationViewModel()));
+    controllerSuppliers.put(
+        VisitController.class, () -> new VisitController(viewModelConfiguration.visitViewModel()));
+    controllerSuppliers.put(
+        VisitSearcherView.class,
+        () -> new VisitSearcherView(viewHandler, viewModelConfiguration.visitDashboardViewModel()));
   }
 
   @Override
