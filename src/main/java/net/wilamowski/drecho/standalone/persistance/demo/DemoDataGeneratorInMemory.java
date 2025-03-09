@@ -4,10 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import net.wilamowski.drecho.app.bundle.Lang;
 import net.wilamowski.drecho.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.standalone.domain.user.account.User;
 import net.wilamowski.drecho.standalone.domain.visit.Visit;
-import net.wilamowski.drecho.app.bundle.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,9 +26,15 @@ public class DemoDataGeneratorInMemory {
   private DemoDataGeneratorInMemory() {
     logger.warn("[REPOSITORY] Initializing _DEMO_ data generator...");
     random = new Random();
+
+    addPatient( );
     initializeCities();
     initializeNames();
     initializeLastNames();
+  }
+
+  private static void addPatient() {
+    User admin = User.builder( ).login( "TEST1" ).firstName( "Jan" ).surname( "Kowalski" ).build( );
   }
 
   private void initializeCities() {
@@ -64,6 +70,7 @@ public class DemoDataGeneratorInMemory {
 
   public List<Patient> patients(int numberOfPatient) {
     patients = new ArrayList<>();
+    addStaticPatient( );
     int i = 1;
     while (i <= numberOfPatient) {
       patients.add(patient());
@@ -71,6 +78,11 @@ public class DemoDataGeneratorInMemory {
     }
     logger.debug("[DEMO] Genereted demo patients:" + patients.size());
     return patients;
+  }
+
+  private void addStaticPatient() {
+    Patient testPatient = Patient.builder( ).id( 99999L ).name( "Jan" ).lastName( "Kowalski" ).pesel( "12345678901" ).dateBirth( LocalDate.EPOCH ).build( );
+    patients.add( testPatient );
   }
 
   private Patient patient() {
@@ -153,14 +165,13 @@ public class DemoDataGeneratorInMemory {
   private void genereteSomeVisitsForPatient(Set<Visit> visits, String userName) {
     patients.forEach(
         patient -> {
-          User user = User.builder( ).login( "TEST1" ).firstName( "Jan" ).surname( "Kowalski" ).build( );
-
+          User admin = User.builder( ).login( "TEST1" ).firstName( "Jan" ).surname( "Kowalski" ).build( );
           int numberOfVisits = random.nextInt(5) + 1;
           while (numberOfVisits > 0) {
             visits.add(
                 Visit.builder()
-                    .selectedPerformer(user )
-                    .selectedRegistrant(user)
+                    .selectedPerformer(admin )
+                    .selectedRegistrant(admin)
                     .realizationDateTime(randomRealizationDateTime())
                     .viewStartDateTime(randomViewStartDateTimeProperty())
                     .patient( patient)

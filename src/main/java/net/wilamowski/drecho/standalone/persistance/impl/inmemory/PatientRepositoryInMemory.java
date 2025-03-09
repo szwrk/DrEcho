@@ -3,6 +3,7 @@ package net.wilamowski.drecho.standalone.persistance.impl.inmemory;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.ToString;
+import net.wilamowski.drecho.app.dto.PatientDto;
 import net.wilamowski.drecho.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.standalone.persistance.PatientRepository;
 import net.wilamowski.drecho.standalone.persistance.demo.DemoDataGeneratorInMemory;
@@ -125,7 +126,7 @@ public class PatientRepositoryInMemory implements PatientRepository {
   }
 
   @Override
-  public List<Patient> findByPeselCode(String param, int page) {
+  public List<Patient> findByCitizenCode(String param, int page) {
     if (patients == null || param == null || param.isBlank()) {
       logger.debug("[REPOSITORY] Empty param or null patients list - returning empty list");
       return Collections.emptyList();
@@ -177,6 +178,12 @@ public class PatientRepositoryInMemory implements PatientRepository {
   public List<Patient> findRecent(int page) {
     return patients.subList(0, 10);
   }
+
+  @Override
+  public int countByCitizenCode(String code) {
+    return 0;
+  }
+
 
   private List<Patient> filterByFullName(String param) {
     logger.trace("[REPOSITORY] Entering filterByFullName");
