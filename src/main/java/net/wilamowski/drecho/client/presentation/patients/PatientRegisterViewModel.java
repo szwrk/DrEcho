@@ -156,7 +156,14 @@ public class PatientRegisterViewModel {
     this.currentPatientVM = PatientVM.createEmptyPatientFx();
   }
 
-  enum PatientRegisterDataEntryMode {
+    public void turnOnInsertMode() {
+      this.dataEntryMode = PatientRegisterDataEntryMode.ADD;
+      this.isEditPatientMode.set(false);
+      this.disableCitizenCodeField.set(false);
+      this.addPatientModeDisable.set( false );
+    }
+
+    enum PatientRegisterDataEntryMode {
     READONLY,
     ADD,
     EDIT
