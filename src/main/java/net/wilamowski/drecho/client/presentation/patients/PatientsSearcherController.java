@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import lombok.ToString;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
-import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.presentation.customs.PopoverFactory;
 import net.wilamowski.drecho.client.presentation.customs.animations.AnimationsUtil;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
@@ -80,9 +79,10 @@ public class PatientsSearcherController implements Initializable {
   private GeneralViewHandler viewHandler;
   private int paginationPageRowNumber;
 
+
   public PatientsSearcherController(
-      ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
-    this.patientSearcherViewModel = viewModelConfiguration.patientViewModel();
+          PatientSearcherViewModel patientSearcherViewModel, GeneralViewHandler viewHandler) {
+    this.patientSearcherViewModel = patientSearcherViewModel;
     this.viewHandler = viewHandler;
   }
 
@@ -374,7 +374,8 @@ public class PatientsSearcherController implements Initializable {
 
   @FXML
   void onActionAddNewPatient(ActionEvent event) {
-    openNewPatientModal();
+      setupOwner();
+      viewHandler.openPatientAddView(owner);
   }
 
   public PatientSearcherViewModel getPatientSearcherViewModel() {
@@ -426,4 +427,6 @@ public class PatientsSearcherController implements Initializable {
     var timeline = AnimationsUtil.userCallToActionAnimation(searcherTextField);
     timeline.play();
   }
+
+
 }
