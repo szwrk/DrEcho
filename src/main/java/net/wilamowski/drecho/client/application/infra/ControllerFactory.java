@@ -1,8 +1,11 @@
 package net.wilamowski.drecho.client.application.infra;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 import javafx.util.Callback;
 import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
-import net.wilamowski.drecho.client.presentation.complex.visits.VisitSearcherView;
+import net.wilamowski.drecho.client.presentation.complex.visits.VisitSearcherController;
 import net.wilamowski.drecho.client.presentation.examinations.chooser.ExaminationsChooserController;
 import net.wilamowski.drecho.client.presentation.login.LoginController;
 import net.wilamowski.drecho.client.presentation.main.MainController;
@@ -14,10 +17,6 @@ import net.wilamowski.drecho.client.presentation.settings.SettingsController;
 import net.wilamowski.drecho.client.presentation.visit.VisitController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
 
 /*Author:
 Arkadiusz Wilamowski
@@ -35,7 +34,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
       ViewModelConfiguration viewModelConfiguration, GeneralViewHandler viewHandler) {
 
     PatientsSearcherController patientsSearcherController =
-        new PatientsSearcherController(viewModelConfiguration, viewHandler);
+        new PatientsSearcherController(viewModelConfiguration.patientViewModel(), viewHandler);
     //
     controllerSuppliers.put(
         LoginController.class,
@@ -55,7 +54,7 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
                 patientsSearcherController,
                 new ExaminationsChooserController(),
                 new NotesController()));
-    controllerSuppliers.put(PatientsSearcherController.class, () -> patientsSearcherController);
+    controllerSuppliers.put(PatientsSearcherController.class, () ->   new PatientsSearcherController(viewModelConfiguration.patientViewModel(), viewHandler));
     controllerSuppliers.put(
         PatientRegisterController.class,
         () ->
@@ -64,17 +63,22 @@ public class ControllerFactory implements Callback<Class<?>, Object> {
     controllerSuppliers.put(
         VisitController.class, () -> new VisitController(viewModelConfiguration.visitViewModel()));
     controllerSuppliers.put(
-        VisitSearcherView.class,
-        () -> new VisitSearcherView(viewHandler, viewModelConfiguration.visitDashboardViewModel()));
+        VisitSearcherController.class,
+        () -> new VisitSearcherController(viewHandler, viewModelConfiguration.visitDashboardViewModel()));
   }
 
   @Override
   public Object call(Class<?> aClass) {
+    System.out.println("ControllerFactory requested: " + aClass.getSimpleName());
     Supplier<Object> supplier = controllerSuppliers.get(aClass);
     if (supplier != null) {
-      return supplier.get();
+      Object controller = supplier.get();
+      System.out.println("Returning instance of: " + controller.getClass().getSimpleName());
+      return controller;
     }
-    logger.error("Controller class not found: {}", aClass);
+
+    System.err.println("Controller class not found: " + aClass.getSimpleName());
     throw new IllegalArgumentException("Controller class not found!");
   }
+
 }

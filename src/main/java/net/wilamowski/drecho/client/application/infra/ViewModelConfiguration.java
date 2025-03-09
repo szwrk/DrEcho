@@ -82,7 +82,7 @@ public class ViewModelConfiguration {
 
   public VisitDashboardViewModel visitDashboardViewModel() {
     logger.traceEntry();
-    return new VisitDashboardViewModel( connectors.visitModel());
+    return new VisitDashboardViewModel( connectors.visitModel(), connectors.patientModel());
   }
 
   public PatientRegisterViewModel patientRegistrationViewModel() {

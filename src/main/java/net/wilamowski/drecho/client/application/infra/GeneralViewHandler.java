@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -28,13 +29,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import lombok.ToString;
+import net.wilamowski.drecho.ModalWrapper;
 import net.wilamowski.drecho.app.bundle.Lang;
 import net.wilamowski.drecho.client.ApplicationRoot;
 import net.wilamowski.drecho.client.presentation.complex.quickvisit.QuickVisitController;
 import net.wilamowski.drecho.client.presentation.customs.modals.ExceptionAlert;
-import net.wilamowski.drecho.client.presentation.patients.PatientRegisterController;
-import net.wilamowski.drecho.client.presentation.patients.PatientRegisterViewModel;
-import net.wilamowski.drecho.client.presentation.patients.PatientVM;
+import net.wilamowski.drecho.client.presentation.patients.*;
 import net.wilamowski.drecho.client.properties.ClientPropertyReader;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
@@ -47,11 +47,15 @@ import org.apache.logging.log4j.Logger;
  */
 @ToString
 public class GeneralViewHandler {
+  public static final String VIEW_PATIENT_SEARCHER = "patient/PatientsSearcherView.fxml";
+  public static final String VIEW_PATIENT_DETAILS = "patient/PatientRegisterView.fxml";
+  public static final String VIEW_MAIN = "MainView.fxml";
+  public static final String VIEW_QUICK_VISIT = "QuickVisit.fxml";
+  public static final String VIEW_LOGIN = "LoginView.fxml";
   private static final Logger logger = LogManager.getLogger(GeneralViewHandler.class);
   private static final int WIDTH = 1920;
   public static int ANIMATION_CHANGE_SCANE_DURATION = 200;
   private static ControllerInitializer controllerInitializer;
-  private static ControllerFactory staticControllerFactory;
   private final ApplicationRoot root;
   private final ViewModelConfiguration viewModelConfiguration;
   private String applicationStyle;
@@ -65,7 +69,6 @@ public class GeneralViewHandler {
     controllerInitializer = new ControllerInitializerImpl( viewModelConfiguration );
     this.viewModelConfiguration = viewModelConfiguration;
     this.controllerFactory = new ControllerFactory( viewModelConfiguration , this );
-    staticControllerFactory = controllerFactory;
   }
 
   private void initGlobalStyle(String styleName) {
@@ -135,14 +138,6 @@ public class GeneralViewHandler {
     modalStage.initStyle(StageStyle.UNDECORATED);
     modalStage.setMaximized(false);
   }
-  
-  public static FXMLLoader createFxmlLoader(String subView) {
-    FXMLLoader loader = new FXMLLoader(GeneralViewHandler.class.getResource(subView));
-    loader.setControllerFactory( staticControllerFactory );
-    loader.setResources(Lang.getBundle());
-
-    return loader;
-  }
 
   public <T extends Parent> Object switchSceneForParent(String viewToOpen) {
     BorderPane root = getMainView( );
@@ -150,8 +145,8 @@ public class GeneralViewHandler {
     Objects.requireNonNull(viewToOpen);
 
     logger.debug("Switch scene for parent, view name: {} ", viewToOpen);
-    FXMLLoader loader = createFxmlLoader( );
-    Parent newNode = loadFxml(viewToOpen, loader);
+    FXMLLoader loader = instanceLoaderFxml( );
+    Parent newNode = loaderLoad( setupLoader( viewToOpen , loader ) );
     Objects.requireNonNull(newNode, "Fxml loading error. Node is null");
 
     Timeline timeline =
@@ -159,9 +154,22 @@ public class GeneralViewHandler {
     embedNodeInContainer(root, newNode);
     applyCurrentStyleForParent(newNode);
     Object controller = loader.getController();
-    initializeController(controller);
     timeline.play();
     return controller;
+  }
+  
+//  public FXMLLoader loaderFxmlInstance(String subView) {
+//    FXMLLoader loader = new FXMLLoader(GeneralViewHandler.class.getResource(subView));
+//    loader.setControllerFactory( controllerFactory );
+//    loader.setResources(Lang.getBundle());
+//
+//    return loader;
+//  }
+
+  private FXMLLoader instanceLoaderFxml() {
+    final FXMLLoader loader= new FXMLLoader( );
+    loader.setControllerFactory(controllerFactory);
+    return loader;
   }
 
   public BorderPane getMainView() {
@@ -172,19 +180,9 @@ public class GeneralViewHandler {
     this.mainView = mainView;
   }
 
-  private FXMLLoader createFxmlLoader() {
-    FXMLLoader loader = new FXMLLoader( );
-    loader.setControllerFactory(controllerFactory);
-    return loader;
-  }
-
-  private void initializeController(Object controller) {
-    controllerInitializer.initController(controller, this);
-  }
-
-  private Parent loadFxml(String viewName, FXMLLoader loader) {
+  private FXMLLoader setupLoader(String viewName, FXMLLoader loader) {
     Parent parent = null;
-    String path = "/views/" + viewName + "View.fxml";
+    String path = "/views/" + viewName;
     logger.debug("Load fxml with path: {} ", path);
 
     URL resourceUrl = getClass().getResource(path);
@@ -195,28 +193,7 @@ public class GeneralViewHandler {
     }
     loader.setLocation(resourceUrl);
     loader.setResources(Lang.getBundle());
-
-    try {
-      parent = loader.load();
-    } catch (LoadException e) {
-      showLocalizedError(e, "e.018.header", "e.018.msg", path);
-    } catch (IOException e) {
-      showLocalizedError(e, "e.001.header", "e.001.msg", path);
-    } catch (IllegalArgumentException e) {
-      showLocalizedError(e, "e.010.header", "e.010.msg", path);
-    } catch (IllegalStateException e) {
-      throw new RuntimeException(e);
-    } catch (Exception e) {
-      showLocalizedError(e, "e.999.header", "e.999.msg", path);
-    }
-    return parent;
-  }
-
-  private void showLocalizedError(Exception e, String headerKey, String contentKey, String path) {
-    logger.error("An error occurred while loading FXML view '{}': {}", path, e.getMessage(), e);
-    String header = Lang.getString(headerKey);
-    String msg = Lang.getString(contentKey);
-    ExceptionAlert.create().showError(e, header, msg);
+    return loader;
   }
 
   private void applyCurrentStyleForParent(Parent newNode) {
@@ -248,13 +225,38 @@ public class GeneralViewHandler {
     }
   }
 
+  private Parent loaderLoad(FXMLLoader l) {
+    Parent parent = null;
+    try {
+      parent =  l.load();
+    } catch (LoadException e) {
+      showLocalizedError(e, "e.018.header", "e.018.msg", "-");
+    } catch (IOException e) {
+      showLocalizedError(e, "e.001.header", "e.001.msg", "-");
+    } catch (IllegalArgumentException e) {
+      showLocalizedError(e, "e.010.header", "e.010.msg", "-");
+    } catch (IllegalStateException e) {
+      throw new RuntimeException(e);
+    } catch (Exception e) {
+      showLocalizedError(e, "e.999.header", "e.999.msg", "-");
+    }
+      return parent;
+  }
+
+  private void showLocalizedError(Exception e, String headerKey, String contentKey, String path) {
+    logger.error("An error occurred while loading FXML view '{}': {}", path, e.getMessage(), e);
+    String header = Lang.getString(headerKey);
+    String msg = Lang.getString(contentKey);
+    ExceptionAlert.create().showError(e, header, msg);
+  }
+
   public <T extends Parent> Object switchSceneForParent(T container, String viewToOpen) {
     Objects.requireNonNull(container);
     Objects.requireNonNull(viewToOpen);
 
     logger.debug("Switch scene for parent, view name: {} ", viewToOpen);
-    FXMLLoader loader = createFxmlLoader( );
-    Parent newNode = loadFxml(viewToOpen, loader);
+    FXMLLoader loader = instanceLoaderFxml( );
+    Parent newNode = loaderLoad( setupLoader( viewToOpen , loader ) );
     Objects.requireNonNull(newNode, "Fxml loading error. Node is null");
 
     Timeline timeline =
@@ -262,7 +264,6 @@ public class GeneralViewHandler {
     embedNodeInContainer(container, newNode);
     applyCurrentStyleForParent(newNode);
     Object controller = loader.getController();
-    initializeController(controller);
     timeline.play();
     return controller;
   }
@@ -271,8 +272,7 @@ public class GeneralViewHandler {
     Objects.requireNonNull(container, "Container cannot be null");
 
     logger.debug("Switch scene for QuickVisit view");
-
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("QuickVisit.fxml"));
+    FXMLLoader loader = instanceLoaderFxml( );
     loader.setControllerFactory(controllerFactory);
 
     Parent newNode;
@@ -304,31 +304,85 @@ public class GeneralViewHandler {
     logger.info("Login window lauching...");
     try {
       Stage           newStage   = new Stage();
-//      LoginController controller = (LoginController) switchSceneForStage("Login", newStage);
+      switchSceneForStage( VIEW_LOGIN , newStage);
 
       newStage.show();
     } catch (IllegalStateException e) {
       showLocalizedError(e, "e.001.header", "e.001.msg","-");
     } catch (Exception e) {
       showLocalizedError(e, "e.999.header", "e.999.msg","-");
+}
+  }
+
+  public Object switchSceneForStage(String viewToOpen, Stage stage) {
+    try {
+      Objects.requireNonNull(viewToOpen);
+      Objects.requireNonNull(stage);
+      logger.debug("Switch scene for stage, view name: {} ", viewToOpen);
+      FXMLLoader loader = instanceLoaderFxml( );
+      Parent parent = loaderLoad( setupLoader( viewToOpen , loader ) );
+
+      if (parent == null) {
+        showLocalizedError(
+                new IllegalStateException("Failed to load FXML"), "e.001.header", "e.001.msg", viewToOpen);
+        return null;
+      }
+      Scene scene = new Scene(parent);
+
+      stage.setTitle(viewToOpen);
+      stage.setScene(scene);
+      applyCurrentStyleForParent(parent);
+
+      Object controller = loader.getController();
+//      Objects.requireNonNull(controller);
+      return controller;
+    } catch (IllegalStateException stateException) {
+      showLocalizedError(stateException, "e.011.header","e.011.msg", viewToOpen);
+      return null;
+    } catch (IllegalArgumentException illegalArgumentException) {
+      showLocalizedError(illegalArgumentException, "e.999.header", "e.999.msg",viewToOpen);
+      return null;
+    } catch (Exception unexceptedException) {
+      showLocalizedError(unexceptedException, "e.999.header", "e.999.msg",viewToOpen);
+      return null;
     }
   }
 
-public void openNewPatientView(Stage owner){
+  //    return includedController.getPatientSearcherViewModel().getSelectedPatient();
+  public PatientVM openModalPatientChooser(String par) {
+    FXMLLoader loader = instanceLoaderFxml();
+    FXMLLoader setupedLoader = setupLoader(VIEW_PATIENT_SEARCHER, loader);
+    Parent parent = loaderLoad(setupedLoader);
+
+    PatientsSearcherController controller = setupedLoader.getController();
+    controller.inititalizeSearchValue(par);
+
+    ModalWrapper<PatientVM> modal = new ModalWrapper<>(parent,
+            () -> controller.getPatientSearcherViewModel().getSelectedPatient()
+    );
+
+//    GeneralViewHandler.setupAsBlurModal(modal, owner);
+//    GeneralViewHandler.setupStageTitle(patientModal, "New patient registration");
+
+    Optional<PatientVM> result = modal.showAndWait();
+    return result.orElse(null);
+  }
+
+  public PatientsSearcherController openNewPatientView(Stage owner){
   Stage patientModal = new Stage();
 
-  PatientRegisterController patientRegisterController = //todo factory methods
-          (PatientRegisterController)
-                  this.switchSceneForStage("patient/PatientRegister", patientModal);
+  PatientsSearcherController patientRegisterController = //todo factory methods
+          (PatientsSearcherController)
+                  this.switchSceneForStage( VIEW_PATIENT_SEARCHER , patientModal);
 
-  PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
-  patientRegisterController.bindControlsWithCurrentPatient();
-  viewModel.enableWriteMode();
-  patientRegisterController.setTitle("Add patient");
+  PatientSearcherViewModel viewModel = patientRegisterController.getPatientSearcherViewModel();
+//  patientRegisterController.bindControlsWithCurrentPatient();
+//  viewModel.enableWriteMode();
+//  patientRegisterController.setTitle("Add patient");
   GeneralViewHandler.setupAsBlurModal(patientModal, owner);
   GeneralViewHandler.setupStageTitle(patientModal, "New patient registration");
   patientModal.showAndWait();
-
+return patientRegisterController;
 }
 
   /**
@@ -369,53 +423,13 @@ public void openNewPatientView(Stage owner){
   public static void setupStageTitle(Stage stage, String name) {
     stage.setTitle(name);
   }
-
-  public Object switchSceneForStage(String viewToOpenAsStage, Stage stage) {
-    try {
-      return switchScene(viewToOpenAsStage, stage);
-    } catch (IllegalStateException stateException) {
-      showLocalizedError(stateException, "e.011.header","e.011.msg", viewToOpenAsStage);
-      return null;
-    } catch (IllegalArgumentException illegalArgumentException) {
-      showLocalizedError(illegalArgumentException, "e.999.header", "e.999.msg",viewToOpenAsStage);
-      return null;
-    } catch (Exception unexceptedException) {
-      showLocalizedError(unexceptedException, "e.999.header", "e.999.msg",viewToOpenAsStage);
-      return null;
-    }
-  }
-
-  private Object switchScene(String viewToOpenAsStage, Stage newStage) {
-    Objects.requireNonNull(viewToOpenAsStage);
-    Objects.requireNonNull(newStage);
-    logger.debug("Switch scene for stage, view name: {} ", viewToOpenAsStage);
-
-    FXMLLoader loader = createFxmlLoader( );
-    Parent parent = loadFxml(viewToOpenAsStage, loader);
-
-    if (parent == null) {
-      showLocalizedError(
-              new IllegalStateException("Failed to load FXML"), "e.001.header", "e.001.msg", viewToOpenAsStage);
-      return null;
-    }
-    Scene scene = new Scene(parent);
-
-    newStage.setTitle(viewToOpenAsStage);
-    newStage.setScene(scene);
-    applyCurrentStyleForParent(parent);
-
-    Object controller = loader.getController();
-    Objects.requireNonNull(controller);
-    initializeController(controller);
-    return controller;
-  }
-
+  
   public void openPatientReadOnlyView(Stage owner , PatientVM selectedPatient) {
     Stage patientModal = new Stage();
 
     PatientRegisterController patientRegisterController = //todo factory methods
             (PatientRegisterController)
-                    this.switchSceneForStage("patient/PatientRegister", patientModal);
+                    this.switchSceneForStage( VIEW_PATIENT_DETAILS , patientModal);
     PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
     viewModel.selectPatientForEdit(selectedPatient);
     patientRegisterController.bindControlsWithCurrentPatient();
@@ -432,7 +446,7 @@ public void openNewPatientView(Stage owner){
 
     PatientRegisterController patientRegisterController =
             (PatientRegisterController)
-                    this.switchSceneForStage("patient/PatientRegister", modal);
+                    this.switchSceneForStage(VIEW_PATIENT_DETAILS, modal);
     PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
     viewModel.selectPatientForEdit(selectedPatient);
     viewModel.turnOnEditingPatientMode();
@@ -444,10 +458,25 @@ public void openNewPatientView(Stage owner){
     GeneralViewHandler.disableBlur(owner);
   }
 
+  public void openPatientAddView(Stage owner) {
+    Stage modal = new Stage();
+
+    PatientRegisterController patientRegisterController =
+            (PatientRegisterController)
+                    this.switchSceneForStage(VIEW_PATIENT_DETAILS, modal);
+    PatientRegisterViewModel viewModel = patientRegisterController.getViewModel();
+    patientRegisterController.setTitle("New patient");
+    viewModel.turnOnInsertMode();
+    this.setupAsBlurModal(modal, owner);
+    this.setupStageTitle(modal, "New patient");
+    modal.showAndWait();
+    GeneralViewHandler.disableBlur(owner);
+  }
+
   public void openMain() {
     try {
       Stage newStage = new Stage();
-      switchSceneForStage("Main", newStage);
+      switchSceneForStage( VIEW_MAIN , newStage);
       GeneralViewHandler.setupAsFullScreenModal(newStage);
       newStage.show();
     } catch (IllegalStateException e) {
@@ -473,4 +502,8 @@ public void openNewPatientView(Stage owner){
     return bounds.getHeight() - taskbarHeight;
   }
 
+//  public Parent loadNestedView(String subView) {
+//    FXMLLoader loader = instanceLoaderFxml( );
+//    return setupLoader(subView, loader);
+//   }
 }
