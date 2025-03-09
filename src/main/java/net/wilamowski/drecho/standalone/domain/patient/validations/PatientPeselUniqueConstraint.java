@@ -23,7 +23,7 @@ class PatientPeselUniqueConstraint implements Constraint {
     if (patient.getPesel() == null) {
       return false;
     }
-    List<PatientDto> findByPesel = service.findByPesel(patient.getPesel(), 0);
+    List<PatientDto> findByPesel = service.findByCitizenCode(patient.getPesel(), 0);
 
     if (findByPesel.isEmpty()) { // not using code so ok
       logger.debug("[SERVICE-PATIENT] Pesel code validation... OK");
