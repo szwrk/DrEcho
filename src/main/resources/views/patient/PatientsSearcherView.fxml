@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<TitledPane collapsible="false" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="899.0" styleClass="dense" text="%ui.patient.searcher-view-title" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController">
+<TitledPane collapsible="false" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" styleClass="dense" text="%ui.patient.searcher-view-title" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="net.wilamowski.drecho.client.presentation.patients.PatientsSearcherController">
     <content>
         <VBox fx:id="patientsSearcherRoot" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="405.0" prefWidth="877.0">
             <children>
