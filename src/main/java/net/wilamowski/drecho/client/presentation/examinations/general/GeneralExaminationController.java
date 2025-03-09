@@ -7,14 +7,12 @@ import java.util.Objects;
 import javafx.beans.binding.Bindings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
 import lombok.ToString;
-import net.wilamowski.drecho.client.application.infra.ControllerInitializer;
 import net.wilamowski.drecho.client.application.infra.GeneralViewHandler;
 import net.wilamowski.drecho.client.application.infra.ViewModelConfiguration;
 import net.wilamowski.drecho.client.application.infra.ViewModelsInitializer;
@@ -24,6 +22,7 @@ import net.wilamowski.drecho.client.application.infra.controler_init.Tooltipable
 import net.wilamowski.drecho.client.presentation.debugger.DebugHandler;
 import net.wilamowski.drecho.client.presentation.debugger.KeyDebugHandlerGui;
 import net.wilamowski.drecho.client.presentation.main.ViewHandlerInitializer;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,12 +58,13 @@ public class GeneralExaminationController
 
   public void loadNestedExamByFxmlPath(String subView) throws IOException { //todo refactor
     logger.debug("Loading nested examination. Param: {}", subView);
-    FXMLLoader loader = GeneralViewHandler.createFxmlLoader(subView);
-    includedNode = loader.load();
-    includedController = loader.getController();
-    ControllerInitializer initializer = GeneralViewHandler.initializer();
-    initializer.initController(includedController, handler);
-    this.root.setContent(includedNode);
+//    FXMLLoader loader = viewHandler.createFxmlLoader(subView);
+    throw new NotImplementedException( "Refactor needed!" );
+//    includedNode = loader.load();
+//    includedController = loader.getController();
+//    ControllerInitializer initializer = GeneralViewHandler.initializer();
+//    initializer.initController(includedController, handler);
+//    this.root.setContent(includedNode);
   }
 
   @Override
