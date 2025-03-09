@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,20 +41,8 @@ public class ClientPropertyReader {
     }
   }
 
-  public static Boolean getBoolean(String key) {
+  public static boolean getBoolean(String key) {
     String value = getString(key);
-    try {
-      if (StringUtils.equalsIgnoreCase(value, "true")) {
-        return true;
-      } else if (StringUtils.equalsIgnoreCase(value, "false")) {
-        return false;
-      } else {
-        return BooleanUtils.toBooleanObject(value);
-      }
-    } catch (IllegalArgumentException e) {
-      String errorMsg = "Error parsing boolean value for key '" + key + "': " + e.getMessage();
-      logger.error(errorMsg);
-      throw new IllegalArgumentException(errorMsg, e);
-    }
+    return BooleanUtils.toBoolean(value);
   }
 }
