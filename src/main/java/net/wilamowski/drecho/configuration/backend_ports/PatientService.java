@@ -7,13 +7,14 @@ import net.wilamowski.drecho.standalone.domain.patient.Patient;
 import net.wilamowski.drecho.standalone.domain.patient.validations.ValidationExceptions;
 
 public interface PatientService {
-  List<PatientDto> findByAny(String input);
 
-  List<PatientDto> findByPesel(String peselCode, int page);
+  List<PatientDto> findByCitizenCode(String peselCode, int page);
 
   List<PatientDto> findByFullName(String lastName, int page);
 
   int counterByFullName(String lastName);
+
+  int counterByCitizenCode(String code);
 
   Optional<PatientDto> createPatientRecord(PatientDto patient) throws ValidationExceptions;
 
@@ -22,4 +23,6 @@ public interface PatientService {
   Optional<Patient> findById(Long patientId);
 
   List<PatientDto> findRecentlyPatients();
+
+  PatientDto findByCitizenCodeFirstRecord(String par);
 }
