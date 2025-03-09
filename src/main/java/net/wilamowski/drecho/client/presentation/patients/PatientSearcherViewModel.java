@@ -62,7 +62,7 @@ public class PatientSearcherViewModel {
     selectedPatient.setValue( null );
   }
 
-  public int searchPatientByFullName(String param) {
+  public int searchPatientByFullName(String param) { //todo refactor, move to service, unify visit searching
     logger.trace("[VM] Entering search method with param: {}", param);
     if (param == null) {
       logger.trace("[VM] Escaping search, param is null. Return 0");
@@ -104,7 +104,7 @@ public class PatientSearcherViewModel {
 
   private int handleSearchByPesel(String searchInput) {
     logger.trace("[VM] Entering handle search by pesel code");
-    List<PatientDto> fetchedPatients = patientService.findByPesel(searchInput, 0);
+    List<PatientDto> fetchedPatients = patientService.findByCitizenCode(searchInput, 0);
     if (fetchedPatients.size() == 1) {
       logger.debug("[VM] Service return values: {}", fetchedPatients.size());
       List<PatientVM> patientsFxBean = PatientDtoVmMapper.toListToFx(fetchedPatients);
