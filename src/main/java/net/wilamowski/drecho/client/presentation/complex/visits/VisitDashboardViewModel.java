@@ -1,18 +1,20 @@
 package net.wilamowski.drecho.client.presentation.complex.visits;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.ToString;
+import net.wilamowski.drecho.app.dto.PatientDto;
+import net.wilamowski.drecho.app.dto.VisitDtoDetailedQuery;
 import net.wilamowski.drecho.client.application.mapper.PatientDtoVmMapper;
 import net.wilamowski.drecho.client.application.mapper.VisitDtoVmMapper;
 import net.wilamowski.drecho.client.presentation.patients.PatientVM;
 import net.wilamowski.drecho.client.presentation.visit.VisitVM;
+import net.wilamowski.drecho.configuration.backend_ports.PatientService;
 import net.wilamowski.drecho.configuration.backend_ports.VisitService;
-import net.wilamowski.drecho.app.dto.PatientDto;
-import net.wilamowski.drecho.app.dto.VisitDtoDetailedQuery;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,9 +30,11 @@ public class VisitDashboardViewModel {
 
   private final VisitService visitService;
   private final ObservableList<VisitVM> visits = FXCollections.observableArrayList();
+  private final PatientService patientService;
 
-  public VisitDashboardViewModel(VisitService visitService) {
+  public VisitDashboardViewModel(VisitService visitService, PatientService patientService) {
     this.visitService = visitService;
+    this.patientService = patientService;
   }
 
   public void searchByPatient(PatientVM patientVM , int page) {
@@ -70,5 +74,19 @@ public class VisitDashboardViewModel {
 
   public void clearSearchResults() {
     visits.clear();
+  }
+
+  public int checkIsPatientExist(String par) {
+    return patientService.counterByCitizenCode(par);
+  }
+
+  public List<PatientDto> findPatientByCitizenCode(String par) {
+    return patientService.findByCitizenCode(  par, 0 );
+  }
+
+
+  public PatientVM findByCitizenCodeFirstRecord(String par) {
+    PatientDto byCitizenCodeFirstRecord = patientService.findByCitizenCodeFirstRecord( par );
+    return PatientDtoVmMapper.toVm( byCitizenCodeFirstRecord );
   }
 }
