@@ -1,7 +1,6 @@
 package net.wilamowski.drecho.client.application.exceptions.old;
 
 import net.wilamowski.drecho.client.application.infra.util.screenshot.Screenshoter;
-import net.wilamowski.drecho.client.presentation.customs.modals.NativeAlert;
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,8 +26,7 @@ public class MyDefaultUncaughtExceptionHandler implements Thread.UncaughtExcepti
                   ExceptionUtils.getStackTrace(throwable));
           log.error(msg);
           log.error(e.getMessage(), e);
-          Screenshoter.shot();
-          NativeAlert.safeError(e);
+          Screenshoter.shot();//          NativeAlert.safeError(e);
         });
   }
 }
