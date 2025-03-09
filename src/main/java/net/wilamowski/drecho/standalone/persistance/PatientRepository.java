@@ -13,7 +13,7 @@ public interface PatientRepository {
 
   int countByFullName(String param);
 
-  List<Patient> findByPeselCode(String param, int page);
+  List<Patient> findByCitizenCode(String param, int page);
 
   Optional<Patient> update(Patient patient);
 
@@ -21,4 +21,6 @@ public interface PatientRepository {
 
   List<Patient> findRecent(int page);
 
+    int countByCitizenCode(String code);
+    
 }
