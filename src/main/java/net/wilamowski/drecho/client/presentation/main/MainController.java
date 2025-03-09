@@ -38,6 +38,12 @@ public class MainController
     implements Initializable,
         KeyEventDebugInitializer         {
   private static final Logger logger = LogManager.getLogger(MainController.class);
+  public static final String VIEW_PATIENT_SEARCHER = "patient/PatientsSearcherView.fxml";
+  public static final String VIEW_PREFERENCE = "PreferenceView.fxml";
+  public static final String VIEW_SETTINGS = "SettingsView.fxml";
+  public static final String VIEW_VISIT_SEARCHER = "VisitSearcherView.fxml";
+  public static final String VIEW_DICTIONARIES = "DictionariesView.fxml";
+  public static final String VIEW_WELCOME = "WelcomeView.fxml";
   private final String loggedInUser;
   private final String sessionStartDateTime;
   // ViewModels
@@ -91,14 +97,14 @@ public class MainController
     logger.debug("Clicked on Patients...");
     Platform.runLater(
         () -> {
-          viewHandler.switchSceneForParent(root, "patient/PatientsSearcher");
+          viewHandler.switchSceneForParent(root, VIEW_PATIENT_SEARCHER );
         });
   }
 
   @FXML
   public void onActionOpenUserPreference(ActionEvent actionEvent) {
     logger.debug("Clicked on user preference...");
-    viewHandler.switchSceneForParent(root, "Preference");
+    viewHandler.switchSceneForParent(root, VIEW_PREFERENCE );
   }
 
   @FXML
@@ -106,7 +112,7 @@ public class MainController
     logger.debug("Clicked on admin settings...");
     Platform.runLater(
         () -> {
-          viewHandler.switchSceneForParent(root, "Settings");
+          viewHandler.switchSceneForParent(root, VIEW_SETTINGS );
         });
   }
 
@@ -115,7 +121,7 @@ public class MainController
     logger.debug("Clicked on open Visits...");
     Platform.runLater(
         () -> {
-          viewHandler.switchSceneForParent(root, "VisitSearcher");
+          viewHandler.switchSceneForParent(root, VIEW_VISIT_SEARCHER );
         });
   }
 
@@ -124,7 +130,7 @@ public class MainController
     logger.debug("Clicked on Dictionaries...");
     Platform.runLater(
         () -> {
-          viewHandler.switchSceneForParent(root, "Dictionaries");
+          viewHandler.switchSceneForParent(root, VIEW_DICTIONARIES );
         });
   }
 
@@ -150,7 +156,7 @@ public class MainController
         new Task<>() {
           @Override
           protected Void call() throws Exception {
-            viewHandler.switchSceneForParent(root, "Welcome");
+            viewHandler.switchSceneForParent(root, VIEW_WELCOME );
             return null;
           }
         });
